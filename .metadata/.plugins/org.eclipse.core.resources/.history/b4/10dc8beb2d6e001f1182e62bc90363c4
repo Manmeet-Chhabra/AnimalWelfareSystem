@@ -1,0 +1,5 @@
+package com.manmeet.animalsys.config;
+
+public class SecurityConfig {
+
+}

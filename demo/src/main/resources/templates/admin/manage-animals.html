@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Animals</title>
+</head>
+<body>
+    <h2>Manage Animals</h2>
+    <a href="/admin/animals/add">Add New Animal</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Age</th>
+                <th>Health Status</th>
+                <th>Adoption Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="animal : ${animals}">
+                <td th:text="${animal.id}"></td>
+                <td th:text="${animal.name}"></td>
+                <td th:text="${animal.type}"></td>
+                <td th:text="${animal.age}"></td>
+                <td th:text="${animal.healthStatus}"></td>
+                <td th:text="${animal.adoptionStatus}"></td>
+                <td>
+                    <a th:href="@{/admin/animals/edit/{id}(id=${animal.id})}">Edit</a>
+                    <a th:href="@{/admin/animals/delete/{id}(id=${animal.id})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
