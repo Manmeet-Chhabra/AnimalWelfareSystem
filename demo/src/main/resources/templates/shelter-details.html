@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shelter Details</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Shelter Details</h1>
+        <nav>
+            <a href="/home">Home</a>
+            <a href="/shelters">Shelter List</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Details for Shelter ID: <span th:text="${shelter.id}"></span></h2>
+        <p>Name: <span th:text="${shelter.name}"></span></p>
+        <p>Location: <span th:text="${shelter.location}"></span></p>
+        <p>Capacity: <span th:text="${shelter.capacity}"></span></p>
+        <p>Current Staff:
+            <ul>
+                <li th:each="staff : ${shelter.staff}">
+                    <span th:text="${staff.name}"></span>
+                </li>
+            </ul>
+        </p>
+        <a th:href="@{/shelters/edit/{id}(id=${shelter.id})}">Edit Shelter</a>
+    </main>
+</body>
+</html>

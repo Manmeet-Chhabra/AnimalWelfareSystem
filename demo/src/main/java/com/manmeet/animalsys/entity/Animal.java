@@ -1,69 +1,33 @@
 package com.manmeet.animalsys.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "animals")
 public class Animal {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Column(nullable = false)
+    private String name;
 
-	private String name;
-	private String type;
-	private int age;
-	private String healthStatus;
-	private String adoptionStatus;
+    @Column(nullable = false)
+    private String type; // e.g., cat, dog, etc.
 
-	public Long getId() {
-		return id;
-	}
+    @Column(nullable = false)
+    private String healthStatus;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column
+    private String doctorAppointmentDetails;
 
-	public String getName() {
-		return name;
-	}
+    // Additional fields as needed
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public String getHealthStatus() {
-		return healthStatus;
-	}
-
-	public void setHealthStatus(String healthStatus) {
-		this.healthStatus = healthStatus;
-	}
-
-	public String getAdoptionStatus() {
-		return adoptionStatus;
-	}
-
-	public void setAdoptionStatus(String adoptionStatus) {
-		this.adoptionStatus = adoptionStatus;
-	}
-
+    // Relationships (e.g., many-to-one with Shelter) can be added here
 }

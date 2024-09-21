@@ -1,5 +1,14 @@
 package com.manmeet.animalsys.repos;
 
-public class ShelterRepository  {
+import com.manmeet.animalsys.entity.Shelter;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ShelterRepository extends JpaRepository<Shelter, Long> {
+
+	List<Shelter> findByLocationAndCapacity(String location, Integer capacity);
 }

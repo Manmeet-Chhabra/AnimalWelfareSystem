@@ -37,13 +37,14 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((authorize) ->
+            .authorizeHttpRequests((authorize) -> 
                 authorize.requestMatchers("/register/**", "/login", "/index").permitAll()
                 .requestMatchers("/admin-dashboard").hasRole("ADMIN")  // Admin only access
-                .requestMatchers("/user-dashboard").hasRole("USER") 
-                         .requestMatchers("/users").hasRole("ADMIN")
-                         
-            ).formLogin(
+                .requestMatchers("/user-dashboard").hasRole("USER")
+                .requestMatchers("/staff-dashboard").hasRole("STAFF") // Staff only access
+                .requestMatchers("/users").hasRole("ADMIN") // Admin only access for users
+            )
+            .formLogin(
                 form -> form
                     .loginPage("/login")
                     .loginProcessingUrl("/login")
@@ -80,6 +81,8 @@ public class SpringSecurity {
                     response.sendRedirect("/admin-dashboard");
                 } else if (roles.contains("ROLE_USER")) {
                     response.sendRedirect("/user-dashboard");
+                } else if (roles.contains("ROLE_STAFF")) {
+                    response.sendRedirect("/staff-dashboard");
                 } else {
                     response.sendRedirect("/index");
                 }
