@@ -4,85 +4,144 @@ import com.manmeet.animalsys.entity.Shelter;
 import com.manmeet.animalsys.entity.User;
 import com.manmeet.animalsys.service.ShelterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/shelters")
 public class ShelterController {
 
     @Autowired
     private ShelterService shelterService;
 
-    @PostMapping
-    public ResponseEntity<Shelter> createShelter(@RequestBody Shelter shelter) {
-        Shelter savedShelter = shelterService.saveShelter(shelter);
-        return new ResponseEntity<>(savedShelter, HttpStatus.CREATED);
+    // Only Admin can create a new shelter (Form page)
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/create")
+    public String showCreateShelterForm(Model model) {
+        model.addAttribute("shelter", new Shelter());
+        return "shelter-create"; // HTML form for creating a shelter
     }
 
+    // Save the new shelter
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/save")
+    public String createShelter(@ModelAttribute Shelter shelter) {
+        shelterService.saveShelter(shelter);
+        return "redirect:/shelters";
+    }
+
+    // All users can view all shelters
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping
-    public ResponseEntity<List<Shelter>> getAllShelters() {
+    public String getAllShelters(Model model) {
         List<Shelter> shelters = shelterService.getAllShelters();
-        return new ResponseEntity<>(shelters, HttpStatus.OK);
+        model.addAttribute("shelters", shelters);
+        return "shelter-list"; // HTML page displaying the list of shelters
     }
 
+    // Admin and Staff can view details of a specific shelter
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/{id}")
-    public ResponseEntity<Shelter> getShelterById(@PathVariable Long id) {
+    public String getShelterById(@PathVariable Long id, Model model) {
         Optional<Shelter> shelter = shelterService.getShelterById(id);
-        return shelter.map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (shelter.isPresent()) {
+            model.addAttribute("shelter", shelter.get());
+            return "shelter-details"; // HTML page for viewing shelter details
+        } else {
+            return "error-page"; // Error page if shelter not found
+        }
     }
 
-    @PutMapping
-    public ResponseEntity<Shelter> updateShelter(@RequestBody Shelter shelter) {
-        Shelter updatedShelter = shelterService.updateShelter(shelter);
-        return new ResponseEntity<>(updatedShelter, HttpStatus.OK);
+    // Only Admin can update a shelter
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/edit/{id}")
+    public String showEditShelterForm(@PathVariable Long id, Model model) {
+        Optional<Shelter> shelter = shelterService.getShelterById(id);
+        if (shelter.isPresent()) {
+            model.addAttribute("shelter", shelter.get());
+            return "shelter-edit"; // HTML form for editing a shelter
+        } else {
+            return "error-page";
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteShelter(@PathVariable Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/update")
+    public String updateShelter(@ModelAttribute Shelter shelter) {
+        shelterService.updateShelter(shelter);
+        return "redirect:/shelters";
+    }
+
+    // Only Admin can delete a shelter
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/delete/{id}")
+    public String deleteShelter(@PathVariable Long id) {
         shelterService.deleteShelter(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return "redirect:/shelters";
     }
 
+    // All users can search for shelters
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/search")
-    public ResponseEntity<List<Shelter>> searchShelters(@RequestParam(required = false) String location,
-                                                        @RequestParam(required = false) Integer capacity) {
+    public String searchShelters(@RequestParam(required = false) String location,
+                                 @RequestParam(required = false) Integer capacity,
+                                 Model model) {
         List<Shelter> shelters = shelterService.searchShelters(location, capacity);
-        return new ResponseEntity<>(shelters, HttpStatus.OK);
+        model.addAttribute("shelters", shelters);
+        return "shelter-list"; // Display search results on the same shelter list page
     }
 
-    @PatchMapping("/{id}/capacity/increase")
-    public ResponseEntity<Shelter> increaseCapacity(@PathVariable Long id, @RequestParam int increment) {
-        Shelter updatedShelter = shelterService.increaseCapacity(id, increment);
-        return new ResponseEntity<>(updatedShelter, HttpStatus.OK);
+    // Only Admin and Staff can increase the capacity of a shelter
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    @PostMapping("/{id}/capacity/increase")
+    public String increaseCapacity(@PathVariable Long id, @RequestParam int increment) {
+        shelterService.increaseCapacity(id, increment);
+        return "redirect:/shelters/" + id;
     }
 
-    @PatchMapping("/{id}/capacity/decrease")
-    public ResponseEntity<Shelter> decreaseCapacity(@PathVariable Long id, @RequestParam int decrement) {
-        Shelter updatedShelter = shelterService.decreaseCapacity(id, decrement);
-        return new ResponseEntity<>(updatedShelter, HttpStatus.OK);
+    // Only Admin and Staff can decrease the capacity of a shelter
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    @PostMapping("/{id}/capacity/decrease")
+    public String decreaseCapacity(@PathVariable Long id, @RequestParam int decrement) {
+        shelterService.decreaseCapacity(id, decrement);
+        return "redirect:/shelters/" + id;
     }
 
-    @PostMapping("/{shelterId}/staff")
-    public ResponseEntity<User> addStaffToShelter(@PathVariable Long shelterId, @RequestBody User staff) {
-        User addedStaff = shelterService.addStaffToShelter(shelterId, staff);
-        return new ResponseEntity<>(addedStaff, HttpStatus.CREATED);
+    // Only Admin and Staff can add staff to a shelter
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    @GetMapping("/{shelterId}/staff/add")
+    public String showAddStaffForm(@PathVariable Long shelterId, Model model) {
+        model.addAttribute("staff", new User());
+        model.addAttribute("shelterId", shelterId);
+        return "shelter-staff-add"; // Form for adding staff
     }
 
-    @DeleteMapping("/{shelterId}/staff/{staffId}")
-    public ResponseEntity<Void> removeStaffFromShelter(@PathVariable Long shelterId, @PathVariable Long staffId) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    @PostMapping("/{shelterId}/staff/save")
+    public String addStaffToShelter(@PathVariable Long shelterId, @ModelAttribute User staff) {
+        shelterService.addStaffToShelter(shelterId, staff);
+        return "redirect:/shelters/" + shelterId + "/staff";
+    }
+
+    // Only Admin can remove staff from a shelter
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{shelterId}/staff/delete/{staffId}")
+    public String removeStaffFromShelter(@PathVariable Long shelterId, @PathVariable Long staffId) {
         shelterService.removeStaffFromShelter(shelterId, staffId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return "redirect:/shelters/" + shelterId + "/staff";
     }
 
+    // All users can view staff by shelter
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/{shelterId}/staff")
-    public ResponseEntity<List<User>> getStaffByShelter(@PathVariable Long shelterId) {
+    public String getStaffByShelter(@PathVariable Long shelterId, Model model) {
         List<User> staff = shelterService.getStaffByShelter(shelterId);
-        return new ResponseEntity<>(staff, HttpStatus.OK);
+        model.addAttribute("staff", staff);
+        return "shelter-staff-list"; // Page for displaying staff members of a shelter
     }
 }

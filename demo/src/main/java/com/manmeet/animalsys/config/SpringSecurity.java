@@ -39,10 +39,14 @@ public class SpringSecurity {
         http
             .authorizeHttpRequests((authorize) -> 
                 authorize.requestMatchers("/register/**", "/login", "/index").permitAll()
+                
                 .requestMatchers("/admin-dashboard").hasRole("ADMIN")  // Admin only access
                 .requestMatchers("/user-dashboard").hasRole("USER")
                 .requestMatchers("/staff-dashboard").hasRole("STAFF") // Staff only access
                 .requestMatchers("/users").hasRole("ADMIN") // Admin only access for users
+                .requestMatchers("/animals").hasAnyRole("USER", "ADMIN", "STAFF")
+                .anyRequest().authenticated() // All other requests require authentication
+                
             )
             .formLogin(
                 form -> form

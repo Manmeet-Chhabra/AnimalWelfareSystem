@@ -1,12 +1,18 @@
 package com.manmeet.animalsys.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import java.util.List;
 import java.util.Set;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
@@ -29,13 +35,13 @@ public class Shelter {
     private int capacity;
 
     @Column
-    private int currentOccupancy;
+    private Integer currentOccupancy;
 
     @Column
     private String contactDetails;
 
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Animal> animals;
+    private List<Animal> animals;
 
     @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<User> staff;
@@ -72,11 +78,11 @@ public class Shelter {
 		this.capacity = capacity;
 	}
 
-	public int getCurrentOccupancy() {
+	public Integer getCurrentOccupancy() {
 		return currentOccupancy;
 	}
 
-	public void setCurrentOccupancy(int currentOccupancy) {
+	public void setCurrentOccupancy(Integer currentOccupancy) {
 		this.currentOccupancy = currentOccupancy;
 	}
 
@@ -88,11 +94,11 @@ public class Shelter {
 		this.contactDetails = contactDetails;
 	}
 
-	public Set<Animal> getAnimals() {
+	public List<Animal> getAnimals() {
 		return animals;
 	}
 
-	public void setAnimals(Set<Animal> animals) {
+	public void setAnimals(List<Animal> animals) {
 		this.animals = animals;
 	}
 

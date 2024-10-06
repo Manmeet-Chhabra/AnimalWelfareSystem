@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Animal</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Edit Animal</h1>
+    <form action="/animals/{{ animal.id }}" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type" value="{{ animal.type }}" required>
+        
+        <label for="healthStatus">Health Status:</label>
+        <input type="text" id="healthStatus" name="healthStatus" value="{{ animal.healthStatus }}" required>
+
+        <label for="pictureUrl">Picture URL:</label>
+        <input type="text" id="pictureUrl" name="pictureUrl" value="{{ animal.pictureUrl }}">
+
+        <button type="submit">Update Animal</button>
+        <a href="/animals">Cancel</a>
+    </form>
+</body>
+</html>
+
+
+

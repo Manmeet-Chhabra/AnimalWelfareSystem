@@ -1,60 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title th:text="${title}">User Dashboard</title>
-	<link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-	<header th:fragment="header" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/}">Animal Welfare System</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-
-
-					<li class="nav-item">
-						<a class="nav-link" href="/shelters/search">Search Shelters</a>
-					</li>
-					<li class="nav-item">
-					<a class="nav-link" href="/shelters">View Shelters</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/user/donations">Make Donations</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/user/donations/history">Donation History</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/user/adoptions">View Adoptions</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/user/animals">View Animal Info</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/logout">Logout</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</header>
-
-	<main class="container mt-5">
-		<div th:fragment="content">
-			<!-- Content will be inserted here -->
-		</div>
-	</main>
-
-	<footer class="footer">
-		<p>&copy; 2024 Animal Welfare System</p>
-	</footer>
+    <div class="container">
+        <h1>User Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="/animals">View Animals</a></li>
+                <li><a href="/shelters">View Shelters</a></li>
+                <li><a href="/animals/search">Search Animals</a></li>
+                <li><a href="/shelters/search">Search Shelters</a></li>
+                <li><a href="/adopt-animal">Adopt Animal</a></li>
+                <li><a href="/donations">Make a Donation</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
 </body>
-
 </html>
