@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animals in Shelter</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Animals in Shelter</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Health Status</th>
+                <th>Picture</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="animal : ${animals}">
+                <td th:text="${animal.id}"></td>
+                <td th:text="${animal.name}"></td> <!-- Added name field -->
+                <td th:text="${animal.type}"></td>
+                <td th:text="${animal.healthStatus}"></td>
+                <td><img th:src="${animal.pictureUrl}" alt="Animal Picture" width="50" /></td> <!-- Updated to pictureUrl -->
+                <td>
+                    <a th:href="@{/animals/{id}(id=${animal.id})}">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/shelters/{shelterId}(shelterId=${shelterId})}">Back to Shelter</a>
+</body>
+</html>

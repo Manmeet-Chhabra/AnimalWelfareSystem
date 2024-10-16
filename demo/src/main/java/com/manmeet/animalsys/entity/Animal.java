@@ -24,10 +24,10 @@ public class Animal {
 
 	@Column(name = "picture_url")
 	private String pictureUrl; // Field to store the animal picture URL
-	
-	 @ManyToOne
-	    @JoinColumn(name = "shelter_id") // This will create a shelter_id column in the animals table
-	    private Shelter shelter; // Reference to the Shelter entity
+
+	@ManyToOne
+	@JoinColumn(name = "shelter_id") // This will create a shelter_id column in the animals table
+	private Shelter shelter; // Reference to the Shelter entity
 
 	public Animal() {
 	}
@@ -99,5 +99,4 @@ public class Animal {
 		this.shelter = shelter;
 	}
 
-	
 }

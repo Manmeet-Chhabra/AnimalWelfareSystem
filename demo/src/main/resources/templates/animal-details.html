@@ -9,15 +9,14 @@
 <body>
     <h1>Animal Details</h1>
     <div>
-        <p><strong>ID:</strong> <span id="animalId"></span></p>
-        <p><strong>Type:</strong> <span id="animalType"></span></p>
-        <p><strong>Health Status:</strong> <span id="animalHealthStatus"></span></p>
-        <p><strong>Picture:</strong> <img id="animalPicture" alt="Animal Picture" /></p>
-		<a href="animal-edit.html">Edit Animal</a>
-		    <a href="animal-list.html">Back to Animal List</a>
+        <p>ID: <span th:text="${animal.id}"></span></p>
+        <p>Name: <span th:text="${animal.name}"></span></p>
+        <p>Type: <span th:text="${animal.type}"></span></p>
+        <p>Health Status: <span th:text="${animal.healthStatus}"></span></p>
+        <p>Doctor Appointment: <span th:text="${animal.doctorAppointment}"></span></p>
+        <p>Picture: <img th:src="${animal.pictureUrl}" alt="Animal Picture" width="100" /></p>
+        <p>Shelter: <span th:text="${animal.shelter != null ? animal.shelter.name : 'No Shelter'}"></span></p>
     </div>
-    <a href="/animals">Back to List</a>
+    <a th:href="@{/animals}">Back to Animals</a>
 </body>
 </html>
-
-

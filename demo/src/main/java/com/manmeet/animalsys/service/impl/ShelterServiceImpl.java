@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.manmeet.animalsys.entity.Role;
 import com.manmeet.animalsys.entity.Shelter;
@@ -26,6 +28,9 @@ public class ShelterServiceImpl implements ShelterService {
 
 	@Autowired
 	private UserRepository userRepository; // Add this dependency
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Shelter saveShelter(Shelter shelter) {
@@ -52,10 +57,34 @@ public class ShelterServiceImpl implements ShelterService {
 		shelterRepository.deleteById(id);
 	}
 
+	/*
+	 * @Override public Shelter updateShelter(Shelter shelter) { if
+	 * (shelterRepository.existsById(shelter.getId())) { return
+	 * shelterRepository.save(shelter); } throw new
+	 * IllegalArgumentException("Shelter with id " + shelter.getId() +
+	 * " does not exist."); }
+	 */
+
 	@Override
 	public Shelter updateShelter(Shelter shelter) {
-		if (shelterRepository.existsById(shelter.getId())) {
-			return shelterRepository.save(shelter);
+		Optional<Shelter> existingShelterOpt = shelterRepository.findById(shelter.getId());
+		if (existingShelterOpt.isPresent()) {
+			Shelter existingShelter = existingShelterOpt.get();
+
+			// Update fields without reassigning the `animals` reference
+			existingShelter.setName(shelter.getName());
+			existingShelter.setLocation(shelter.getLocation());
+			existingShelter.setCapacity(shelter.getCapacity());
+			existingShelter.setCurrentOccupancy(shelter.getCurrentOccupancy());
+			existingShelter.setContactDetails(shelter.getContactDetails());
+
+			// Only update the `animals` collection if needed
+			if (shelter.getAnimals() != null) {
+				existingShelter.getAnimals().clear();
+				existingShelter.getAnimals().addAll(shelter.getAnimals());
+			}
+
+			return shelterRepository.save(existingShelter);
 		}
 		throw new IllegalArgumentException("Shelter with id " + shelter.getId() + " does not exist.");
 	}
@@ -66,6 +95,7 @@ public class ShelterServiceImpl implements ShelterService {
 	}
 
 	@Override
+	@Transactional
 	public Shelter increaseCapacity(Long shelterId, int increment) {
 		Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
 		if (shelterOptional.isPresent()) {
@@ -77,6 +107,7 @@ public class ShelterServiceImpl implements ShelterService {
 	}
 
 	@Override
+	@Transactional
 	public Shelter decreaseCapacity(Long shelterId, int decrement) {
 		Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
 		if (shelterOptional.isPresent()) {
@@ -92,26 +123,45 @@ public class ShelterServiceImpl implements ShelterService {
 	}
 
 	@Override
+	@Transactional
 	public User addStaffToShelter(Long shelterId, User staff) {
-		Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
-		if (shelterOptional.isPresent()) {
-			Shelter shelter = shelterOptional.get();
+	    Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
+	    if (shelterOptional.isPresent()) {
+	        Shelter shelter = shelterOptional.get();
 
-			// Fetch the "STAFF" role
-			Role staffRole = roleRepository.findByName("STAFF");
-			if (staffRole == null) {
-				throw new IllegalStateException("The STAFF role does not exist in the database.");
-			}
+	        // Fetch the "ROLE_STAFF" role
+	        Role staffRole = roleRepository.findByName("ROLE_STAFF");
+	        if (staffRole == null) {
+	            throw new IllegalStateException("The STAFF role does not exist in the database.");
+	        }
 
-			// Assign the STAFF role to the user
-			staff.getRoles().add(staffRole);
+	        // Check if email is null
+	        if (staff.getEmail() == null) {
+	            throw new IllegalArgumentException("Email cannot be null for the user.");
+	        }
 
-			// Save the user with the new role
-			userRepository.save(staff);
+	        // Set a default password if not provided
+	        if (staff.getPassword() == null || staff.getPassword().isEmpty()) {
+	            staff.setPassword("defaultPassword"); // Replace with a proper password generation logic
+	        }
 
-			return staff;
-		}
-		throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
+	        // Encode the password
+	        String encodedPassword = passwordEncoder.encode(staff.getPassword());
+	        staff.setPassword(encodedPassword);
+
+	        // Assign the STAFF role to the user
+	        staff.getRoles().add(staffRole);
+
+	        // Save the user with the new role
+	        User savedStaff = userRepository.save(staff);
+
+	        // Associate staff with the shelter
+	        shelter.getStaff().add(savedStaff);
+	        shelterRepository.save(shelter); // Save the updated shelter
+
+	        return savedStaff; // Optionally return the saved staff member
+	    }
+	    throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
 	}
 
 	@Override
@@ -134,13 +184,17 @@ public class ShelterServiceImpl implements ShelterService {
 
 	@Override
 	public List<User> getStaffByShelter(Long shelterId) {
-		Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
-		if (shelterOptional.isPresent()) {
-			Shelter shelter = shelterOptional.get();
-			return shelter.getStaff().stream()
-					.filter(user -> user.getRoles().stream().anyMatch(role -> role.getName().equals("STAFF")))
-					.collect(Collectors.toList());
-		}
-		throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
+	    Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
+	    if (shelterOptional.isPresent()) {
+	        Shelter shelter = shelterOptional.get();
+	        
+	        // Return staff members who have the ROLE_STAFF
+	        return shelter.getStaff().stream()
+	                .filter(user -> user.getRoles().stream()
+	                        .anyMatch(role -> role.getName().equals("ROLE_STAFF"))) // Ensure using the correct role name
+	                .collect(Collectors.toList());
+	    }
+	    throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
 	}
+
 }

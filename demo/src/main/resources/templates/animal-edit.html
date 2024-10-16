@@ -8,22 +8,33 @@
 </head>
 <body>
     <h1>Edit Animal</h1>
-    <form action="/animals/{{ animal.id }}" method="POST">
-        <input type="hidden" name="_method" value="PUT">
+    <form action="/animals/{id}/edit" method="post" th:action="@{/animals/{id}/edit(id=${animal.id})}" th:object="${animal}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" th:field="*{name}" required>
+
         <label for="type">Type:</label>
-        <input type="text" id="type" name="type" value="{{ animal.type }}" required>
-        
+        <input type="text" id="type" name="type" th:field="*{type}" required>
+
         <label for="healthStatus">Health Status:</label>
-        <input type="text" id="healthStatus" name="healthStatus" value="{{ animal.healthStatus }}" required>
+        <input type="text" id="healthStatus" name="healthStatus" th:field="*{healthStatus}" required>
+
+        <label for="doctorAppointment">Doctor Appointment:</label>
+        <input type="text" id="doctorAppointment" name="doctorAppointment" th:field="*{doctorAppointment}">
 
         <label for="pictureUrl">Picture URL:</label>
-        <input type="text" id="pictureUrl" name="pictureUrl" value="{{ animal.pictureUrl }}">
+        <input type="text" id="pictureUrl" name="pictureUrl" th:field="*{pictureUrl}">
+
+        <label for="shelter">Shelter:</label>
+        <select id="shelter" name="shelterId" th:field="*{shelter.id}">
+            <option value="" disabled selected>Select Shelter</option> <!-- Optional placeholder -->
+            <option th:each="shelter : ${shelters}" 
+                    th:value="${shelter.id}" 
+                    th:text="${shelter.name}" 
+                    th:selected="${animal.shelter.id == shelter.id}"></option>
+        </select>
 
         <button type="submit">Update Animal</button>
-        <a href="/animals">Cancel</a>
     </form>
+    <a href="/animals">Back to Animal List</a>
 </body>
 </html>
-
-
-

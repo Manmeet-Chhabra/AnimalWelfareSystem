@@ -1,49 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shelter List</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="path/to/your/css/styles.css"> <!-- Link your CSS file -->
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Shelters</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Capacity</th>
-                    <th>Current Occupancy</th>
-                </tr>
-            </thead>
-            <tbody id="shelterTableBody">
-                <!-- Data will be populated here -->
-            </tbody>
-        </table>
+    <h1>Shelter List</h1>
+
+    <!-- Search Form -->
+    <form th:action="@{/shelters/search}" method="get">
+        <input type="text" name="location" placeholder="Location" />
+        <input type="number" name="capacity" placeholder="Capacity" />
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th>Current Occupancy</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="shelter : ${shelters}">
+                <td th:text="${shelter.name}"></td>
+                <td th:text="${shelter.location}"></td>
+                <td th:text="${shelter.capacity}"></td>
+                <td th:text="${shelter.currentOccupancy} != null ? ${shelter.currentOccupancy} : 'N/A'"></td>
+                <td>
+                    <a th:href="@{/shelters/{id}(id=${shelter.id})}">View</a>
+                    <a th:href="@{/shelters/edit/{id}(id=${shelter.id})}">Edit</a>
+                    <a th:href="@{/shelters/delete/{id}(id=${shelter.id})}" onclick="return confirm('Are you sure you want to delete this shelter?');">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a href="/shelters/create">Create New Shelter</a>
     </div>
 
-    <script>
-        // Fetching shelter data from the backend
-        fetch('/shelters')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('shelterTableBody');
-                data.forEach(shelter => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${shelter.id}</td>
-                        <td>${shelter.name}</td>
-                        <td>${shelter.location}</td>
-                        <td>${shelter.capacity}</td>
-                        <td>${shelter.currentOccupancy !== null ? shelter.currentOccupancy : 0}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error fetching shelters:', error));
-    </script>
 </body>
 </html>

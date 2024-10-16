@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animal List</title>
-    <link rel="stylesheet" href="/css/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Animal List</title>
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
-    <h1>Animal List</h1>
-    <a href="/animals/create">Add New Animal</a>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Health Status</th>
-                <th>Picture URL</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="animalTable">
-            <!-- Animal data will be populated here -->
-        </tbody>
-    </table>
-	<a href="animal-create.html">Add New Animal</a>
+	<h1>Animal List</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Health Status</th>
+				<th>Picture</th>
+				<th>Shelter</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="animal : ${animals}">
+				<td th:text="${animal.id}"></td>
+				<td th:text="${animal.name}"></td>
+				<td th:text="${animal.type}"></td>
+				<td th:text="${animal.healthStatus}"></td>
+				<td><img th:src="${animal.pictureUrl}" alt="Animal Picture" width="50" /></td>
+				<td th:text="${animal.shelter != null ? animal.shelter.name : 'No Shelter'}"></td>
+				<!-- Handle null shelter -->
+
+				<td>
+					<a th:href="@{/animals/{id}(id=${animal.id})}">Details</a> |
+					<a th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a> |
+					<a th:href="@{/animals/{id}/delete(id=${animal.id})}">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="/animals/create">Create New Animal</a>
 </body>
+
 </html>

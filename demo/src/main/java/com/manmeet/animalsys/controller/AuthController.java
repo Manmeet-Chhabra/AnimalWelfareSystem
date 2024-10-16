@@ -101,4 +101,9 @@ public class AuthController {
 	public String userDashboard() {
 		return "user-dashboard"; // Points to user-dashboard.html
 	}
+	
+	@GetMapping("/staff-dashboard")
+	public String staffDashboard() {
+		return "staff-dashboard"; // Points to user-dashboard.html
+	}
 }

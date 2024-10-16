@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff List</title>
+    <style>
+        /* Optional: Add some basic styles */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove default padding */
+        }
+        li {
+            margin: 5px 0; /* Add spacing between items */
+        }
+        a {
+            text-decoration: none; /* Remove underline from links */
+            color: blue; /* Link color */
+        }
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Staff Members of Shelter</h1>
+
+    <!-- Display success or error messages -->
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+    <div th:if="${success}" style="color: green;">
+        <p th:text="${success}"></p>
+    </div>
+
+    <ul>
+        <!-- Ensure ${staff} is the correct model attribute -->
+        <li th:each="member : ${staff}">
+            <span th:text="${member.name}"></span> - 
+            <span th:text="${member.email}"></span> <!-- Optional: Display email -->
+        </li>
+    </ul>
+    
+    <a th:href="@{/shelters/{shelterId}/staff/add(shelterId=${shelterId})}">Add Staff</a>
+    <a th:href="@{/shelters}">Back to Shelter List</a>
+</body>
+</html>

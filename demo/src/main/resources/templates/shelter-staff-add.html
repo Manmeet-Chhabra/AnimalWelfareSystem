@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Staff</title>
+</head>
+<body>
+    <h1>Add Staff to Shelter</h1>
+
+    <!-- Display success or error messages -->
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+    <div th:if="${success}" style="color: green;">
+        <p th:text="${success}"></p>
+    </div>
+
+    <form th:action="@{/shelters/{shelterId}/staff/save(shelterId=${shelterId})}" th:object="${staff}" method="post">
+        <div>
+            <label for="staffMember">Select Staff Member:</label>
+            <select id="staffMember" th:field="*{id}" required onchange="populateStaffDetails()">
+                <option value="" disabled selected>Select a staff member</option>
+                <option th:each="member : ${staffMembers}" 
+                        th:value="${member.id}" 
+                        th:text="${member.name}" 
+                        th:attr="data-name=${member.name}, data-email=${member.email}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="staffName">Name:</label>
+            <input type="text" id="staffName" th:field="*{name}" readonly />
+        </div>
+        <div>
+            <label for="staffEmail">Email:</label>
+            <input type="email" id="staffEmail" th:field="*{email}" readonly />
+        </div>
+        <div>
+            <label for="staffPassword">Password:</label>
+            <input type="text" id="staffPassword" th:field="*{password}" readonly />
+        </div>
+        <div>
+            <button type="submit">Add Staff</button>
+        </div>
+    </form>
+    <a th:href="@{/shelters/{shelterId}/staff(shelterId=${shelterId})}">Cancel</a>
+
+    <script>
+        function populateStaffDetails() {
+            const staffSelect = document.getElementById("staffMember");
+            const selectedStaff = staffSelect.options[staffSelect.selectedIndex];
+            document.getElementById("staffName").value = selectedStaff.getAttribute("data-name") || "";
+            document.getElementById("staffEmail").value = selectedStaff.getAttribute("data-email") || "";
+        }
+    </script>
+</body>
+</html>

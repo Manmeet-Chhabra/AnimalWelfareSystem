@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Animal</title>
+</head>
+<body>
+    <h1>Add Animal to Shelter</h1>
+    
+    <!-- Form for adding a new animal -->
+    <form th:action="@{/shelter/{shelterId}/add(shelterId=${shelterId})}" 
+          th:object="${animal}" method="post">
+        <!-- Animal Name -->
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" th:field="*{name}" required />
+        </div>
+        
+        <!-- Animal Type -->
+        <div>
+            <label for="type">Type:</label>
+            <select id="type" th:field="*{type}" required>
+                <option value="">Select Type</option>
+                <option value="DOG">Dog</option>
+                <option value="CAT">Cat</option>
+                <option value="RABBIT">Rabbit</option>
+                <option value="COW">Cow</option>
+                <option value="OTHER">Other</option>
+            </select>
+        </div>
+        
+        
+
+        <!-- Submit Button -->
+        <div>
+            <button type="submit">Add Animal</button>
+        </div>
+    </form>
+</body>
+</html>

@@ -8,10 +8,13 @@
 </head>
 <body>
     <h1>Search Animals</h1>
-    <form id="searchForm">
+    <form action="/animals/search" method="get" th:action="@{/animals/search}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+
         <label for="type">Type:</label>
         <input type="text" id="type" name="type">
-        
+
         <label for="healthStatus">Health Status:</label>
         <input type="text" id="healthStatus" name="healthStatus">
 
@@ -22,13 +25,25 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Name</th>
                 <th>Type</th>
                 <th>Health Status</th>
                 <th>Picture URL</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody id="searchResults">
-            <!-- Search results will be populated here -->
+        <tbody>
+            <tr th:each="animal : ${animals}">
+                <td th:text="${animal.id}"></td>
+                <td th:text="${animal.name}"></td>
+                <td th:text="${animal.type}"></td>
+                <td th:text="${animal.healthStatus}"></td>
+                <td th:text="${animal.pictureUrl}"></td>
+                <td>
+                    <a th:href="@{/animals/{id}(id=${animal.id})}">Details</a> |
+                    <a th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a>
+                </td>
+            </tr>
         </tbody>
     </table>
 </body>
