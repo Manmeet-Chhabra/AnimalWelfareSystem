@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Review Adoption Request</title>
+    <style>
+        /* Optional styling for better appearance */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>Review Adoption Request</h1>
+
+<div>
+    <h2>Request Details</h2>
+    <table>
+        <tr>
+            <td>Adoption Request ID: <span th:text="${adoptionRequest.id}"></span></td>
+        </tr>
+        <tr>
+            <td>Animal ID: <span th:text="${adoptionRequest.animal.id}"></span></td>
+        </tr>
+        <tr>
+            <th>User ID</th>
+            <td th:text="${adoptionRequest.user.id}"></td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td th:text="${adoptionRequest.status}"></td>
+        </tr>
+        <tr>
+            <th>Score</th>
+            <td th:text="${adoptionRequest.score}"></td>
+        </tr>
+    </table>
+
+    
+
+    <h2>Decision</h2>
+    <form th:action="@{/adoptions/update-status}" method="post">
+        <input type="hidden" name="requestId" th:value="${adoptionRequest.id}"/>
+
+        <label for="decision">Decision:</label>
+        <select id="decision" name="decision">
+            <option value="APPROVED">Approve</option>
+            <option value="REJECTED">Reject</option>
+        </select>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" rows="4" cols="50"></textarea>
+
+        <button type="submit">Submit Decision</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Adoption Answers</title>
+</head>
+
+<body>
+    <h1>Adoption Answers for Request ID: <span th:text="${adoption.id}"></span></h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through questions (list of strings) and corresponding answers -->
+            <tr th:each="question, iterStat : ${questions}">
+                <td th:text="${iterStat.index + 1} + '. ' + ${question}"></td> <!-- Display the question text -->
+                <td th:text="${answers[iterStat.index].answer}"></td> <!-- Display the corresponding answer -->
+            </tr>
+        </tbody>
+    </table>
+
+    <td>
+        <a th:href="@{/adoptions/requests}">Back to Pending Requests</a>
+    </td>
+
+</body>
+
+</html>

@@ -1,6 +1,7 @@
 package com.manmeet.animalsys.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,69 +11,93 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ElementCollection; // Add this import for List
+import jakarta.persistence.Column; // Add this import for @Column
 
 @Entity
 public class Adoption {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "animal_id", nullable = false)
-	private Animal animal;
+    @ManyToOne
+    @JoinColumn(name = "animal_id", nullable = false)
+    private Animal animal;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	@Enumerated(EnumType.STRING)
-	private AdoptionRequestStatus status;
+    @Enumerated(EnumType.STRING)
+    private AdoptionRequestStatus status;
 
-	private LocalDate requestDate;
+    private LocalDate requestDate;
 
-	// Constructor, Getters, and Setters
+    @ElementCollection // Use this to store a list of answers
+    @Column(name = "answers") // Specify column name
+    private List<String> answers;
 
-	public Adoption() {
-	}
+    private int score; // Add this for storing the score
 
-	public Long getId() {
-		return id;
-	}
+    // Constructor, Getters, and Setters
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Adoption() {
+    }
 
-	public AdoptionRequestStatus getStatus() {
-		return status;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setStatus(AdoptionRequestStatus status) {
-		this.status = status;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public LocalDate getRequestDate() {
-		return requestDate;
-	}
+    public AdoptionRequestStatus getStatus() {
+        return status;
+    }
 
-	public void setRequestDate(LocalDate requestDate) {
-		this.requestDate = requestDate;
-	}
+    public void setStatus(AdoptionRequestStatus status) {
+        this.status = status;
+    }
 
-	public Animal getAnimal() {
-		return animal;
-	}
+    public LocalDate getRequestDate() {
+        return requestDate;
+    }
 
-	public void setAnimal(Animal animal) {
-		this.animal = animal;
-	}
+    public void setRequestDate(LocalDate requestDate) {
+        this.requestDate = requestDate;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public Animal getAnimal() {
+        return animal;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<String> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<String> answers) {
+        this.answers = answers;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }

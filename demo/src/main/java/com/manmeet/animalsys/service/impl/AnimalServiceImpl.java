@@ -82,5 +82,7 @@ public class AnimalServiceImpl implements AnimalService {
 		// Fetch and return animals with status AVAILABLE
 		return animalRepository.findByAdoptionStatus(AdoptionStatus.AVAILABLE);
 	}
+	
+	
 
 }

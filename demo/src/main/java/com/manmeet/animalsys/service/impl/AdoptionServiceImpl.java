@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.manmeet.animalsys.entity.Adoption;
+import com.manmeet.animalsys.entity.AdoptionAnswer;
 import com.manmeet.animalsys.entity.AdoptionRequestStatus;
+import com.manmeet.animalsys.repos.AdoptionAnswerRepository;
 import com.manmeet.animalsys.repos.AdoptionRepository;
 import com.manmeet.animalsys.service.AdoptionService;
 
@@ -17,6 +19,9 @@ public class AdoptionServiceImpl implements AdoptionService {
     @Autowired
     private AdoptionRepository adoptionRepository;
 
+    @Autowired
+    private AdoptionAnswerRepository adoptionAnswerRepository;
+    
     // Evaluate the score based on answers
     @Override
     @Transactional
@@ -43,8 +48,11 @@ public class AdoptionServiceImpl implements AdoptionService {
     @Override
     @Transactional
     public List<Adoption> getAllAdoptionRequests() {
-        return adoptionRepository.findAll();
+        //return adoptionRepository.findAll();
+    	return adoptionRepository.findByStatus(AdoptionRequestStatus.PENDING);
     }
+    
+    
 
     // Retrieve a specific adoption request by ID
     @Override
@@ -72,6 +80,8 @@ public class AdoptionServiceImpl implements AdoptionService {
         adoption.setStatus(status); // Update status
         return adoptionRepository.save(adoption); // Save updated request
     }
+    
+    
 
     // Delete an adoption request
     @Override
@@ -85,4 +95,39 @@ public class AdoptionServiceImpl implements AdoptionService {
     public List<Adoption> getAdoptionsByUserId(Long userId) {
         return adoptionRepository.findByUserId(userId);
     }
+    
+
+    // Method to save answers associated with an adoption request
+    @Override
+    @Transactional
+    public void saveAdoptionAnswers(Adoption adoption, List<String> answers) {
+        // Set the score before saving answers
+        int score = evaluateScore(answers);
+        adoption.setScore(score);
+        adoptionRepository.save(adoption); // Update the adoption with the score
+
+        // Save each answer
+        for (String answer : answers) {
+            AdoptionAnswer adoptionAnswer = new AdoptionAnswer();
+            adoptionAnswer.setAdoption(adoption);
+            adoptionAnswer.setAnswer(answer);
+            adoptionAnswerRepository.save(adoptionAnswer);
+        }
+    }
+    
+    
+
+    // Method to retrieve answers for a specific adoption request
+    @Override
+    @Transactional
+    public List<AdoptionAnswer> getAdoptionAnswers(Long adoptionId) {
+        return adoptionAnswerRepository.findByAdoptionId(adoptionId);
+    }
+    
+    @Override
+    @Transactional
+    public Adoption save(Adoption adoption) {
+        return adoptionRepository.save(adoption); // Save the adoption entity to the database
+    }
+   
 }

@@ -1,38 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Review Adoption Requests</title>
+    <title>Pending Adoption Requests</title>
+    <style>
+        /* Optional styling for better appearance */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e8e8e8;
+        }
+        .button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Adoption Requests for Review</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>Animal ID</th>
-                <th>User ID</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="request : ${requests}">
-                <td th:text="${request.id}"></td>
-                <td th:text="${request.animal.id}"></td>
-                <td th:text="${request.user.id}"></td>
-                <td th:text="${request.status}"></td>
-                <td>
-                    <form th:action="@{/adoptions/requests/{requestId}/review(requestId=${request.id})}" method="post">
-                        <select name="status">
-                            <option value="PENDING">Pending</option>
-                            <option value="APPROVED">Approve</option>
-                            <option value="REJECTED">Reject</option>
-                        </select>
-                        <button type="submit">Update</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<h1>Pending Adoption Requests</h1>
+
+<!-- Display error message if exists -->
+<div th:if="${errorMessage}" class="error-message">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th scope="col">Request ID</th>
+            <th scope="col">Animal ID</th>
+            <th scope="col">User ID</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+            <th scope="col">Score</th>
+            <th scope="col">Answers</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:if="${#lists.isEmpty(pendingRequests)}">
+            <td colspan="7" style="text-align: center; font-weight: bold;">No pending adoption requests.</td>
+        </tr>
+        <tr th:each="request : ${pendingRequests}">
+            <td th:text="${request.id}"></td>
+            <td th:text="${request.animal.id}"></td>
+            <td th:text="${request.user.id}"></td>
+            <td th:text="${request.status}"></td>
+            <td>
+                <a th:href="@{/adoptions/review/{id}(id=${request.id})}" class="button">Review</a>
+            </td>
+            <td th:text="${request.score}"></td>
+            <td>
+                <a th:href="@{/adoptions/answers/{id}(id=${request.id})}" class="button">View Answers</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 </body>
 </html>

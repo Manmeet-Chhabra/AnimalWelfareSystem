@@ -3,6 +3,7 @@ package com.manmeet.animalsys.service;
 import java.util.List;
 
 import com.manmeet.animalsys.entity.Adoption;
+import com.manmeet.animalsys.entity.AdoptionAnswer;
 import com.manmeet.animalsys.entity.AdoptionRequestStatus;
 
 public interface AdoptionService {
@@ -27,5 +28,12 @@ public interface AdoptionService {
 	Adoption updateRequestStatus(Long requestId, AdoptionRequestStatus status);
 
 	List<Adoption> getAdoptionsByUserId(Long userId);
+
+	void saveAdoptionAnswers(Adoption adoption, List<String> answers);
+
+	List<AdoptionAnswer> getAdoptionAnswers(Long adoptionId);
+
+	Adoption save(Adoption adoption);
+
 
 }
