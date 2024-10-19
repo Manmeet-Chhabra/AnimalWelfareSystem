@@ -3,6 +3,7 @@ package com.manmeet.animalsys.service.impl;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -98,4 +99,9 @@ public class UserServiceImpl implements UserService {
 	public User findById(Long id) {
 		 return userRepository.findById(id).orElse(null); // Return null if not found
 	}
+	
+	@Override
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id); // Assumes your UserRepository has this method
+    }
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Adoption Status</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Your Adoption Request Status</h1>
+        
+        <!-- Display message if available (e.g., after submitting a request) -->
+        <div th:if="${message}" class="alert alert-info">
+            <p th:text="${message}"></p>
+        </div>
+
+        <!-- List of adoptions if present -->
+        <div th:if="${not #lists.isEmpty(adoptions)}">
+            <h2>Your Adoption Requests:</h2>
+            <ul>
+                <li th:each="adoption : ${adoptions}">
+                    <strong>Animal Name:</strong> <span th:text="${adoption.animal.name}"></span><br />
+                    <strong>Status:</strong> <span th:text="${adoption.status}"></span><br />
+                    <strong>Request Date:</strong> <span th:text="${adoption.requestDate}"></span><br />
+                    <hr />
+                </li>
+            </ul>
+        </div>
+
+        <!-- Display message if no adoptions are found -->
+        <div th:if="${#lists.isEmpty(adoptions)}">
+            <p>You have no adoption requests at this time.</p>
+        </div>
+
+        <!-- Navigation Links -->
+        <div>
+            <a href="/" class="btn btn-primary">Back to Home</a> <!-- Link to your home page -->
+            <a href="/adoptions/available" class="btn btn-secondary">Back to Available Animals</a> <!-- Link to the available animals page -->
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Review Adoption Requests</title>
+</head>
+<body>
+    <h1>Adoption Requests for Review</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Animal ID</th>
+                <th>User ID</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="request : ${requests}">
+                <td th:text="${request.id}"></td>
+                <td th:text="${request.animal.id}"></td>
+                <td th:text="${request.user.id}"></td>
+                <td th:text="${request.status}"></td>
+                <td>
+                    <form th:action="@{/adoptions/requests/{requestId}/review(requestId=${request.id})}" method="post">
+                        <select name="status">
+                            <option value="PENDING">Pending</option>
+                            <option value="APPROVED">Approve</option>
+                            <option value="REJECTED">Reject</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Adoption Result</title>
+</head>
+<body>
+    <h1>Adoption Eligibility Result</h1>
+    <div>
+        <p th:text="${eligibilityStatus}"></p>
+        <p th:if="${feedback}" th:text="${feedback}"></p>
+    </div>
+    <div>
+        <a href="/adoptions/available" class="btn btn-secondary">Back to Available Animals</a> <!-- Link to the available animals page -->
+    </div>
+</body>
+</html>

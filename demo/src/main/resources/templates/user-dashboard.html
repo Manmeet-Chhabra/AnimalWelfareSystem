@@ -9,17 +9,25 @@
 <body>
     <div class="container">
         <h1>User Dashboard</h1>
+        
         <nav>
             <ul>
                 <li><a href="/animals">View Animals</a></li>
                 <li><a href="/shelters">View Shelters</a></li>
                 <li><a href="/animals/search">Search Animals</a></li>
                 <li><a href="/shelters/search">Search Shelters</a></li>
-                <li><a href="/adopt-animal">Adopt Animal</a></li>
+                <li><a href="/adoptions/available">Adopt Animal</a></li>
+                <li><a href="/adoptions/status">Check Adoption Status</a></li> <!-- New addition -->
+                <li><a href="/adoptions/questionnaire">Adoption Questionnaire</a></li> <!-- New addition -->
+                <li><a href="/adoptions/feedback">Adoption Feedback</a></li> <!-- New addition -->
                 <li><a href="/donations">Make a Donation</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
+        
+        <div class="user-info">
+            <p>Welcome, <strong>{{ userName }}</strong>!</p> <!-- Example of user-specific greeting -->
+        </div>
     </div>
 </body>
 </html>

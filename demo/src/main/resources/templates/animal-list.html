@@ -36,6 +36,12 @@
 					<a th:href="@{/animals/{id}(id=${animal.id})}">Details</a> |
 					<a th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a> |
 					<a th:href="@{/animals/{id}/delete(id=${animal.id})}">Delete</a>
+					<!-- Show 'Adopt' button only if the animal is available for adoption -->
+					<form th:action="@{/adoptions/{animalId}/submit(animalId=${animal.id})}" method="post" th:if="${animal.adoptionStatus == 'AVAILABLE'}">
+					        <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/> <!-- Assuming the user ID is available in the authentication object -->
+					        <button type="submit">Adopt</button>
+					    </form>
+
 				</td>
 			</tr>
 		</tbody>

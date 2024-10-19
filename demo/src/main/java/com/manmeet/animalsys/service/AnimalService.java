@@ -6,6 +6,9 @@ import java.util.Optional;
 import com.manmeet.animalsys.entity.Animal;
 
 public interface AnimalService {
+	
+	
+	List<Animal> getAvailableAnimals();
 
 	Animal addAnimal(Long shelterId, Animal animal);
 
@@ -24,3 +27,4 @@ public interface AnimalService {
 	List<Animal> searchAnimals(String type, String healthStatus); // Add search criteria as needed
 
 }
+

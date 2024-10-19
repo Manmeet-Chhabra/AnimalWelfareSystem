@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Adoption Questionnaire</title>
+</head>
+<body>
+    <h1>Adoption Eligibility Questionnaire</h1>
+    <form th:action="@{/adoptions/{animalId}/questionnaire(animalId=${animalId})}" method="post">
+        <div>
+            <label for="answer0">1. Do you have prior experience with animals?</label><br>
+            <input type="radio" id="answer0" name="answer0" value="yes" required> Yes
+            <input type="radio" id="answer0_no" name="answer0" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer1">2. Is your home pet-friendly?</label><br>
+            <input type="radio" id="answer1" name="answer1" value="yes" required> Yes
+            <input type="radio" id="answer1_no" name="answer1" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer2">3. Can you commit time daily for pet care?</label><br>
+            <input type="radio" id="answer2" name="answer2" value="yes" required> Yes
+            <input type="radio" id="answer2_no" name="answer2" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer3">4. Are you financially prepared for pet care?</label><br>
+            <input type="radio" id="answer3" name="answer3" value="yes" required> Yes
+            <input type="radio" id="answer3_no" name="answer3" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer4">5. Do you have a stable living situation?</label><br>
+            <input type="radio" id="answer4" name="answer4" value="yes" required> Yes
+            <input type="radio" id="answer4_no" name="answer4" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer5">6. Do you have knowledge or experience in training animals?</label><br>
+            <input type="radio" id="answer5" name="answer5" value="yes" required> Yes
+            <input type="radio" id="answer5_no" name="answer5" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer6">7. Do you have plans for who will care for the animal if you are unable?</label><br>
+            <input type="radio" id="answer6" name="answer6" value="yes" required> Yes
+            <input type="radio" id="answer6_no" name="answer6" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer7">8. Are you willing to undergo a home visit?</label><br>
+            <input type="radio" id="answer7" name="answer7" value="yes" required> Yes
+            <input type="radio" id="answer7_no" name="answer7" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer8">9. Do you have any allergies to animals?</label><br>
+            <input type="radio" id="answer8" name="answer8" value="yes" required> Yes
+            <input type="radio" id="answer8_no" name="answer8" value="no"> No
+        </div>
+
+        <div>
+            <label for="answer9">10. How would you describe your lifestyle?</label><br>
+            <input type="radio" id="answer9" name="answer9" value="active" required> Active
+            <input type="radio" id="answer9" name="answer9" value="moderate"> Moderate
+            <input type="radio" id="answer9" name="answer9" value="sedentary"> Sedentary
+        </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.manmeet.animalsys.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -29,11 +31,36 @@ public class Animal {
 	@JoinColumn(name = "shelter_id") // This will create a shelter_id column in the animals table
 	private Shelter shelter; // Reference to the Shelter entity
 
+	@Enumerated(EnumType.STRING)
+	private AdoptionStatus adoptionStatus = AdoptionStatus.AVAILABLE;
+
+	@OneToMany(mappedBy = "animal", cascade = CascadeType.ALL)
+	private List<Adoption> adoptionRequests; // Change this to your Adoption entity
+
+	public AdoptionStatus getAdoptionStatus() {
+		return adoptionStatus;
+	}
+
+	public void setAdoptionStatus(AdoptionStatus adoptionStatus) {
+		this.adoptionStatus = adoptionStatus;
+	}
+
+	public List<Adoption> getAdoptionRequests() {
+		return adoptionRequests;
+	}
+
+	public void setAdoptionRequests(List<Adoption> adoptionRequests) {
+		this.adoptionRequests = adoptionRequests;
+	}
+
 	public Animal() {
 	}
 
+	
+
 	public Animal(Long id, String name, String type, String healthStatus, String doctorAppointment, String pictureUrl,
-			Shelter shelter) {
+			Shelter shelter, AdoptionStatus adoptionStatus, List<Adoption> adoptionRequests) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -41,6 +68,8 @@ public class Animal {
 		this.doctorAppointment = doctorAppointment;
 		this.pictureUrl = pictureUrl;
 		this.shelter = shelter;
+		this.adoptionStatus = adoptionStatus;
+		this.adoptionRequests = adoptionRequests;
 	}
 
 	public Long getId() {
@@ -98,5 +127,27 @@ public class Animal {
 	public void setShelter(Shelter shelter) {
 		this.shelter = shelter;
 	}
+	
+	// Method to adopt the animal
+    public void adopt() {
+        this.adoptionStatus = AdoptionStatus.ADOPTED;
+        this.adoptionRequests.clear(); // Clear the adoption requests when adopted
+    }
+
+    // Check if the animal is available for adoption
+    public boolean isAvailable() {
+        return this.adoptionStatus == AdoptionStatus.AVAILABLE;
+    }
+
+    // Override toString() for better logging
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", adoptionStatus=" + adoptionStatus +
+                '}';
+    }
 
 }

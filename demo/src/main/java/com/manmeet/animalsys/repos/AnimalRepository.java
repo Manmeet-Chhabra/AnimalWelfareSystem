@@ -1,10 +1,12 @@
 package com.manmeet.animalsys.repos;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.manmeet.animalsys.entity.AdoptionStatus;
 import com.manmeet.animalsys.entity.Animal;
 
 @Repository
@@ -19,4 +21,8 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 	List<Animal> findByNameContaining(String name);
 
 	List<Animal> findByShelter_Id(Long shelterId);
+	
+	List<Animal> findByAdoptionStatus(AdoptionStatus status);
+	
+	Optional<Animal> findById(Long id);
 }

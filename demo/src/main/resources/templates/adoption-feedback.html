@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Adoption Feedback</title>
+</head>
+<body>
+    <h1>Feedback Form</h1>
+    <form th:action="@{/adoptions/feedback}" method="post">
+        <div>
+            <label>Your Feedback:</label>
+            <textarea name="feedback" required></textarea>
+        </div>
+        <div>
+            <button type="submit">Submit Feedback</button>
+        </div>
+    </form>
+</body>
+</html>

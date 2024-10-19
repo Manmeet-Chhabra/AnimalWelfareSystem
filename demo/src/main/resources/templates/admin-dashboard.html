@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +11,24 @@
         <h1>Admin Dashboard</h1>
         <nav>
             <ul>
-                <li><a href="/animals">View Animals</a></li>
-                <li><a href="/shelters">View Shelters</a></li>
-                <li><a href="/animals/create">Add Animal</a></li>
-                <li><a href="/shelters/create">Create Shelter</a></li>
-                <li><a href="/animals/search">Search Animals</a></li>
-                <li><a href="/shelters/search">Search Shelters</a></li>
-                <li><a href="/users">Manage Users</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li><a th:href="@{/animals}">View Animals</a></li>
+                <li><a th:href="@{/shelters}">View Shelters</a></li>
+                <li><a th:href="@{/animals/create}">Add Animal</a></li>
+                <li><a th:href="@{/shelters/create}">Create Shelter</a></li>
+                <li><a th:href="@{/animals/search}">Search Animals</a></li>
+                <li><a th:href="@{/shelters/search}">Search Shelters</a></li>
+                <li><a th:href="@{/users}">Manage Users</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
             </ul>
         </nav>
+        <div>
+            <h2>Adoption Requests Overview</h2>
+            <p>Total Requests: <span th:text="${totalRequests}"></span></p>
+            <p>Pending Requests: <span th:text="${pendingRequests}"></span></p>
+            <p>Approved Requests: <span th:text="${approvedRequests}"></span></p>
+            <p>Rejected Requests: <span th:text="${rejectedRequests}"></span></p>
+            <a th:href="@{/adoptions/requests}">Review Adoption Requests</a>
+        </div>
     </div>
 </body>
 </html>

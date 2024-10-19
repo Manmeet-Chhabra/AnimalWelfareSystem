@@ -4,6 +4,7 @@ package com.manmeet.animalsys.service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import com.manmeet.animalsys.dto.UserDto;
 import com.manmeet.animalsys.entity.Role;
@@ -21,5 +22,7 @@ public interface UserService {
 	List<User> findByRole(String roleName);
 
 	User findById(Long id);
+
+	Optional<User> getUserById(Long id);
 
 }

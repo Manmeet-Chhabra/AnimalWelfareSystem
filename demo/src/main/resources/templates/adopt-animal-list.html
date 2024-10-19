@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Available Animals for Adoption</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Available Animals for Adoption</h1>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Health Status</th>
+					<th>Picture</th>
+					<th>Shelter</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="animal : ${animals}">
+					<td th:text="${animal.id}"></td>
+					<td th:text="${animal.name}"></td>
+					<td th:text="${animal.type}"></td>
+					<td th:text="${animal.healthStatus}"></td>
+					<td><img th:src="${animal.pictureUrl}" alt="Animal Picture" width="50" /></td>
+					<td th:text="${animal.shelter != null ? animal.shelter.name : 'No Shelter'}"></td>
+					<td>
+						<a th:href="@{/adoptions/{animalId}/questionnaire(animalId=${animal.id})}"
+							class="btn btn-primary">Adopt</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

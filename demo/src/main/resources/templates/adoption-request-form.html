@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Adoption Request Form</title>
+</head>
+<body>
+    <h1>Adoption Request Form</h1>
+    
+    <!-- Form for submitting the adoption request -->
+    <form th:action="@{/adoptions/{animalId}/submit(animalId=${animalId})}" method="post">
+        
+        <!-- Hidden field for userId -->
+        <input type="hidden" name="userId" th:value="${userId}"/>
+
+        <div>
+            <label>Animal ID:</label>
+            <span th:text="${animalId}"></span> <!-- Display animalId instead of input -->
+        </div>
+
+        <div>
+            <button type="submit">Submit Adoption Request</button>
+        </div>
+    </form>
+
+</body>
+</html>
