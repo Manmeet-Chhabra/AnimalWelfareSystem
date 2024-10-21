@@ -32,9 +32,9 @@ public class ShelterController {
 
 	@Autowired
 	private UserService userService;
-	
-	 @Autowired
-	    private RoleRepository roleRepository;
+
+	@Autowired
+	private RoleRepository roleRepository;
 
 	// Only Admin can create a new shelter (Form page)
 	@PreAuthorize("hasRole('ADMIN')")
@@ -152,40 +152,40 @@ public class ShelterController {
 	}
 
 	@PostMapping("/{shelterId}/staff/save")
-	public String addStaffToShelter(@PathVariable Long shelterId, @ModelAttribute User staff, RedirectAttributes redirectAttributes) {
-	    try {
-	        // Check if the email is null or empty before attempting to add staff
-	        if (staff.getEmail() == null || staff.getEmail().isEmpty()) {
-	            redirectAttributes.addFlashAttribute("error", "Email cannot be empty.");
-	            return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form with error
-	        }
+	public String addStaffToShelter(@PathVariable Long shelterId, @ModelAttribute User staff,
+			RedirectAttributes redirectAttributes) {
+		try {
+			// Check if the email is null or empty before attempting to add staff
+			if (staff.getEmail() == null || staff.getEmail().isEmpty()) {
+				redirectAttributes.addFlashAttribute("error", "Email cannot be empty.");
+				return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form with error
+			}
 
-	        // Fetch the "ROLE_STAFF" role
-	        Role staffRole = roleRepository.findByName("ROLE_STAFF");
-	        if (staffRole != null) {
-	            staff.getRoles().add(staffRole); // Add the staff role to the user
-	        } else {
-	            throw new IllegalStateException("The STAFF role does not exist in the database.");
-	        }
+			// Fetch the "ROLE_STAFF" role
+			Role staffRole = roleRepository.findByName("ROLE_STAFF");
+			if (staffRole != null) {
+				staff.getRoles().add(staffRole); // Add the staff role to the user
+			} else {
+				throw new IllegalStateException("The STAFF role does not exist in the database.");
+			}
 
-	        // Attempt to add the staff to the shelter
-	        shelterService.addStaffToShelter(shelterId, staff);
-	        
-	        // Add a success message
-	        redirectAttributes.addFlashAttribute("success", "Staff added successfully.");
-	        
-	        return "redirect:/shelters/" + shelterId + "/staff"; // Redirect to staff list
-	    } catch (DataIntegrityViolationException e) {
-	        // Handle case where a user with the same email already exists
-	        redirectAttributes.addFlashAttribute("error", "A user with this email already exists.");
-	        return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
-	    } catch (Exception e) {
-	        // Handle other potential exceptions
-	        redirectAttributes.addFlashAttribute("error", "An error occurred while adding staff.");
-	        return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
-	    }
+			// Attempt to add the staff to the shelter
+			shelterService.addStaffToShelter(shelterId, staff);
+
+			// Add a success message
+			redirectAttributes.addFlashAttribute("success", "Staff added successfully.");
+
+			return "redirect:/shelters/" + shelterId + "/staff"; // Redirect to staff list
+		} catch (DataIntegrityViolationException e) {
+			// Handle case where a user with the same email already exists
+			redirectAttributes.addFlashAttribute("error", "A user with this email already exists.");
+			return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
+		} catch (Exception e) {
+			// Handle other potential exceptions
+			redirectAttributes.addFlashAttribute("error", "An error occurred while adding staff.");
+			return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
+		}
 	}
-
 
 	// Only Admin can remove staff from a shelter
 	@PreAuthorize("hasRole('ADMIN')")

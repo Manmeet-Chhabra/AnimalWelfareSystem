@@ -5,26 +5,89 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Staff Dashboard</title>
-	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="styles.css"> <!-- Link to your custom styles -->
+	<style>
+		body {
+			background-color: #f8f9fa;
+		}
+
+		.container {
+			margin-top: 20px;
+		}
+
+		h1 {
+			color: #343a40;
+		}
+
+		nav ul {
+			list-style: none;
+			padding: 0;
+		}
+
+		nav ul li {
+			margin-bottom: 10px;
+		}
+
+		nav ul li a {
+			text-decoration: none;
+			color: #007bff;
+			font-weight: bold;
+		}
+
+		nav ul li a:hover {
+			text-decoration: underline;
+		}
+
+		.btn-custom {
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 0.25rem;
+			padding: 10px 15px;
+			text-align: center;
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		.btn-custom:hover {
+			background-color: #0056b3;
+		}
+	</style>
 </head>
 
 <body>
 	<div class="container">
-		<h1>Staff Dashboard</h1>
-		<nav>
-			<ul>
-				<li><a th:href="@{/animals}">View Animals</a></li>
-				<li><a th:href="@{/shelters}">View Shelters</a></li>
-				<li><a th:href="@{/animals/search}">Search Animals</a></li>
-				<li><a th:href="@{/shelters/search}">Search Shelters</a></li>
+		<h1 class="text-center mb-4">Staff Dashboard</h1>
+
+		<nav class="mb-4">
+			<ul class="navbar-nav">
+				<li><a class="btn btn-custom" th:href="@{/animals}">View Animals</a></li>
+				<li><a class="btn btn-custom" th:href="@{/shelters}">View Shelters</a></li>
+				<li><a class="btn btn-custom" th:href="@{/animals/search}">Search Animals</a></li>
+				<li><a class="btn btn-custom" th:href="@{/shelters/search}">Search Shelters</a></li>
+
 				<!-- Link to View Staff by Shelter with dynamic shelterId placeholder -->
-				<li><a th:href="@{/shelters/{shelterId}/staff(shelterId=${shelterId})}">View Staff by Shelter</a></li>
-				<li><a th:href="/adoptions/requests">View Adoption Requests</a></li> <!-- New addition -->
-				<li><a th:href="/adoptions/review">Assist in Adoption Review</a></li> <!-- New addition -->
-				<li><a th:href="@{/logout}">Logout</a></li>
+				<li><a class="btn btn-custom" th:href="@{/shelters/{shelterId}/staff(shelterId=${shelterId})}">View
+						Staff by Shelter</a></li>
+
+				<li><a class="btn btn-custom" th:href="@{/adoptions/requests}">View Adoption Requests</a></li>
+				<li><a class="btn btn-custom" th:href="@{/adoptions/review}">Assist in Adoption Review</a></li>
+
+				<!-- Reporting Features -->
+				
+				<!-- Updated Reporting Features -->
+				                <li><a class="btn btn-custom" th:href="@{/reports/new}">Create New Report</a></li>
+				                <li><a class="btn btn-custom" th:href="@{/reports/history}">View Report History</a></li>
+
+				<li><a class="btn btn-custom" th:href="@{/logout}">Logout</a></li>
 			</ul>
 		</nav>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

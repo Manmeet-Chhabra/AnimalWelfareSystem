@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Reports</title>
+    <style>
+        /* Basic styling for better appearance */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Report History</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Address</th> <!-- Updated to Address if applicable -->
+                <th>Date</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+		<tbody>
+		            <tr th:each="report : ${reports}">
+		                <td th:text="${report.type}"></td>
+		                <td th:text="${report.description}"></td>
+		                <td th:text="${report.address}"></td> <!-- Use address if changed -->
+						<td th:text="${report.reportDate}"></td>
+
+		                <td><a th:href="@{/reports/view/{id}(id=${report.id})}">View Details</a></td>
+		            </tr>
+		            <tr th:if="${#lists.isEmpty(reports)}">
+		                <td colspan="5">No reports found.</td>
+		            </tr>
+		        </tbody>
+    </table>
+</body>
+</html>

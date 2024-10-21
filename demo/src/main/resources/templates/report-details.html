@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Report Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Light gray background */
+            font-family: Arial, sans-serif;
+            /* Change font */
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            /* White background for the card */
+            border-radius: 5px;
+            /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
+        }
+
+        h1 {
+            color: #343a40;
+            /* Dark gray color */
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #495057;
+            /* Another shade of gray */
+        }
+
+        .attachment {
+            list-style-type: none;
+            /* Remove bullets from the list */
+            padding: 0;
+            /* Remove padding */
+        }
+
+        .attachment li {
+            margin-bottom: 10px;
+            /* Space between attachments */
+        }
+
+        .back-button {
+            margin-top: 20px;
+        }
+
+        .attachment a {
+            text-decoration: none;
+            /* Remove underline */
+            color: #007bff;
+            /* Bootstrap primary color */
+        }
+
+        .attachment a:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Report Details</h1>
+        <p><strong>Type:</strong> <span th:text="${report.type}"></span></p>
+        <p><strong>Description:</strong> <span th:text="${report.description}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${report.address}"></span></p>
+        <p><strong>Reported By:</strong> <span th:text="${report.reportedBy.name}"></span></p>
+        <p><strong>Status:</strong> <span th:text="${report.status}"></span></p> <!-- Added status field -->
+
+        <h2>Attachments</h2>
+        <ul class="attachment">
+            <li th:each="attachment : ${attachments}">
+                <img th:src="@{/reports/{reportId}/attachment/{attachmentId}(reportId=${report.id}, attachmentId=${attachment.id})}"
+                    alt="Attachment" style="max-width: 100%; height: auto;" />
+            </li>
+            <li th:if="${#lists.isEmpty(attachments)}">No attachments found.</li>
+        </ul>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

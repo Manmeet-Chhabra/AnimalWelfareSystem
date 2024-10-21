@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.manmeet.animalsys.entity.AdoptionStatus;
 import com.manmeet.animalsys.entity.Animal;
 import com.manmeet.animalsys.entity.Shelter;
-import com.manmeet.animalsys.repos.AdoptionRepository;
 import com.manmeet.animalsys.repos.AnimalRepository;
 import com.manmeet.animalsys.repos.ShelterRepository;
 import com.manmeet.animalsys.service.AnimalService;
@@ -83,6 +82,15 @@ public class AnimalServiceImpl implements AnimalService {
 		return animalRepository.findByAdoptionStatus(AdoptionStatus.AVAILABLE);
 	}
 	
+	@Override
+	public Animal findByName(String name) {
+	    return animalRepository.findByName(name);
+	}
 	
+	@Override
+    public Animal save(Animal animal) {
+        return animalRepository.save(animal); // Implement the save logic here
+    }
+
 
 }

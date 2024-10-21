@@ -26,5 +26,8 @@ public interface AnimalService {
 
 	List<Animal> searchAnimals(String type, String healthStatus); // Add search criteria as needed
 
+	Animal findByName(String name);
+
+	Animal save(Animal animal);
 }
 

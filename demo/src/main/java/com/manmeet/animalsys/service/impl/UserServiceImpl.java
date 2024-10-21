@@ -104,4 +104,11 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id); // Assumes your UserRepository has this method
     }
+	
+	@Override
+    public User findByName(String name) {
+        // Assuming you have a method in your UserRepository to find by username
+        return userRepository.findByName(name);
+	}
+	
 }

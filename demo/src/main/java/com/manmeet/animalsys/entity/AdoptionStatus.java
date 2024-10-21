@@ -1,5 +1,5 @@
 package com.manmeet.animalsys.entity;
 
 public enum AdoptionStatus {
-	AVAILABLE, ADOPTED
+	AVAILABLE, ADOPTED, NOT_AVAILABLE
 }

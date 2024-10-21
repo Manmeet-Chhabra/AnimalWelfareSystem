@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Submit Report</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px; /* Set the height for the map */
+            width: 100%; /* Make the map full width */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        textarea, input, select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Submit a New Report</h1>
+    <form action="#" th:action="@{/reports/submit}" th:object="${report}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="type">Report Type:</label>
+            <select id="type" th:field="*{type}" required>
+                <option th:each="type : ${types}" th:value="${type}" th:text="${type}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" th:field="*{description}" required></textarea>
+        </div>
+
+        <!-- Removed the animal input field since it will always be set to "Unknown" -->
+        <div class="form-group">
+            <p>The animal's details will be recorded as follows:</p>
+            <p>Name: <strong>Unknown</strong></p>
+            <p>Type: <strong>Unknown</strong></p>
+            <p>Health Status: <strong>Unknown</strong></p>
+        </div>
+
+        <!-- Hidden input field to store the selected location coordinates -->
+        <input type="hidden" id="location" th:field="*{location}" required/>
+
+        <div class="form-group">
+            <label for="humanReadableLocation">Location (Address):</label>
+            <input type="text" id="humanReadableLocation" th:field="*{address}" readonly required/>
+        </div>
+
+        <div class="form-group">
+            <label for="file">Upload Attachments:</label>
+            <input type="file" id="file" name="file" multiple/>
+        </div>
+
+        <button type="submit">Submit Report</button>
+    </form>
+
+    <!-- Map for selecting location -->
+    <div id="map"></div>
+
+    <!-- Include Leaflet.js -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([12.912548, 77.690506], 8);  // Default location
+
+        // Load OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Add a draggable marker
+        const marker = L.marker([12.912548, 77.690506], { draggable: true }).addTo(map);
+
+        // Update the hidden input field and fetch the human-readable address when the marker is moved
+        marker.on('moveend', function (e) {
+            const position = marker.getLatLng();
+            document.getElementById('location').value = position.lat + ',' + position.lng;
+
+            // Fetch the human-readable address using reverse geocoding
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.lat}&lon=${position.lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    document.getElementById('humanReadableLocation').value = address;
+                })
+                .catch(error => console.error('Error fetching the address:', error));
+        });
+
+        // Try to get the user's current location using the browser's geolocation API
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                };
+                map.setView(userLocation, 13); // Zoom in to user's location
+                marker.setLatLng(userLocation); // Set the marker to the user's location
+
+                // Fetch the human-readable address for the user's location
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.lat}&lon=${userLocation.lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const address = data.display_name;
+                        document.getElementById('humanReadableLocation').value = address;
+                    })
+                    .catch(error => console.error('Error fetching the address:', error));
+            });
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            const description = document.getElementById('description').value;
+            const location = document.getElementById('location').value;
+
+            if (!description || !location) {
+                alert("Please fill in all required fields.");
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>

@@ -25,4 +25,6 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 	List<Animal> findByAdoptionStatus(AdoptionStatus status);
 	
 	Optional<Animal> findById(Long id);
+	
+	Animal findByName(String name);
 }

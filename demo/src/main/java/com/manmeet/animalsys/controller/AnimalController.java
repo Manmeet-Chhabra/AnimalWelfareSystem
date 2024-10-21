@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.manmeet.animalsys.entity.Animal;
 import com.manmeet.animalsys.entity.Shelter;
@@ -30,15 +33,14 @@ public class AnimalController {
 
     private static final Logger logger = LoggerFactory.getLogger(AnimalController.class);
 
-    private final AnimalService animalService;
+    //private final AnimalService animalService;
 
     @Autowired
     private ShelterService shelterService;
 
     @Autowired
-    public AnimalController(AnimalService animalService) {
-        this.animalService = animalService;
-    }
+    private AnimalService animalService;
+    
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/create")
@@ -148,4 +150,12 @@ public class AnimalController {
         model.addAttribute("shelterId", shelterId);
         return "animal-shelter-list";
     }
+    
+    @GetMapping("/animals/check/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> checkAnimalExists(@PathVariable String name) {
+        Animal animal = animalService.findByName(name);
+        return animal != null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
 }
