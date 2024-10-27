@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Donate Toys</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('/images/donation-toys.jpg'); /* Add your background image here */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+            color: white; /* Change text color to make it readable on the background */
+            text-align: center;
+        }
+        h1 {
+            animation: slideIn 1s;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        img {
+            width: 300px;
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 8px; /* Rounded corners for the image */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for the image */
+        }
+        img:hover {
+            transform: scale(1.1);
+        }
+        form {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for the form */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .btn {
+            padding: 10px 15px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .quote {
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Donate Toys</h1>
+    <p>Your toy donations provide mental stimulation for animals in shelters.</p>
+    
+    <div class="quote">
+        “Play is essential for the well-being of our furry friends. Your donation can bring joy to their lives!”
+    </div>
+    
+    <img src="/images/donation_toys.jpg" alt="Toys Donation">
+    
+    <form th:action="@{/donations/save}" method="post">
+        <input type="hidden" name="donationType" value="TOYS"/>
+        <div>
+            <label>Quantity:</label>
+            <input type="number" name="quantity" placeholder="Enter quantity" required/>
+        </div>
+        <div>
+            <label>Your Name (optional):</label>
+            <input type="text" name="donorName" placeholder="Your name"/>
+        </div>
+        <button type="submit" class="btn">Submit Donation</button>
+    </form>
+</body>
+</html>

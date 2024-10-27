@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Animal Welfare Donations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('/images/background.jpg'); /* Replace with your image path */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+            color: #ffffff; /* Change text color to make it readable on the background */
+            text-align: center;
+        }
+        h1 {
+            animation: slideIn 1s;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .btn {
+            padding: 10px 15px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .story {
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for readability */
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: #333; /* Dark text for stories */
+        }
+    </style>
+</head>
+<body>
+    <h1>Make a Difference with Your Donation</h1>
+    <p>Each donation helps improve the lives of animals in our care.</p>
+    <p>“The greatness of a nation and its moral progress can be judged by the way its animals are treated.” – Mahatma Gandhi</p>
+    
+    <select id="donationType" onchange="redirectToDonationPage()">
+        <option value="">Select a type of donation</option>
+        <option value="food">Food Donation</option>
+        <option value="supplies">Supplies Donation</option>
+        <option value="health_hygiene">Health & Hygiene Donation</option>
+        <option value="toys">Toys Donation</option>
+        <option value="equipment">Equipment Donation</option>
+        <option value="money">Money Donation</option>
+        <option value="volunteer">Volunteer Time Donation</option>
+        <option value="educational">Educational Materials Donation</option>
+    </select>
+
+    <div class="story">
+        <h2>Anna's Story: The Food Donation</h2>
+        <p>“I remember the day I adopted my dog from the shelter, and I want to give back. By donating food, I feel like I’m helping those still waiting for a loving home.”</p>
+    </div>
+
+    <div class="story">
+        <h2>Tom's Story: The Supplies Donation</h2>
+        <p>“I often have excess supplies at my store. It warms my heart to know that my donations can help bring joy to animals who might not have a cozy space.”</p>
+    </div>
+
+    <div class="story">
+        <h2>Lisa's Story: The Health & Hygiene Donation</h2>
+        <p>“Every time I visit the shelter, I see how important hygiene is for these animals. Donating health products makes me feel like I’m directly contributing to their well-being.”</p>
+    </div>
+
+    <div class="story">
+        <h2>Mark's Story: The Money Donation</h2>
+        <p>“Money donations can be daunting, but knowing that my contribution helps keep the shelter running and provides medical care for sick animals makes it worthwhile.”</p>
+    </div>
+
+    <div class="story">
+        <h2>Sara's Story: The Toy Donation</h2>
+        <p>“My students love animals, and we’ve collected so many toys! It’s fulfilling to know that we are helping shelter animals have fun and stay happy.”</p>
+    </div>
+
+    <div class="story">
+        <h2>Jake's Story: The Volunteer Time Donation</h2>
+        <p>“Volunteering has been a rewarding experience. I not only get to spend time with animals but also meet other compassionate people who care just as much.”</p>
+    </div>
+
+    <div class="story">
+        <h2>Emily's Story: The Educational Materials Donation</h2>
+        <p>“Education is key to preventing animal abandonment. By donating resources, I hope to spread awareness and inspire others to be responsible pet owners.”</p>
+    </div>
+
+    <script>
+        function redirectToDonationPage() {
+            const donationType = document.getElementById('donationType').value;
+            if (donationType) {
+                window.location.href = `/donations/${donationType}`;
+            }
+        }
+    </script>
+</body>
+</html>

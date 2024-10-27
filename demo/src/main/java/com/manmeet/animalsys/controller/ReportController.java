@@ -220,7 +220,7 @@ public class ReportController {
     }
 
 	@PostMapping("/approve/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
 	public String approveReport(@PathVariable Long id) {
 	    reportService.approveReport(id); // Implement this method in ReportService
 	    return "redirect:/reports/pending"; // Redirect back to reports page
@@ -228,7 +228,7 @@ public class ReportController {
 	
 
 	@PostMapping("/reject/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
 	public String rejectReport(@PathVariable Long id, @RequestParam String rejectionReason) {
 	    reportService.rejectReport(id, rejectionReason); // Update this method in ReportService
 	    return "redirect:/reports/pending"; // Redirect back to reports page

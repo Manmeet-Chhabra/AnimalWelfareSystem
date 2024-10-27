@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Donate Educational Materials</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('/images/education-background.jpg'); /* Replace with your background image */
+            background-size: cover; /* Cover the entire page */
+            background-position: center; /* Center the image */
+            text-align: center;
+            color: white; /* Text color for better contrast against the background */
+        }
+        img {
+            width: 300px;
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+        img:hover {
+            transform: scale(1.1);
+        }
+        form {
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for form */
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .motivational-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for story */
+            border-radius: 8px;
+            opacity: 0; /* Start hidden */
+            transform: translateY(20px); /* Start slightly lower */
+            animation: fadeIn 1s forwards; /* Animation to fade in */
+            animation-delay: 0.5s; /* Delay for effect */
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1; /* Fully visible */
+                transform: translateY(0); /* Move to original position */
+            }
+        }
+        .btn {
+            padding: 10px 15px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow effect */
+        }
+    </style>
+</head>
+<body>
+    <h1>Donate Educational Materials</h1>
+    <p>Your help with the animal trainigs and can help raise awareness and knowledge about animal care.</p>
+    <img src="/images/donation_educational.jpg" alt="Educational Donation">
+
+    <div class="motivational-section">
+        <h2>Inspiration to Donate</h2>
+        
+        <blockquote>
+            <p>"An investment in knowledge pays the best interest." – Benjamin Franklin</p>
+        </blockquote>
+        
+        <blockquote>
+            <p>"The best way to find yourself is to lose yourself in the service of others." – Mahatma Gandhi</p>
+        </blockquote>
+
+        <h3>Story of Max and Friends</h3>
+        <p>In a bustling shelter, there was a gentle dog named Max, a curious cat named Whiskers, and a playful rabbit named Daisy. Each of them had their own story of hardship—Max was rescued from the streets, Whiskers had been abandoned, and Daisy was found lost in a park. They all faced challenges that left them scared and uncertain about the world.</p>
+        <p>The shelter staff recognized their potential but knew they needed training and socialization to thrive. Thanks to the generosity of donors like you, the shelter implemented a comprehensive educational program that focused on building trust and confidence in animals like Max, Whiskers, and Daisy. With patience, love, and expert guidance, they learned not just basic commands but also how to engage with people and their fellow animals.</p>
+        <p>Your donations make stories like Max, Whiskers, and Daisy's possible. By contributing to our educational initiatives, you empower shelters to provide training and support for all domestic animals in need, helping them become the loving companions they are meant to be.</p>
+    </div>
+
+    <form th:action="@{/donations/save}" method="post">
+        <input type="hidden" name="donationType" value="EDUCATIONAL"/>
+        <div>
+            <label>Amount:</label>
+            <input type="number" name="amount" placeholder="Enter amount" required/>
+        </div>
+        <div>
+            <label>Your Name:</label>
+            <input type="text" name="donorName" placeholder="Your name"/>
+        </div>
+        <button type="submit" class="btn">Submit Donation</button>
+    </form>
+
+    <script>
+        // Function to check if an element is in view
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+
+        // Add animation class when the section is in view
+        function handleScroll() {
+            const section = document.querySelector('.motivational-section');
+            if (isInViewport(section)) {
+                section.style.opacity = 1; // Make it fully visible
+                section.style.transform = 'translateY(0)'; // Move to original position
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+    </script>
+</body>
+</html>
