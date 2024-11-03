@@ -2,89 +2,95 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Donate Food</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-			background-color: #f8f9fa;
-			text-align: center;
-		}
+    <meta charset="UTF-8">
+    <title>Donate Food</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
 
-		img {
-			width: 300px;
-			height: auto;
-			transition: transform 0.3s ease-in-out;
-		}
+        img {
+            width: 300px;
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+        }
 
-		.motivational-section {
-			margin-top: 20px;
-			padding: 20px;
-			background-color: #f1f1f1;
-			border-radius: 8px;
-		}
+        .motivational-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
 
-		blockquote {
-			font-style: italic;
-			margin: 10px 0;
-			padding: 10px;
-			border-left: 5px solid #007bff;
-		}
+        blockquote {
+            font-style: italic;
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+        }
 
-		.story {
-			display: flex;
-			align-items: center;
-			margin-top: 20px;
-		}
+        .story {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
 
-		.story img {
-			width: 150px;
-			height: auto;
-			border-radius: 10px;
-			margin-right: 20px;
-		}
-	</style>
+        .story img {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+    </style>
 </head>
 
 <body>
-	<h1><i class="fas fa-utensils"></i> Donate Food</h1>
-	<p>Your food donations help ensure that animals in shelters receive the nutrition they need.</p>
-	<img src="/images/donation_food.jpg" alt="Food Donation">
+    <h1><i class="fas fa-utensils"></i> Donate Food</h1>
+    <p>Your food donations help ensure that animals in shelters receive the nutrition they need.</p>
+    <img src="/images/donation_food.jpg" alt="Food Donation">
 
-	<div class="motivational-section">
-		<blockquote>
-			<p>"We make a living by what we get, but we make a life by what we give."</p>
-			<footer>- Winston S. Churchill</footer>
-		</blockquote>
+    <div class="motivational-section">
+        <blockquote>
+            <p>"We make a living by what we get, but we make a life by what we give."</p>
+            <footer>- Winston S. Churchill</footer>
+        </blockquote>
 
-		<h3>Story of Bella</h3>
-		<div class="story">
-			<img src="/images/bella_before_after.jpg" alt="Bella the Dog" />
-			<div>
-				<p>Meet Bella, a gentle soul who once roamed the streets hungry and alone. Thanks to compassionate
-					donors like you, Bella now enjoys a warm bed and plenty of nutritious food. Every donation helps us
-					rescue more animals like Bella.</p>
-			</div>
-		</div>
-	</div>
+        <h3>Story of Bella</h3>
+        <div class="story">
+            <img src="/images/bella_before_after.jpg" alt="Bella the Dog" />
+            <div>
+                <p>Meet Bella, a gentle soul who once roamed the streets hungry and alone. Thanks to compassionate donors like you, Bella now enjoys a warm bed and plenty of nutritious food. Every donation helps us rescue more animals like Bella.</p>
+            </div>
+        </div>
+    </div>
 
-	<!-- Donation Form -->
-	<form th:action="@{/donations/save}" method="post">
-		<input type="hidden" name="donationType" value="FOOD" />
-		<div>
-			<label for="quantity">Quantity:</label>
-			<input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required min="1"
-				title="Enter the number of food items you want to donate" />
-		</div>
-		<div>
-			<label for="donorName">Your Name:</label>
-			<input type="text" id="donorName" name="donorName" placeholder="Your name" aria-label="Your Name" />
-		</div>
-		<button type="submit" class="btn">Submit Donation</button>
-	</form>
+    <!-- Donation Form -->
+    <form th:action="@{/donations/save}" th:object="${donation}" method="post">
+        <input type="hidden" th:field="*{donationType}" />
+            <label for="quantity">Quantity:</label>
+            <input type="number" th:field="*{quantity}" id="quantity" name="quantity" min="1" placeholder="Quantity">
+        
+
+        <label for="donorName">Your Name:</label>
+        <input type="text" th:field="*{donorName}" id="donorName" name="donorName" placeholder="Your Name">
+
+        <label for="mobileNumber">Mobile Number:</label>
+        <input type="text" th:field="*{mobileNumber}" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number">
+
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{email}" id="email" name="email" placeholder="Email">
+
+        <label>
+            <input type="checkbox" th:field="*{recurring}" /> Schedule Monthly Donation
+        </label><br>
+
+        <button type="submit" class="btn">Donate</button>
+    </form>
 </body>
 
 </html>

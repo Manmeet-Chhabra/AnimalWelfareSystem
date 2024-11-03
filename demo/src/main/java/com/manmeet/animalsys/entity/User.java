@@ -1,6 +1,7 @@
 package com.manmeet.animalsys.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,6 +56,8 @@ public class User
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
 
+    @OneToMany(mappedBy = "user") // This tells JPA that the 'user' field in Donation is the owner of the relationship
+    private List<Donation> donations;
 
 	public Set<Role> getRoles() {
 		return roles;

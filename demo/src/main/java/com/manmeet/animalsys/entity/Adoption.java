@@ -34,6 +34,9 @@ public class Adoption {
 
     private LocalDate requestDate;
 
+    private LocalDate adoptionDate; // New field for adoption date
+
+    
     @ElementCollection // Use this to store a list of answers
     @Column(name = "answers") // Specify column name
     private List<String> answers;
@@ -100,4 +103,12 @@ public class Adoption {
     public void setScore(int score) {
         this.score = score;
     }
+
+	public LocalDate getAdoptionDate() {
+		return adoptionDate;
+	}
+
+	public void setAdoptionDate(LocalDate adoptionDate) {
+		this.adoptionDate = adoptionDate;
+	}
 }

@@ -2,11 +2,13 @@ package com.manmeet.animalsys.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.manmeet.animalsys.entity.Donation;
+import com.manmeet.animalsys.entity.User;
 import com.manmeet.animalsys.repos.DonationRepository;
 import com.manmeet.animalsys.service.DonationService;
 
@@ -16,10 +18,21 @@ public class DonationServiceImpl implements DonationService {
 	private DonationRepository donationRepository;
 
 	@Override
-	public void saveDonation(Donation donation) {
-		donationRepository.save(donation);
-	}
+    public void saveDonation(Donation donation) {
+        // Check for duplicates based on donor name, donation type, and date
+        Optional<Donation> existingDonation = donationRepository.findByDonorNameAndDonationTypeAndDate(
+            donation.getDonorName(),
+            donation.getDonationType(),
+            donation.getDate()
+        );
 
+        if (existingDonation.isPresent()) {
+            // Handle the case where a duplicate donation exists
+            throw new IllegalArgumentException("Duplicate donation detected for this donor on the same date.");
+        }
+
+        donationRepository.save(donation);
+    }
 	@Override
 	public List<Donation> getAllDonations() {
 		return donationRepository.findAll();
@@ -46,5 +59,31 @@ public class DonationServiceImpl implements DonationService {
 		return donationRepository.sumAmount();
 	}
 
-	// Implement the export logic in this method
+	@Override
+	//public List<Donation> getRecentDonations() {
+	//	return donationRepository.findTop10ByOrderByDateDesc();
+	//}
+	
+	public List<Donation> getRecentDonations() {
+	    List<Donation> donations = donationRepository.findTop10ByOrderByDateDesc();
+	    donations.forEach(donation -> {
+	        System.out.println("Donation Type: " + donation.getDonationType());
+	        System.out.println("Amount: " + donation.getAmount());
+	    });
+	    return donations;
+	}
+
+	@Override
+	public List<Donation> findDonationsByUser(User user) {
+	    return donationRepository.findByUser(user); // Pass the user object
+	}
+
+
+
+	@Override
+	public void scheduleMonthlyDonation(Donation donation) {
+		donation.setRecurring(true); // Mark this donation as recurring
+		donationRepository.save(donation);
+	}
 }
+

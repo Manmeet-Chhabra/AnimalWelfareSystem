@@ -1,6 +1,8 @@
 
 package com.manmeet.animalsys.repos;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,12 +25,18 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 	List<Report> findByAnimal(Animal animal);
 
 	List<Report> findByStatus(String status);
-	
-	/* @Query("SELECT r FROM Report r WHERE "
-	         + "(:description IS NULL OR r.description LIKE %:description%) AND "
-	         + "(:type IS NULL OR r.type = :type) AND "
-	         + "(:status IS NULL OR r.status = :status)")
-	    List<Report> findReportsByFilters(@Param("description") String description,
-	                                      @Param("type") String type,
-	                                      @Param("status") String status);*/
+
+	// Custom query for finding reports within a date range
+	@Query("SELECT r FROM Report r WHERE r.reportDate BETWEEN :startDateTime AND :endDateTime")
+	List<Report> findByDateRange(@Param("startDateTime") LocalDateTime startDateTime,
+	                             @Param("endDateTime") LocalDateTime endDateTime);
+
+    // Dynamic filter query for description, type, and status
+    @Query("SELECT r FROM Report r WHERE "
+           + "(:description IS NULL OR r.description LIKE %:description%) AND "
+           + "(:type IS NULL OR r.type = :type) AND "
+           + "(:status IS NULL OR r.status = :status)")
+    List<Report> findReportsByFilters(@Param("description") String description,
+                                      @Param("type") ReportType type,
+                                      @Param("status") String status);
 }

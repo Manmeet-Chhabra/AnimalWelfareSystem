@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Animal Health Status Report</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 20px;
+		}
+
+		th,
+		td {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+
+		th {
+			background-color: #f2f2f2;
+		}
+
+		.no-results {
+			color: red;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Animal Health Status Report</h1>
+
+	<form action="#" th:action="@{/reports/animal-health-status}" method="get">
+		<label for="healthStatus">Choose Health Status:</label>
+		<select id="healthStatus" name="healthStatus">
+			<option value="">--Select Status--</option>
+			<option value="Healthy">Healthy</option>
+			<option value="Sick">Sick</option>
+			<option value="In Treatment">In Treatment</option>
+			<option value="Unknown">Unknown</option>
+			<!-- Add other statuses as needed -->
+		</select>
+		<input type="submit" value="Filter">
+	</form>
+
+	<div th:if="${filteredAnimals}">
+		<h2>Filtered Animals</h2>
+		<p>Total Count: <span th:text="${filteredAnimals.size()}"></span></p>
+		<table>
+			<thead>
+				<tr>
+					<th>Animal Name</th>
+					<th>Type</th>
+					<th>Health Status</th>
+					<th>Doctor Appointment</th>
+					<th>Shelter Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="animal : ${filteredAnimals}">
+					<td th:text="${animal.name}"></td>
+					<td th:text="${animal.type}"></td>
+					<td th:text="${animal.healthStatus}"></td>
+					<td th:text="${animal.doctorAppointment}"></td>
+					<td th:text="${animal.shelterName != null ? animal.shelterName : 'No Shelter Assigned'}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div th:if="${filteredAnimals.size() == 0}">
+		<p class="no-results">No animals found with the selected health status.</p>
+	</div>
+</body>
+
+</html>

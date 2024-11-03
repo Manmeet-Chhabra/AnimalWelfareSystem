@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Donate Equipment</title>
@@ -8,30 +9,34 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-image: url('/images/equipment_background.jpg'); /* Background image for page */
+            background-image: url('/images/equipment_background.jpg');
             background-size: cover;
             background-position: center;
             text-align: center;
             color: white;
         }
+
         img {
             width: 300px;
             height: auto;
             transition: transform 0.3s ease-in-out;
         }
+
         img:hover {
             transform: scale(1.1);
         }
+
         .story-section {
             margin-top: 20px;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            background-color: rgba(0, 0, 0, 0.6);
             border-radius: 8px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeIn 1s forwards;
             animation-delay: 0.5s;
         }
+
         form {
             margin-top: 20px;
             background-color: rgba(0, 0, 0, 0.7);
@@ -39,12 +44,14 @@
             border-radius: 8px;
             animation: fadeIn 1s;
         }
+
         @keyframes fadeIn {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
         .btn {
             padding: 10px 15px;
             color: white;
@@ -54,6 +61,7 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
         }
+
         .btn:hover {
             background-color: #0056b3;
             transform: scale(1.05);
@@ -61,6 +69,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Donate Equipment</h1>
     <p>"Together, we can provide every animal with the equipment and care they need to thrive." – Unknown.</p>
@@ -68,25 +77,37 @@
 
     <div class="story-section">
         <h2>Help Animals Thrive with Essential Equipment</h2>
-        <p>When young animals, like Sparky the kitten, are brought to our shelter, they often arrive scared and in need of gentle care. Proper equipment helps us create safe, comfortable spaces where they can recover and grow. Thanks to donors like you, we’ve been able to provide warm bedding, soft carriers, and the training tools essential for these animals to become happy, healthy, and ready for new homes.</p>
-        <p>Every piece of equipment you donate supports the animals on their journey, offering them not only safety but a second chance at life.</p>
+        <p>When young animals, like Sparky the kitten, are brought to our shelter, they often arrive scared and in need
+            of gentle care. Proper equipment helps us create safe, comfortable spaces where they can recover and grow.
+            Thanks to donors like you, we’ve been able to provide warm bedding, soft carriers, and the training tools
+            essential for these animals to become happy, healthy, and ready for new homes.</p>
+        <p>Every piece of equipment you donate supports the animals on their journey, offering them not only safety but
+            a second chance at life.</p>
     </div>
 
-    <form th:action="@{/donations/save}" method="post">
-        <input type="hidden" name="donationType" value="EQUIPMENT"/>
-        <div>
-            <label>Quantity:</label>
-            <input type="number" name="quantity" placeholder="Enter quantity" required/>
-        </div>
-        <div>
-            <label>Your Name (optional):</label>
-            <input type="text" name="donorName" placeholder="Your name"/>
-        </div>
-        <button type="submit" class="btn">Submit Donation</button>
+    <form th:action="@{/donations/save}" th:object="${donation}" method="post">
+        <input type="hidden" th:field="*{donationType}" value="EQUIPMENT" />
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" th:field="*{quantity}" id="quantity" min="1" placeholder="Quantity">
+
+        <label for="donorName">Your Name:</label>
+        <input type="text" th:field="*{donorName}" id="donorName" placeholder="Your Name">
+
+        <label for="mobileNumber">Mobile Number:</label>
+        <input type="text" th:field="*{mobileNumber}" id="mobileNumber" placeholder="Mobile Number">
+
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{email}" id="email" placeholder="Email">
+
+        <label>
+            <input type="checkbox" th:field="*{recurring}" /> Schedule Monthly Donation
+        </label><br>
+
+        <button type="submit" class="btn">Donate</button>
     </form>
 
     <script>
-        // Check if the story section is in view to add the fade-in effect
         function isInViewport(element) {
             const rect = element.getBoundingClientRect();
             return (
@@ -108,4 +129,5 @@
         window.addEventListener('scroll', handleScroll);
     </script>
 </body>
+
 </html>

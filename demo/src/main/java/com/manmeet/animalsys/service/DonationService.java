@@ -2,8 +2,10 @@ package com.manmeet.animalsys.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import com.manmeet.animalsys.entity.Donation;
+import com.manmeet.animalsys.entity.User;
 
 public interface DonationService {
 
@@ -18,4 +20,11 @@ public interface DonationService {
 	int getTotalDonations();
 
 	BigDecimal getTotalAmountDonated();
+
+	List<Donation> getRecentDonations();
+
+
+	void scheduleMonthlyDonation(Donation donation);
+
+	List<Donation> findDonationsByUser(User user);
 }

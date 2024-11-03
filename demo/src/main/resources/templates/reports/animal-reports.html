@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Animal Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Animal Reports</h1>
+	<table>
+	    <thead>
+	        <tr>
+	            <th>Animal Name</th>
+	            <th>Type</th>
+	            <th>Health Status</th>
+	            <th>Doctor Appointment</th>
+	            <th>Shelter Name</th>
+	            <th>Adoption Status</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:each="animal : ${animalReports}">
+	            <td th:text="${animal.name}"></td>
+	            <td th:text="${animal.type}"></td>
+	            <td th:text="${animal.healthStatus}"></td>
+	            <td th:text="${animal.doctorAppointment}"></td>
+	            <td th:text="${animal.shelterName}"></td> <!-- Updated to use shelterName -->
+	            <td th:text="${animal.adoptionStatus}"></td>
+	        </tr>
+	    </tbody>
+	</table>
+</body>
+</html>

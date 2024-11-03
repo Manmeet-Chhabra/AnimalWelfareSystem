@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Total Adoptions Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #343a40;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <h1>Total Adoptions Report</h1>
+    <p th:text="'Total Adoptions: ' + ${totalAdoptions}"></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Animal Name</th>
+                <th>Adopter Name</th>
+                <th>Adoption Date</th>
+                <th>Status</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="adoption : ${adoptionTrends}">
+                <td th:text="${adoption.animalName}"></td>
+                <td th:text="${adoption.adopterName}"></td>
+                <td th:text="${#dates.format(adoption.adoptionDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${adoption.status}"></td>
+                <td th:text="${adoption.score}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

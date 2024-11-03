@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Donate Money</title>
@@ -8,34 +9,44 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-image: url('/images/donation-money-bg.jpg'); /* Update this path to your chosen background image */
+            background-image: url('/images/donation-money-bg.jpg');
             background-size: cover;
             background-position: center;
             color: #333;
             text-align: center;
         }
+
         .container {
-            background: rgba(255, 255, 255, 0.9); /* Semi-transparent background for readability */
+            background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         img {
             width: 300px;
             height: auto;
             transition: transform 0.3s ease-in-out;
         }
+
         img:hover {
             transform: scale(1.1);
         }
+
         form {
             margin-top: 20px;
             animation: fadeIn 1s;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
+
         .btn {
             padding: 10px 15px;
             color: white;
@@ -45,14 +56,17 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
         }
+
         .btn:hover {
             background-color: #0056b3;
             transform: scale(1.05);
         }
+
         .quote {
             font-style: italic;
             margin: 20px 0;
         }
+
         .story {
             text-align: left;
             margin-top: 20px;
@@ -62,6 +76,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Donate Money</h1>
@@ -71,23 +86,39 @@
 
         <div class="story">
             <h2>Our Story</h2>
-            <p>Every year, countless animals find their way to our shelter, seeking safety and love. One such animal was Bella, a shy golden retriever who was abandoned at a local park. When she arrived at our shelter, she was frightened and malnourished.</p>
-            <p>Thanks to generous donations like yours, we were able to provide Bella with the medical care she desperately needed. We nourished her back to health, showered her with love, and gave her the training she required to trust again. With time, Bella blossomed into a beautiful and loving companion.</p>
-            <p>Today, Bella has found her forever home and is living the life she always deserved. Your donations make stories like Bella's possible. With your support, we can continue to rescue and care for more animals in need.</p>
+            <p>Every year, countless animals find their way to our shelter, seeking safety and love. One such animal was
+                Bella, a shy golden retriever who was abandoned at a local park. When she arrived at our shelter, she
+                was frightened and malnourished.</p>
+            <p>Thanks to generous donations like yours, we were able to provide Bella with the medical care she
+                desperately needed. We nourished her back to health, showered her with love, and gave her the training
+                she required to trust again. With time, Bella blossomed into a beautiful and loving companion.</p>
+            <p>Today, Bella has found her forever home and is living the life she always deserved. Your donations make
+                stories like Bella's possible. With your support, we can continue to rescue and care for more animals in
+                need.</p>
         </div>
-        
-        <form th:action="@{/donations/save}" method="post">
-            <input type="hidden" name="donationType" value="MONEY"/>
-            <div>
-                <label>Amount:</label>
-                <input type="number" name="amount" placeholder="Enter amount" required/>
-            </div>
-            <div>
-                <label>Your Name (optional):</label>
-                <input type="text" name="donorName" placeholder="Your name"/>
-            </div>
-            <button type="submit" class="btn">Submit Donation</button>
+
+        <form th:action="@{/donations/save}" th:object="${donation}" method="post">
+            <input type="hidden" th:field="*{donationType}" value="MONEY" />
+            
+            <label for="amount">Amount:</label>
+            <input type="number" th:field="*{amount}" id="amount" step="0.01" min="0" placeholder="Donation Amount">
+
+            <label for="donorName">Your Name:</label>
+            <input type="text" th:field="*{donorName}" id="donorName" placeholder="Your Name">
+
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" th:field="*{mobileNumber}" id="mobileNumber" placeholder="Mobile Number">
+
+            <label for="email">Email:</label>
+            <input type="email" th:field="*{email}" id="email" placeholder="Email">
+
+            <label>
+                <input type="checkbox" th:field="*{recurring}" /> Schedule Monthly Donation
+            </label><br>
+
+            <button type="submit" class="btn">Donate</button>
         </form>
     </div>
 </body>
+
 </html>

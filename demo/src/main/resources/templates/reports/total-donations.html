@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Donation Summary Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #343a40;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+        }
+
+        .recurring {
+            color: green;
+            font-weight: bold;
+        }
+
+        .non-recurring {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Donation Summary Report</h1>
+    <p th:text="'Total Donations: ' + ${#lists.size(donationSummary)}"></p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Donor Name</th>
+                <th>Amount</th>
+                <th>Donation Date</th>
+                <th>Donation Type</th>
+                <th>Quantity</th>
+                <th>Recurring</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="donation : ${donationSummary}">
+                <td th:text="${donation.donorName}"></td>
+                <td th:text="${donation.amount}"></td>
+                <td th:text="${#dates.format(donation.donationDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${donation.donationType}"></td>
+                <td th:text="${donation.quantity}"></td>
+                <td>
+                    <span th:class="${donation.recurring} ? 'recurring' : 'non-recurring'" 
+                          th:text="${donation.recurring} ? 'Yes' : 'No'"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

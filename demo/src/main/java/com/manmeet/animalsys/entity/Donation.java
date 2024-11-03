@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Donation {
@@ -26,6 +28,27 @@ public class Donation {
 	private String email; // Optional
 	private String address; // Optional
 	private LocalDate date;
+	private boolean recurring;
+
+	 @ManyToOne // Assuming multiple donations can belong to one user
+	    @JoinColumn(name = "user_id") // This will create a foreign key in the donation table
+	    private User user; // Reference to User entity
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public boolean isRecurring() {
+		return recurring;
+	}
+
+	public void setRecurring(boolean recurring) {
+		this.recurring = recurring;
+	}
 
 	public Long getId() {
 		return id;

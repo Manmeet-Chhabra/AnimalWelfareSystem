@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Adoption Trends Report</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+		}
+
+		h1 {
+			text-align: center;
+			color: #4CAF50;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 20px;
+		}
+
+		th,
+		td {
+			padding: 10px;
+			border: 1px solid #ddd;
+			text-align: center;
+		}
+
+		th {
+			background-color: #f2f2f2;
+			color: #333;
+			font-weight: bold;
+		}
+
+		tbody tr:nth-child(even) {
+			background-color: #f9f9f9;
+		}
+
+		tbody tr:hover {
+			background-color: #e0f7fa;
+		}
+
+		form {
+			margin-bottom: 20px;
+		}
+
+		label {
+			margin-right: 10px;
+		}
+
+		input[type="date"] {
+			margin-right: 15px;
+		}
+
+		/* Error and message styling */
+		.error {
+			color: red;
+		}
+
+		.message {
+			color: green;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Adoption Trends Report</h1>
+
+	<!-- Form to filter by date -->
+	<form action="#" th:action="@{/reports/adoption-trends}" method="get">
+		<label for="startDate">Start Date:</label>
+		<input type="date" id="startDate" name="startDate" required />
+
+		<label for="endDate">End Date:</label>
+		<input type="date" id="endDate" name="endDate" required />
+
+		<button type="submit">Filter</button>
+	</form>
+
+	<!-- Error or Message Display -->
+	<div th:if="${error}" class="error">
+		<p th:text="${error}"></p>
+	</div>
+
+	<div th:if="${message}" class="message">
+		<p th:text="${message}"></p>
+	</div>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Animal Name</th>
+				<th>Adopter Name</th>
+				<th>Adoption Date</th>
+				<th>Status</th>
+				<th>Request Date</th>
+				<th>Score</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="adoption : ${adoptionTrends}">
+				<td th:text="${adoption.animalName}"></td>
+				<td th:text="${adoption.adopterName}"></td>
+				<td th:text="${#temporals.format(adoption.adoptionDate, 'yyyy-MM-dd')}"></td>
+				<td th:text="${adoption.status}"></td>
+				<td th:text="${#temporals.format(adoption.requestDate, 'yyyy-MM-dd')}"></td>
+				<td th:text="${adoption.score}"></td>
+			</tr>
+		</tbody>
+
+
+	</table>
+
+
+
+	<script>
+		document.querySelector('form').addEventListener('submit', function (event) {
+			const startDate = new Date(document.getElementById('startDate').value);
+			const endDate = new Date(document.getElementById('endDate').value);
+
+			if (startDate > endDate) {
+				alert('Start date must be before end date.');
+				event.preventDefault(); // Prevent form submission
+			}
+		});
+	</script>
+</body>
+
+</html>s
