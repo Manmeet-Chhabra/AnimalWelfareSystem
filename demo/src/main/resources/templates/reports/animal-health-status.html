@@ -2,81 +2,116 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Animal Health Status Report</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 20px;
-		}
+    <title>Animal Health Status Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
 
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-top: 20px;
-		}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-		th,
-		td {
-			border: 1px solid #dddddd;
-			text-align: left;
-			padding: 8px;
-		}
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
 
-		th {
-			background-color: #f2f2f2;
-		}
+        th {
+            background-color: #f2f2f2;
+        }
 
-		.no-results {
-			color: red;
-			margin-top: 20px;
-		}
-	</style>
+        .no-results {
+            color: red;
+            margin-top: 20px;
+        }
+
+        .filter {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
-	<h1>Animal Health Status Report</h1>
+    <h1>Animal Health Status Report</h1>
 
-	<form action="#" th:action="@{/reports/animal-health-status}" method="get">
-		<label for="healthStatus">Choose Health Status:</label>
-		<select id="healthStatus" name="healthStatus">
-			<option value="">--Select Status--</option>
-			<option value="Healthy">Healthy</option>
-			<option value="Sick">Sick</option>
-			<option value="In Treatment">In Treatment</option>
-			<option value="Unknown">Unknown</option>
-			<!-- Add other statuses as needed -->
-		</select>
-		<input type="submit" value="Filter">
-	</form>
+    <!-- Form to filter by health status -->
+    <div class="filter">
+        <form action="#" th:action="@{/reports/animal-health-status}" method="get">
+            <label for="healthStatus">Choose Health Status:</label>
+            <select id="healthStatus" name="healthStatus">
+                <option value="">--Select Status--</option>
+                <option value="Healthy">Healthy</option>
+                <option value="Sick">Sick</option>
+                <option value="In Treatment">In Treatment</option>
+                <option value="Unknown">Unknown</option>
+                <!-- Add other statuses as needed -->
+            </select>
+            <input type="submit" value="Filter">
+        </form>
+    </div>
 
-	<div th:if="${filteredAnimals}">
-		<h2>Filtered Animals</h2>
-		<p>Total Count: <span th:text="${filteredAnimals.size()}"></span></p>
-		<table>
-			<thead>
-				<tr>
-					<th>Animal Name</th>
-					<th>Type</th>
-					<th>Health Status</th>
-					<th>Doctor Appointment</th>
-					<th>Shelter Name</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="animal : ${filteredAnimals}">
-					<td th:text="${animal.name}"></td>
-					<td th:text="${animal.type}"></td>
-					<td th:text="${animal.healthStatus}"></td>
-					<td th:text="${animal.doctorAppointment}"></td>
-					<td th:text="${animal.shelterName != null ? animal.shelterName : 'No Shelter Assigned'}"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+    <!-- Buttons for downloading the report -->
+    <div class="filter">
+        <span>Download Report:</span>
+        <form th:action="@{/reports/animal-health-status/download/pdf}" method="get" style="display:inline;">
+            <input type="hidden" id="pdfHealthStatus" name="healthStatus" th:value="${param.healthStatus}"/>
+            <button type="submit" class="btn">PDF</button>
+        </form>
+        <form th:action="@{/reports/animal-health-status/download/excel}" method="get" style="display:inline;">
+            <input type="hidden" id="excelHealthStatus" name="healthStatus" th:value="${param.healthStatus}"/>
+            <button type="submit" class="btn">Excel</button>
+        </form>
+    </div>
 
-	<div th:if="${filteredAnimals.size() == 0}">
-		<p class="no-results">No animals found with the selected health status.</p>
-	</div>
+    <div th:if="${filteredAnimals}">
+        <h2>Filtered Animals</h2>
+        <p>Total Count: <span th:text="${filteredAnimals.size()}"></span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Animal Name</th>
+                    <th>Type</th>
+                    <th>Health Status</th>
+                    <th>Doctor Appointment</th>
+                    <th>Shelter Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="animal : ${filteredAnimals}">
+                    <td th:text="${animal.name}"></td>
+                    <td th:text="${animal.type}"></td>
+                    <td th:text="${animal.healthStatus}"></td>
+                    <td th:text="${animal.doctorAppointment}"></td>
+                    <td th:text="${animal.shelterName != null ? animal.shelterName : 'No Shelter Assigned'}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${filteredAnimals.size() == 0}">
+        <p class="no-results">No animals found with the selected health status.</p>
+    </div>
 </body>
 
 </html>

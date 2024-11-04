@@ -24,6 +24,12 @@ public interface AdoptionRepository extends JpaRepository<Adoption, Long> {
     // Custom query to find adoptions within a date range    
     @Query("SELECT a FROM Adoption a WHERE a.requestDate BETWEEN :startDate AND :endDate")
     List<Adoption> findByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    
+    @Query("SELECT a FROM Adoption a WHERE a.requestDate BETWEEN :startDate AND :endDate AND a.status = :status")
+    List<Adoption> findByDateRangeAndStatus(
+        @Param("startDate") LocalDate startDate,
+        @Param("endDate") LocalDate endDate,
+        @Param("status") String status);
+
 
 }
-

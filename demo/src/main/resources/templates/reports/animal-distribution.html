@@ -11,10 +11,38 @@
         th { background-color: #f2f2f2; color: #333; font-weight: bold; }
         tbody tr:nth-child(even) { background-color: #f9f9f9; }
         tbody tr:hover { background-color: #e0f7fa; }
+        .download-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <h1>Animal Distribution Report</h1>
+
+    <!-- Buttons for downloading the report -->
+    <div class="download-buttons">
+        <span>Download Report:</span>
+        <form th:action="@{/reports/animal-distribution/download/pdf}" method="get" style="display:inline;">
+            <button type="submit" class="btn">PDF</button>
+        </form>
+        <form th:action="@{/reports/animal-distribution/download/excel}" method="get" style="display:inline;">
+            <button type="submit" class="btn">Excel</button>
+        </form>
+    </div>
+
     <table>
         <thead>
             <tr>
@@ -23,10 +51,10 @@
             </tr>
         </thead>
         <tbody>
-			<tr th:each="entry : ${animalDistribution}">
-			    <td th:text="${entry.type}">Type</td>
-			    <td th:text="${entry.count}">Count</td>
-			</tr>
+            <tr th:each="entry : ${animalDistribution}">
+                <td th:text="${entry.type}">Type</td>
+                <td th:text="${entry.count}">Count</td>
+            </tr>
         </tbody>
     </table>
 </body>

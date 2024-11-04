@@ -44,6 +44,8 @@ public class AnimalReportDto {
 		this.name = name;
 	}
 
+	
+
 	public String getType() {
 		return type;
 	}

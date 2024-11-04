@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Shelter Capacity Report</title>
     <style>
@@ -36,8 +37,21 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        .export-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .export-buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
     <h1>Shelter Capacity Report</h1>
 
@@ -49,8 +63,19 @@
         <p th:text="'Max Capacity: ' + ${capacity.capacity}"></p>
     </div>
 
+    <!-- Export Buttons -->
+    <div class="export-buttons">
+        <form th:action="@{/reports/shelter-capacity/export/pdf}" method="get">
+            <button type="submit">Export to PDF</button>
+        </form>
+        <form th:action="@{/reports/shelter-capacity/export/excel}" method="get">
+            <button type="submit">Export to Excel</button>
+        </form>
+    </div>
+
     <div class="footer">
         <p>Generated on: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span></p>
     </div>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Total Adoptions Report</title>
     <style>
@@ -21,7 +22,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #dee2e6;
             padding: 10px;
             text-align: left;
@@ -30,11 +32,39 @@
         th {
             background-color: #e9ecef;
         }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .export-buttons {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .export-buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
     <h1>Total Adoptions Report</h1>
     <p th:text="'Total Adoptions: ' + ${totalAdoptions}"></p>
+
+    <!-- Export Buttons -->
+    <div class="export-buttons">
+        <form th:action="@{/reports/adoptions/export/pdf}" method="get">
+            <button type="submit">Export to PDF</button>
+        </form>
+        <form th:action="@{/reports/adoptions/export/excel}" method="get">
+            <button type="submit">Export to Excel</button>
+        </form>
+    </div>
 
     <table>
         <thead>
@@ -56,5 +86,10 @@
             </tr>
         </tbody>
     </table>
+
+    <div class="footer">
+        <p>Generated on: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span></p>
+    </div>
 </body>
+
 </html>

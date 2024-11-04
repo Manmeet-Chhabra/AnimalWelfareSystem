@@ -25,6 +25,10 @@ public class ReportSummaryDto {
         this.rejectionReason = rejectionReason;
     }
 
+	public ReportSummaryDto() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getReportType() {
 		return reportType;
 	}
