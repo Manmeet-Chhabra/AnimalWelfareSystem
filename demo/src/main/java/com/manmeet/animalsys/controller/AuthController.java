@@ -1,10 +1,9 @@
 package com.manmeet.animalsys.controller;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.manmeet.animalsys.dto.UserDto;
-import com.manmeet.animalsys.entity.Role;
 import com.manmeet.animalsys.entity.User;
+import com.manmeet.animalsys.service.NotificationService;
 import com.manmeet.animalsys.service.UserService;
 
 import jakarta.validation.Valid;
@@ -29,6 +28,10 @@ public class AuthController {
 	public AuthController(UserService userService) {
 		this.userService = userService;
 	}
+	
+	@Autowired
+    private NotificationService notificationService;  
+
 
 	@GetMapping("/index")
 	public String home() {
@@ -78,6 +81,40 @@ public class AuthController {
 
         // Save the user with the selected role
         userService.saveUser(userDto);
+        
+     // Send email to the user
+        String userSubject = "Welcome to Animal Welfare System";
+        String userBody = String.format("Dear %s %s,\n\nThank you for registering with us! We are thrilled to welcome you to our community dedicated to animal welfare.\n\n" +
+                                         "If you have any questions or need assistance, feel free to reach out to us.\n\n" +
+                                         "Best regards,\nAnimal Welfare Team",
+                                         userDto.getFirstName(), userDto.getLastName());
+        notificationService.sendEmail(userDto.getEmail(), userSubject, userBody);
+
+        
+     // Fetch admin email using findByRole method
+        List<User> admins = userService.findByRole("ROLE_ADMIN");
+        String adminEmail;
+
+        // Check if any admins were found
+        if (!admins.isEmpty()) {
+            adminEmail = admins.get(0).getEmail(); // Get the first admin's email
+        } else {
+            adminEmail = "sbp.manmeet@gmail.com"; // Fallback to hardcoded admin email
+        }
+        
+        
+
+        // Send email to the admin
+        String adminSubject = "New User Registration";
+        String adminBody = String.format("Dear Admin,\n\nA new user has successfully registered on the platform:\n\n" +
+                                          "Name: %s %s\n" +
+                                          "Email: %s\n" +
+                                          "Role: %s\n\n" +
+                                          "Please review their account and reach out if necessary.\n\n" +
+                                          "Best regards,\nAnimal Welfare System",
+                                          userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), userDto.getRole());
+        notificationService.sendEmail(adminEmail, adminSubject, adminBody);
+
 
         // Redirect to the registration page with a success message
         return "redirect:/register?success";

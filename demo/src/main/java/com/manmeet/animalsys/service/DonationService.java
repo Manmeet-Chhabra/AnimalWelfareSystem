@@ -27,4 +27,6 @@ public interface DonationService {
 	void scheduleMonthlyDonation(Donation donation);
 
 	List<Donation> findDonationsByUser(User user);
+
+	Donation findById(Long id);
 }

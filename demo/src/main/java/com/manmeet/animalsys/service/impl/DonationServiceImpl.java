@@ -12,6 +12,8 @@ import com.manmeet.animalsys.entity.User;
 import com.manmeet.animalsys.repos.DonationRepository;
 import com.manmeet.animalsys.service.DonationService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class DonationServiceImpl implements DonationService {
 	@Autowired
@@ -84,6 +86,11 @@ public class DonationServiceImpl implements DonationService {
 	public void scheduleMonthlyDonation(Donation donation) {
 		donation.setRecurring(true); // Mark this donation as recurring
 		donationRepository.save(donation);
+	}
+	@Override
+	public Donation findById(Long id) {
+	    return donationRepository.findById(id)
+	            .orElseThrow(() -> new EntityNotFoundException("Donation not found with ID " + id));
 	}
 }
 

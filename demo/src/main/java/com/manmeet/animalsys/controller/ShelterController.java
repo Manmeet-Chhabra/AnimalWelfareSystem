@@ -20,6 +20,7 @@ import com.manmeet.animalsys.entity.Role;
 import com.manmeet.animalsys.entity.Shelter;
 import com.manmeet.animalsys.entity.User;
 import com.manmeet.animalsys.repos.RoleRepository;
+import com.manmeet.animalsys.service.NotificationService;
 import com.manmeet.animalsys.service.ShelterService;
 import com.manmeet.animalsys.service.UserService;
 
@@ -35,6 +36,9 @@ public class ShelterController {
 
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	// Only Admin can create a new shelter (Form page)
 	@PreAuthorize("hasRole('ADMIN')")
@@ -49,6 +53,32 @@ public class ShelterController {
 	@PostMapping("/save")
 	public String createShelter(@ModelAttribute Shelter shelter) {
 		shelterService.saveShelter(shelter);
+		
+		// After creating a new shelter, send confirmation email to the Admin
+		// Fetch admin email using findByRole method
+	    List<User> admins = userService.findByRole("ROLE_ADMIN");
+	    String adminEmail = admins.isEmpty() ? "sbp.manmeet@gmail.com" : admins.get(0).getEmail(); // Fallback to a default email if none found
+
+		String creationSubject = "New Shelter Created";
+        String creationBody = String.format(
+            "Dear [Admin/Staff],\n\n" +
+            "A new shelter has been successfully created.\n\n" +
+            "Shelter Details:\n" +
+            "Name: %s\n" +
+            "Location: %s\n" +
+            "Capacity: %d\n\n" +
+            "Thank you for managing our shelters.\n\n" +
+            "Best regards,\n" +
+            "The Animal Welfare Team",
+            shelter.getName(), shelter.getLocation(), shelter.getCapacity());
+        notificationService.sendEmail(adminEmail, creationSubject, creationBody);
+
+     // Send the same email to all staff members
+	    List<User> staffMembers = userService.findByRole("ROLE_STAFF");
+	    for (User staff : staffMembers) {
+	        notificationService.sendEmail(staff.getEmail(), creationSubject, creationBody);
+	    }
+		
 		return "redirect:/shelters";
 	}
 
@@ -93,6 +123,32 @@ public class ShelterController {
 	@PostMapping("/update")
 	public String updateShelter(@ModelAttribute Shelter shelter) {
 		shelterService.updateShelter(shelter);
+		
+		// After updating a shelter, send confirmation email to the Admin
+		// Fetch admin email using findByRole method
+	    List<User> admins = userService.findByRole("ROLE_ADMIN");
+	    String adminEmail = admins.isEmpty() ? "sbp.manmeet@gmail.com" : admins.get(0).getEmail(); // Fallback to a default email if none found
+
+		String updateSubject = "Shelter Information Updated";
+        String updateBody = String.format(
+            "Dear [Admin/Staff],\n\n" +
+            "The shelter details have been updated.\n\n" +
+            "Updated Shelter Details:\n" +
+            "Name: %s\n" +
+            "Location: %s\n" +
+            "Capacity: %d\n\n" +
+            "Thank you for updating the shelter information.\n\n" +
+            "Best regards,\n" +
+            "The Animal Welfare Team",
+            shelter.getName(), shelter.getLocation(), shelter.getCapacity());
+        notificationService.sendEmail(adminEmail, updateSubject, updateBody);
+
+     // Send the same email to all staff members
+	    List<User> staffMembers = userService.findByRole("ROLE_STAFF");
+	    for (User staff : staffMembers) {
+	        notificationService.sendEmail(staff.getEmail(), updateSubject, updateBody);
+	    }
+        
 		return "redirect:/shelters";
 	}
 
@@ -101,6 +157,27 @@ public class ShelterController {
 	@GetMapping("/delete/{id}")
 	public String deleteShelter(@PathVariable Long id) {
 		shelterService.deleteShelter(id);
+		
+		// After deleting a shelter, send a notification email to the Admin
+		List<User> admins = userService.findByRole("ROLE_ADMIN");
+	    String adminEmail = admins.isEmpty() ? "sbp.manmeet@gmail.com" : admins.get(0).getEmail(); // Fallback to a default email if none found
+
+		String deleteSubject = "Shelter Deleted";
+        String deleteBody = String.format(
+            "Dear [Admin/Staff],\n\n" +
+            "The shelter has been deleted from the system.\n\n" +
+            "Shelter ID: %d\n" +
+            "Please review the shelter list for further updates.\n\n" +
+            "Best regards,\n" +
+            "The Animal Welfare Team", id);
+        notificationService.sendEmail(adminEmail, deleteSubject, deleteBody);
+
+     // Send the same email to all staff members
+	    List<User> staffMembers = userService.findByRole("ROLE_STAFF");
+	    for (User staff : staffMembers) {
+	        notificationService.sendEmail(staff.getEmail(), deleteSubject, deleteBody);
+	    }
+        
 		return "redirect:/shelters";
 	}
 
@@ -114,25 +191,7 @@ public class ShelterController {
 		return "shelter-list"; // Display search results on the same shelter list page
 	}
 
-	/*
-	 * // Only Admin and Staff can increase the capacity of a shelter
-	 * 
-	 * @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-	 * 
-	 * @PostMapping("/{id}/capacity/increase") public String
-	 * increaseCapacity(@PathVariable Long id, @RequestParam int increment) {
-	 * shelterService.increaseCapacity(id, increment); return "redirect:/shelters/"
-	 * + id; }
-	 * 
-	 * // Only Admin and Staff can decrease the capacity of a shelter
-	 * 
-	 * @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-	 * 
-	 * @PostMapping("/{id}/capacity/decrease") public String
-	 * decreaseCapacity(@PathVariable Long id, @RequestParam int decrement) {
-	 * shelterService.decreaseCapacity(id, decrement); return "redirect:/shelters/"
-	 * + id; }
-	 */
+	
 
 	// Only Admin and Staff can add staff to a shelter
 	@PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
@@ -148,44 +207,84 @@ public class ShelterController {
 		List<User> staffMembers = userService.findByRole("ROLE_STAFF");
 		model.addAttribute("staffMembers", staffMembers);
 
+		
+		
 		return "shelter-staff-add"; // Form for adding staff
 	}
 
 	@PostMapping("/{shelterId}/staff/save")
 	public String addStaffToShelter(@PathVariable Long shelterId, @ModelAttribute User staff,
-			RedirectAttributes redirectAttributes) {
-		try {
-			// Check if the email is null or empty before attempting to add staff
-			if (staff.getEmail() == null || staff.getEmail().isEmpty()) {
-				redirectAttributes.addFlashAttribute("error", "Email cannot be empty.");
-				return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form with error
-			}
+	                                 RedirectAttributes redirectAttributes) {
+	    try {
+	        // Check if the email is null or empty before attempting to add staff
+	        if (staff.getEmail() == null || staff.getEmail().isEmpty()) {
+	            redirectAttributes.addFlashAttribute("error", "Email cannot be empty.");
+	            return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form with error
+	        }
 
-			// Fetch the "ROLE_STAFF" role
-			Role staffRole = roleRepository.findByName("ROLE_STAFF");
-			if (staffRole != null) {
-				staff.getRoles().add(staffRole); // Add the staff role to the user
-			} else {
-				throw new IllegalStateException("The STAFF role does not exist in the database.");
-			}
+	        // Fetch the "ROLE_STAFF" role
+	        Role staffRole = roleRepository.findByName("ROLE_STAFF");
+	        if (staffRole != null) {
+	            staff.getRoles().add(staffRole); // Add the staff role to the user
+	        } else {
+	            throw new IllegalStateException("The STAFF role does not exist in the database.");
+	        }
 
-			// Attempt to add the staff to the shelter
-			shelterService.addStaffToShelter(shelterId, staff);
+	        // Attempt to add the staff to the shelter
+	        shelterService.addStaffToShelter(shelterId, staff);
 
-			// Add a success message
-			redirectAttributes.addFlashAttribute("success", "Staff added successfully.");
+	        // Add a success message
+	        redirectAttributes.addFlashAttribute("success", "Staff added successfully.");
 
-			return "redirect:/shelters/" + shelterId + "/staff"; // Redirect to staff list
-		} catch (DataIntegrityViolationException e) {
-			// Handle case where a user with the same email already exists
-			redirectAttributes.addFlashAttribute("error", "A user with this email already exists.");
-			return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
-		} catch (Exception e) {
-			// Handle other potential exceptions
-			redirectAttributes.addFlashAttribute("error", "An error occurred while adding staff.");
-			return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
-		}
+	        // Fetch the shelter details for the email notification
+	        Optional<Shelter> shelterOpt = shelterService.getShelterById(shelterId);
+	        String shelterName = shelterOpt.map(Shelter::getName).orElse("Unknown Shelter");
+
+	        // Fetch admin email using findByRole method
+	        List<User> admins = userService.findByRole("ROLE_ADMIN");
+	        String adminEmail = admins.isEmpty() ? "sbp.manmeet@gmail.com" : admins.get(0).getEmail(); // Fallback to a default email if none found
+
+	        String staffEmail = staff.getEmail(); // Staff email
+	        String addStaffSubject = "New Staff Added to Shelter";
+	        String addStaffBody = String.format(
+	            "Dear Admin,\n\n" +
+	            "A new staff member has been added to the shelter.\n\n" +
+	            "Staff Details:\n" +
+	            "Name: %s\n" +
+	            "Role: %s\n" +
+	            "Shelter: %s\n\n" +
+	            "Best regards,\n" +
+	            "The Animal Welfare Team",
+	            staff.getName(), staff.getRoles(), shelterName);
+
+	        notificationService.sendEmail(adminEmail, addStaffSubject, addStaffBody);
+
+	        // Notify the new staff member
+	        String staffSubject = "You Have Been Added as Staff";
+	        String staffBody = String.format(
+	            "Dear %s,\n\n" +
+	            "You have been successfully added as a staff member at the following shelter:\n\n" +
+	            "Shelter: %s\n" +
+	            "Role: %s\n\n" +
+	            "We welcome you to our team and look forward to your contributions.\n\n" +
+	            "Best regards,\n" +
+	            "The Animal Welfare Team",
+	            staff.getName(), shelterName, staffRole.getName());
+
+	        notificationService.sendEmail(staffEmail, staffSubject, staffBody);
+
+	        return "redirect:/shelters/" + shelterId + "/staff"; // Redirect to staff list
+	    } catch (DataIntegrityViolationException e) {
+	        // Handle case where a user with the same email already exists
+	        redirectAttributes.addFlashAttribute("error", "A user with this email already exists.");
+	        return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
+	    } catch (Exception e) {
+	        // Handle other potential exceptions
+	        redirectAttributes.addFlashAttribute("error", "An error occurred while adding staff.");
+	        return "redirect:/shelters/" + shelterId + "/staff/add"; // Redirect back to form
+	    }
 	}
+
 
 	// Only Admin can remove staff from a shelter
 	@PreAuthorize("hasRole('ADMIN')")

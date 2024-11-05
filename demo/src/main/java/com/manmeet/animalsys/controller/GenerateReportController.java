@@ -31,7 +31,7 @@ public class GenerateReportController {
 
 	@Autowired
 	private GenerateReportService generateReportService;
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(GenerateReportController.class);
 
 	// Endpoint for Animal Type Distribution Report

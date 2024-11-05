@@ -31,7 +31,7 @@ import com.manmeet.animalsys.entity.ReportType;
 import com.manmeet.animalsys.entity.User;
 import com.manmeet.animalsys.repos.AnimalRepository;
 import com.manmeet.animalsys.repos.AttachmentRepository;
-import com.manmeet.animalsys.service.AnimalService;
+import com.manmeet.animalsys.service.NotificationService;
 import com.manmeet.animalsys.service.ReportService;
 import com.manmeet.animalsys.service.UserService;
 
@@ -43,7 +43,7 @@ public class ReportController {
 	private ReportService reportService;
 
 	@Autowired
-	private AnimalService animalService;
+	private NotificationService notificationService;
 	
 	@Autowired
 	private AttachmentRepository attachmentRepository;
@@ -103,6 +103,38 @@ public class ReportController {
 	    // Handle file uploads (attachments)
 	    if (files != null && files.length > 0) {
 	        saveAttachments(savedReport, files);
+	    }
+	    
+	 // Email notification logic for admin and staff
+	    String subject = "New Report Submitted: Action Required";
+	    String body = String.format(
+	            "Dear [Admin/Staff],\n\n" +
+	            "A new report has been successfully submitted in the system. Kindly review the report and take the necessary actions.\n\n" +
+	            "Report Details:\n" +
+	            "- Report ID: %s\n" +
+	            "- Submitted By: %s\n" +
+	            "- Report Type: %s\n" +
+	            "- Status: PENDING\n" +
+	            "- Description: %s\n\n" +
+	            "Please log in to the system to review the full report and address any required actions.\n\n" +
+	            "Thank you for your attention to this matter.\n\n" +
+	            "Best regards,\n" +
+	            "The Animal Welfare Team\n" +
+	            "[Your Organization Name]\n" +
+	            "[Your Contact Information]",
+	            savedReport.getId(), user.getName(), savedReport.getType(), savedReport.getDescription());
+
+	    // Fetch admin email using findByRole method
+	    List<User> admins = userService.findByRole("ROLE_ADMIN");
+	    String adminEmail = admins.isEmpty() ? "sbp.manmeet@gmail.com" : admins.get(0).getEmail(); // Fallback to a default email if none found
+
+	    // Send the email to the admin
+	    notificationService.sendEmail(adminEmail, subject, body);
+
+	    // Send the same email to all staff members
+	    List<User> staffMembers = userService.findByRole("ROLE_STAFF");
+	    for (User staff : staffMembers) {
+	        notificationService.sendEmail(staff.getEmail(), subject, body);
 	    }
 
 	    return "redirect:/reports/history"; // Redirect to user's report history
@@ -222,17 +254,76 @@ public class ReportController {
 	@PostMapping("/approve/{id}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
 	public String approveReport(@PathVariable Long id) {
-	    reportService.approveReport(id); // Implement this method in ReportService
+	    // Retrieve the report by ID
+	    Report report = reportService.findById(id)
+	            .orElseThrow(() -> new IllegalArgumentException("Invalid report ID"));
+
+	    // Get the user who submitted the report
+	    User user = report.getReportedBy();  // Assuming 'getReportedBy' returns the User who submitted the report
+
+	    // Update the report status to APPROVED
+	    reportService.approveReport(id);
+
+	    // Prepare the email content
+	    String approvalSubject = "Report Approved";
+	    String approvalBody = String.format(
+	        "Dear %s,\n\n" +
+	        "We are pleased to inform you that your report submitted on %s has been reviewed and approved.\n\n" +
+	        "Report Details:\n" +
+	        "Report ID: %s\n" +
+	        "Description: %s\n" +
+	        "Type: %s\n" +
+	        "Status: APPROVED\n\n" +
+	        "Thank you for your valuable contribution. If you have any questions or would like to follow up, feel free to reach out.\n\n" +
+	        "Best regards,\n" +
+	        "The Animal Welfare Team",
+	        user.getName(), report.getReportDate(), report.getId(), report.getDescription(), report.getType());
+
+	    // Send the approval email to the user
+	    notificationService.sendEmail(user.getEmail(), approvalSubject, approvalBody);
+
+	    // Redirect to the reports page (pending reports)
 	    return "redirect:/reports/pending"; // Redirect back to reports page
 	}
+
 	
 
 	@PostMapping("/reject/{id}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
 	public String rejectReport(@PathVariable Long id, @RequestParam String rejectionReason) {
-	    reportService.rejectReport(id, rejectionReason); // Update this method in ReportService
+	    // Retrieve the report by ID
+	    Report report = reportService.findById(id)
+	            .orElseThrow(() -> new IllegalArgumentException("Invalid report ID"));
+
+	    // Get the user who submitted the report
+	    User user = report.getReportedBy();  // Assuming 'getReportedBy' returns the User who submitted the report
+
+	    // Update the report status to REJECTED with the rejection reason
+	    reportService.rejectReport(id, rejectionReason);
+
+	    // Prepare the email content
+	    String rejectionSubject = "Report Rejection Notification";
+	    String rejectionBody = String.format(
+	        "Dear %s,\n\n" +
+	        "We regret to inform you that your report submitted on %s has been rejected. Please see the reason below:\n\n" +
+	        "Rejection Reason: %s\n\n" +
+	        "Report Details:\n" +
+	        "Report ID: %s\n" +
+	        "Description: %s\n" +
+	        "Type: %s\n" +
+	        "Status: REJECTED\n\n" +
+	        "If you believe this decision was made in error or if you have any questions, please contact us for further clarification.\n\n" +
+	        "Best regards,\n" +
+	        "The Animal Welfare Team",
+	        user.getName(), report.getReportDate(), rejectionReason, report.getId(), report.getDescription(), report.getType());
+
+	    // Send the rejection email to the user
+	    notificationService.sendEmail(user.getEmail(), rejectionSubject, rejectionBody);
+
+	    // Redirect to the reports page (pending reports)
 	    return "redirect:/reports/pending"; // Redirect back to reports page
 	}
+
 
 	// Method to show pending reports
     @GetMapping("/pending")

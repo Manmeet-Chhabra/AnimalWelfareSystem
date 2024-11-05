@@ -117,5 +117,7 @@ public class UserServiceImpl implements UserService {
 	        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 	        return userRepository.findByEmail(email);  // Assumes user emails are unique
 	    }
+	 
+	 
 	
 }
