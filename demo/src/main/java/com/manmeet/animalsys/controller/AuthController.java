@@ -1,11 +1,11 @@
 package com.manmeet.animalsys.controller;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.manmeet.animalsys.dto.UserDto;
+import com.manmeet.animalsys.entity.Donation;
 import com.manmeet.animalsys.entity.User;
+import com.manmeet.animalsys.service.AdoptionService;
+import com.manmeet.animalsys.service.AnimalService;
+import com.manmeet.animalsys.service.DonationService;
 import com.manmeet.animalsys.service.NotificationService;
+import com.manmeet.animalsys.service.ReportService;
 import com.manmeet.animalsys.service.UserService;
 
 import jakarta.validation.Valid;
@@ -23,11 +28,20 @@ import jakarta.validation.Valid;
 @Controller
 public class AuthController {
 
+	@Autowired
 	private UserService userService;
 
-	public AuthController(UserService userService) {
-		this.userService = userService;
-	}
+	@Autowired
+	private AnimalService animalService;
+	
+	@Autowired
+	private AdoptionService adoptionService;
+	
+	@Autowired
+	private ReportService reportService;
+	
+	@Autowired
+	private DonationService donationService;
 	
 	@Autowired
     private NotificationService notificationService;  
@@ -40,18 +54,12 @@ public class AuthController {
 
 	@GetMapping("/login")
 	public String loginForm(Authentication authentication) {
-		if (authentication != null && authentication.isAuthenticated()) {
-			Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-			for (GrantedAuthority authority : authorities) {
-				if (authority.getAuthority().equals("ROLE_ADMIN")) {
-					return "redirect:/admin-dashboard";
-				} else if (authority.getAuthority().equals("ROLE_USER")) {
-					return "redirect:/user-dashboard";
-				}
-			}
-		}
-		return "login";
+	    if (authentication != null && authentication.isAuthenticated()) {
+	        return "redirect:/dashboard";  // Redirect to the single dashboard for all roles
+	    }
+	    return "login";  // Show the login form if not authenticated
 	}
+
 
 	// handler method to show the registration form
     @GetMapping("/register")
@@ -128,19 +136,40 @@ public class AuthController {
 		model.addAttribute("users", users);
 		return "users";
 	}
-
-	@GetMapping("/admin-dashboard")
-	public String adminDashboard() {
-		return "admin-dashboard"; // Points to admin-dashboard.html
-	}
-
-	@GetMapping("/user-dashboard")
-	public String userDashboard() {
-		return "user-dashboard"; // Points to user-dashboard.html
-	}
 	
-	@GetMapping("/staff-dashboard")
-	public String staffDashboard() {
-		return "staff-dashboard"; // Points to user-dashboard.html
+	@GetMapping("/dashboard")
+	public String dashboard(Model model, Authentication authentication) {
+	    // Get the roles of the logged-in user
+	    Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+
+	    // Check the role and pass it to the model
+	    if (roles.contains("ROLE_ADMIN")) {
+	        model.addAttribute("role", "admin");  // role as a string, enclosed in single quotes
+	    } else if (roles.contains("ROLE_USER")) {
+	        model.addAttribute("role", "user");
+	    } else if (roles.contains("ROLE_STAFF")) {
+	        model.addAttribute("role", "staff");
+	    } else {
+	        model.addAttribute("role", "guest");  // Default case
+	    }
+	    
+	 // Fetch the data for the stats
+	    long totalAnimals = animalService.getTotalAnimals(); // Get the total number of animals
+	    long totalAdoptions = adoptionService.getTotalAdoptions(); // Get the total number of adoptions
+	    long totalIncidents = reportService.getTotalIncidents(); // Get the total number of incidents
+	    // Get recent donors and add them to the model
+	    List<Donation> recentDonors = donationService.getRecentDonors();
+
+	    // Add the stats to the model
+	    model.addAttribute("totalAnimals", totalAnimals);
+	    model.addAttribute("totalAdoptions", totalAdoptions);
+	    model.addAttribute("totalIncidents", totalIncidents);
+	    model.addAttribute("recentDonors", recentDonors);
+
+	    return "dashboard"; 
 	}
+
+
+
+
 }

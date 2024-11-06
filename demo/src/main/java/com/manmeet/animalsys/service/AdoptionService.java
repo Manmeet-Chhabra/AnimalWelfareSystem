@@ -39,4 +39,7 @@ public interface AdoptionService {
 
     // Method to save adoption
     Adoption save(Adoption adoption);
+
+	long getTotalAdoptions();
+
 }

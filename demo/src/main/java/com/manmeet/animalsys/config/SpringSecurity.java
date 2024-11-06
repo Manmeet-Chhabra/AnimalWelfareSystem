@@ -39,12 +39,9 @@ public class SpringSecurity {
         http
             .authorizeHttpRequests((authorize) -> 
                 authorize.requestMatchers("/register/**", "/login", "/index", "/donations", "/donations/**").permitAll()
-                
-                .requestMatchers("/admin-dashboard").hasRole("ADMIN")  // Admin only access
-                .requestMatchers("/user-dashboard").hasRole("USER")
-                .requestMatchers("/staff-dashboard").hasRole("STAFF") // Staff only access
+                .requestMatchers("/dashboard").authenticated() // All users can access the dashboard
                 .requestMatchers("/users").hasRole("ADMIN") // Admin only access for users
-                .requestMatchers("/animals").hasAnyRole("USER", "ADMIN", "STAFF")
+                
                 .anyRequest().authenticated() // All other requests require authentication
                 
             )
@@ -74,23 +71,12 @@ public class SpringSecurity {
     // Custom success handler for role-based redirection
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
-        return new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request,
-                                                HttpServletResponse response,
-                                                Authentication authentication) throws IOException, ServletException {
-                Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        return (request, response, authentication) -> {
+            Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-                if (roles.contains("ROLE_ADMIN")) {
-                    response.sendRedirect("/admin-dashboard");
-                } else if (roles.contains("ROLE_USER")) {
-                    response.sendRedirect("/user-dashboard");
-                } else if (roles.contains("ROLE_STAFF")) {
-                    response.sendRedirect("/staff-dashboard");
-                } else {
-                    response.sendRedirect("/index");
-                }
-            }
+            // If the user has any recognized role, redirect to /dashboard
+            response.sendRedirect("/dashboard");
         };
     }
+
 }

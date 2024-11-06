@@ -66,7 +66,7 @@ public class ReportController {
 		return "report-form";
 	}
 
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/submit")
 	public String submitReport(@ModelAttribute Report report, @RequestParam("file") MultipartFile[] files,
 	        Principal principal) {
@@ -327,6 +327,7 @@ public class ReportController {
 
 	// Method to show pending reports
     @GetMapping("/pending")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public String getPendingReports(Model model) {
         List<Report> pendingReports = reportService.getPendingReports();
         model.addAttribute("reports", pendingReports);

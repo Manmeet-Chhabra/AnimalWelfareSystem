@@ -147,6 +147,9 @@ public class ReportServiceImpl implements ReportService {
     }
     
     
-
+    @Override
+    public long getTotalIncidents() {
+        return reportRepository.count(); // Use count to get the total number of reports (incidents)
+    }
     
 }

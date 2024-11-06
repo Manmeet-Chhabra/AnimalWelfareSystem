@@ -129,5 +129,10 @@ public class AdoptionServiceImpl implements AdoptionService {
     public Adoption save(Adoption adoption) {
         return adoptionRepository.save(adoption); // Save the adoption entity to the database
     }
+    
+    @Override
+    public long getTotalAdoptions() {
+        return adoptionRepository.count(); // Use the count method from the repository to count adoptions
+    }
    
 }

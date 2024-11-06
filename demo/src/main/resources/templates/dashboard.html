@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<!-- Font Awesome for icons -->
+	<title>Animal Welfare Dashboard</title>
+	<style>
+		body {
+			font-family: 'Arial', sans-serif;
+			background-color: #f5f5f5;
+			color: #333;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			/* Ensure body content aligns vertically */
+		}
+
+		.header {
+			background-color: #2c3e50;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			position: fixed;
+			top: 0;
+			z-index: 100;
+			box-sizing: border-box;
+		}
+
+		.header .left-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .center-section {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.header .right-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .logo {
+			margin-right: 10px;
+			height: 40px;
+			/* Ensure the logo fits within the header */
+		}
+
+		.header .app-name {
+			font-size: 18px;
+			color: white;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.logout-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #e74c3c;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.logout-btn:hover {
+			background-color: #c0392b;
+		}
+
+
+		/* Sidebar Styles */
+		.sidebar {
+			width: 250px;
+			background-color: #2c3e50;
+			color: #ecf0f1;
+			padding: 20px;
+			position: fixed;
+			top: 70px;
+			/* Align with header height */
+			left: 0;
+			bottom: 0;
+			transition: all 0.3s ease;
+			overflow-y: auto;
+			z-index: 90;
+		}
+
+		.sidebar h2 {
+			font-size: 1.8em;
+			color: #ecf0f1;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+		}
+
+		.sidebar ul li {
+			padding: 15px 0;
+			border-bottom: 1px solid #34495e;
+		}
+
+		.sidebar ul li a {
+			color: #ecf0f1;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 15px;
+		}
+
+		.sidebar ul li a:hover {
+			background-color: #34495e;
+			border-radius: 5px;
+		}
+
+		.sidebar ul li i {
+			font-size: 30px;
+		}
+
+		/* Sublist Styles */
+		.sidebar ul li ul {
+			list-style: none;
+			padding-left: 20px;
+		}
+
+		.sidebar ul li ul li {
+			padding: 10px 0;
+		}
+
+		.sidebar ul li ul li a {
+			color: #bdc3c7;
+		}
+
+		.sidebar ul li ul li a:hover {
+			background-color: #2c3e50;
+		}
+
+		main {
+			margin-left: 270px;
+			padding: 20px;
+			flex: 1;
+			position: relative;
+			z-index: 80;
+			box-sizing: border-box;
+			margin-top: 80px;
+			/* Ensure enough space for the fixed header */
+		}
+
+		.main-content h1 {
+			margin-top: 0;
+			font-size: 2em;
+			color: #333;
+		}
+
+		.cards {
+			display: flex;
+			justify-content: space-between;
+			gap: 20px;
+			flex-wrap: wrap;
+		}
+
+		.card {
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 15px;
+			width: 48%;
+			box-sizing: border-box;
+		}
+
+		footer {
+			text-align: center;
+			padding: 10px;
+			background-color: #f1f1f1;
+			margin-top: 20px;
+		}
+
+		@media (max-width: 768px) {
+			.sidebar {
+				width: 200px;
+			}
+
+			main {
+				margin-left: 220px;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.sidebar {
+				width: 100%;
+				height: auto;
+				position: relative;
+				top: 0;
+				/* Ensure proper alignment */
+			}
+
+			main {
+				margin-left: 0;
+			}
+
+			.header {
+				padding: 10px 15px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	
+
+	<div class="header">
+		<div class="left-section">
+			<img src="/images/logo.jpg" alt="PETURA Logo" class="logo">
+		</div>
+		<div class="center-section">
+			<span class="app-name">PETURA: Love Knows No Species</span>
+		</div>
+		<div class="right-section">
+			<a href="/logout" class="logout-btn">
+				<i class="fas fa-sign-out-alt"></i> Logout
+			</a>
+		</div>
+	</div>
+
+
+	<div class="sidebar">
+		
+		<div class="sidebar-menu">
+			<ul>
+				<!-- Admin Sidebar Links -->
+				<li id="admin-link1" onclick="toggleSubList('admin-animal')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-paw"></i> Animal Management</a>
+
+					<ul class="sub-list" id="admin-animal">
+						<li><a th:href="@{/animals}"><i class="fas fa-paw"></i> View Animals</a></li>
+						<li><a th:href="@{/animals/create}"><i class="fas fa-plus-circle"></i> Add Animal</a></li>
+						<li><a th:href="@{/animals/search}"><i class="fas fa-search"></i> Search Animals</a></li>
+
+					</ul>
+				</li>
+				<li id="admin-link2" onclick="toggleSubList('admin-shelter')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-home"></i> Shelter Management</a>
+					<ul class="sub-list" id="admin-shelter">
+						<li><a th:href="@{/shelters}"><i class="fas fa-home"></i> View Shelters</a></li>
+						<li><a th:href="@{/shelters/create}"><i class="fas fa-plus-circle"></i> Add Shelter</a></li>
+						<li><a th:href="@{/shelters/update}"><i class="fas fa-sync-alt"></i> Update Shelter</a></li>
+						<li><a th:href="@{/shelters/search}"><i class="fas fa-search"></i> Search Shelter</a></li>
+
+					</ul>
+				</li>
+				<li id="admin-link3" onclick="toggleSubList('admin-adoption')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-users"></i> Adoption Management</a>
+					<ul class="sub-list" id="admin-adoption">
+						<li><a th:href="@{/adoptions/available}"><i class="fas fa-paw"></i> View Adoptions</a></li>
+						<li><a th:href="@{/adoptions/requests}"><i class="fas fa-handshake"></i> Review Adoption
+								Request</a></li>
+
+					</ul>
+				</li>
+				<li id="admin-link4" onclick="toggleSubList('admin-donation')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-donate"></i> Donation Management</a>
+					<ul class="sub-list" id="admin-donation">
+						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> View Donations</a></li>
+						<li><a th:href="@{/donations/new}"><i class="fas fa-hand-holding-usd"></i> Make a New
+								Donation</a></li>
+						<li><a th:href="@{/donations/add}"><i class="fas fa-plus-circle"></i> Add Donation</a></li>
+						<li><a th:href="@{/donations/admin}"><i class="fas fa-list"></i> Review Lists of
+								Donations</a>
+						</li>
+						<li><a th:href="@{/donations/recent-donors}"><i class="fas fa-users"></i> Recent Donors</a>
+						</li>
+						<li><a th:href="@{/donations/history}"><i class="fas fa-history"></i> Donation History</a>
+						</li>
+
+					</ul>
+				</li>
+				<li id="admin-link5" onclick="toggleSubList('admin-report')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-exclamation-triangle"></i> Incident Management</a>
+					<ul class="sub-list" id="admin-report">
+						<li><a th:href="@{/reports}"><i class="fas fa-clipboard-list"></i> View Incidents</a></li>
+						<li><a th:href="@{/reports/pending}"><i class="fas fa-clock"></i> Pending Incidents</a></li>
+						<li><a th:href="@{/reports/search}"><i class="fas fa-search"></i> Search Incidents</a></li>
+						<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
+								Incident</a>
+						</li>
+						<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
+						</li>
+
+					</ul>
+				</li>
+				<li id="admin-link6" onclick="toggleSubList('admin-report-generation')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-chart-line"></i> Report Generation Management</a>
+					<ul class="sub-list" id="admin-report-generation">
+						<li><a th:href="@{/reports/animal-distribution}"><i class="fas fa-paw"></i> Animal
+								Distribution</a></li>
+						<li><a th:href="@{/reports/adoption-trends}"><i class="fas fa-users"></i> Adoption
+								Trends</a>
+						</li>
+						<li><a th:href="@{/reports/donation-summary}"><i class="fas fa-donate"></i> Donation
+								Summary</a>
+						</li>
+						<li><a th:href="@{/reports/incident-reports}"><i class="fas fa-exclamation-triangle"></i>
+								Incident Reports</a></li>
+						<li><a th:href="@{/reports/shelter-capacity}"><i class="fas fa-home"></i> Shelter
+								Capacity</a>
+						</li>
+						<li><a th:href="@{/reports/total-adoptions}"><i class="fas fa-check-circle"></i> Total
+								Adoptions</a></li>
+						<li><a th:href="@{/reports/total-donations}"><i class="fas fa-money-check-alt"></i> Total
+								Donations</a></li>
+						<li><a th:href="@{/reports/animal-health-status}"><i class="fas fa-stethoscope"></i> Animal
+								Health Status Report</a></li>
+						<li><a th:href="@{/reports/animal-reports}"><i class="fas fa-file-alt"></i> Animal
+								Reports</a>
+						</li>
+					</ul>
+				</li>
+				<li id="admin-link7" onclick="toggleSubList('admin-user')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-user-cog"></i> User Management</a>
+					<ul class="sub-list" id="admin-user">
+						<li><a th:href="@{/users}"><i class="fas fa-users"></i> View Users</a></li>
+						<li><a th:href="@{/register}"><i class="fas fa-user-plus"></i> Add User</a></li>
+
+					</ul>
+				</li>
+
+
+				<!-- Staff Sidebar Links -->
+				<li id="staff-link1" onclick="toggleSubList('staff-animal')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-paw"></i> Animal Management</a>
+					<ul class="sub-list" id="staff-animal">
+						<li><a th:href="@{/animals}"><i class="fas fa-paw"></i> View Animals</a></li>
+						<li><a th:href="@{/animals/create}"><i class="fas fa-plus-circle"></i> Add Animal</a></li>
+						<li><a th:href="@{/animals/search}"><i class="fas fa-search"></i> Search Animals</a></li>
+
+					</ul>
+				</li>
+				<li id="staff-link2" onclick="toggleSubList('staff-shelter')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-home"></i> Shelter Management</a>
+					<ul class="sub-list" id="staff-shelter">
+						<li><a th:href="@{/shelters}"><i class="fas fa-home"></i> View Shelters</a></li>
+						<li><a th:href="@{/shelters/search}"><i class="fas fa-search"></i> Search Shelter</a></li>
+
+					</ul>
+				</li>
+				<li id="staff-link3" onclick="toggleSubList('staff-adoption')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-users"></i> Adoption Management</a>
+					<ul class="sub-list" id="staff-adoption">
+						<li><a th:href="@{/adoptions}"><i class="fas fa-paw"></i> View Adoptions</a></li>
+						<li><a th:href="@{/adoptions/manage}"><i class="fas fa-cogs"></i> Manage Adoption</a></li>
+
+					</ul>
+				</li>
+
+				<li id="staff-link4" onclick="toggleSubList('staff-donation')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-donate"></i> Make a Donation</a>
+					<ul class="sub-list" id="staff-donation">
+						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> View Donations</a></li>
+						<li><a th:href="@{/donations/new}"><i class="fas fa-plus-circle"></i> Make a New
+								Donation</a>
+						</li>
+						<li><a th:href="@{/donations/add}"><i class="fas fa-hand-holding-usd"></i> Add Donation</a>
+						</li>
+						<li><a th:href="@{/donations/recent-donor}"><i class="fas fa-users"></i> Recent Donors</a>
+						</li>
+						<li><a th:href="@{/donations/history}"><i class="fas fa-history"></i> Donation History</a>
+						</li>
+
+					</ul>
+				</li>
+				<li id="staff-link5" onclick="toggleSubList('staff-report-generation')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-chart-line"></i> Report Generation Management</a>
+					<ul class="sub-list" id="staff-report-generation">
+						<li><a th:href="@{/reports/animal-distribution}"><i class="fas fa-paw"></i> Animal
+								Distribution</a></li>
+						<li><a th:href="@{/reports/adoption-trends}"><i class="fas fa-users"></i> Adoption
+								Trends</a>
+						</li>
+						<li><a th:href="@{/reports/donation-summary}"><i class="fas fa-donate"></i> Donation
+								Summary</a>
+						</li>
+						<li><a th:href="@{/reports/incident-reports}"><i class="fas fa-exclamation-triangle"></i>
+								Incident Reports</a></li>
+						<li><a th:href="@{/reports/shelter-capacity}"><i class="fas fa-home"></i> Shelter
+								Capacity</a>
+						</li>
+						<li><a th:href="@{/reports/total-adoptions}"><i class="fas fa-check-circle"></i> Total
+								Adoptions</a></li>
+						<li><a th:href="@{/reports/total-donations}"><i class="fas fa-money-check-alt"></i> Total
+								Donations</a></li>
+						<li><a th:href="@{/reports/animal-health-status}"><i class="fas fa-stethoscope"></i> Animal
+								Health Status Report</a></li>
+						<li><a th:href="@{/reports/animal-reports}"><i class="fas fa-file-alt"></i> Animal
+								Reports</a>
+						</li>
+					</ul>
+				</li>
+				<li id="staff-link6" onclick="toggleSubList('staff-report')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-exclamation-triangle"></i> Incident Management</a>
+					<ul class="sub-list" id="staff-report">
+						<li><a th:href="@{/reports}"><i class="fas fa-clipboard-list"></i> View Incidents</a></li>
+						<li><a th:href="@{/reports/pending}"><i class="fas fa-hourglass-half"></i> Pending
+								Incidents</a>
+						</li>
+						<li><a th:href="@{/reports/search}"><i class="fas fa-search"></i> Search Incidents</a></li>
+						<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
+								Incident</a>
+						</li>
+						<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
+						</li>
+
+					</ul>
+				</li>
+
+
+
+				<!-- User Sidebar Links -->
+				<li id="user-link1" onclick="toggleSubList('user-adopt')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-users"></i> Adopt Animals</a>
+					<ul class="sub-list" id="user-adopt">
+						<li><a th:href="@{/adoptions/available}"><i class="fas fa-paw"></i> Browse Animals</a></li>
+						<li><a th:href="@{/adoptions/request}"><i class="fas fa-handshake"></i> Request Adoption</a>
+						</li>
+						<li><a th:href="@{/adoptions/adoption-status}"><i class="fas fa-check-circle"></i> Check
+								Adoption Status</a></li>
+
+					</ul>
+				</li>
+				<li id="user-link2" onclick="toggleSubList('user-donation')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-donate"></i> Make a Donation</a>
+					<ul class="sub-list" id="user-donation">
+						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> View Donations</a></li>
+						<li><a th:href="@{/donations/new}"><i class="fas fa-plus-circle"></i> Make a New
+								Donation</a>
+						</li>
+						<li><a th:href="@{/donations/add}"><i class="fas fa-plus"></i> Add Donation</a></li>
+						<li><a th:href="@{/donations/recent-donor}"><i class="fas fa-users"></i> Recent Donors</a>
+						</li>
+						<li><a th:href="@{/donations/history}"><i class="fas fa-history"></i> Donation History</a>
+						</li>
+
+					</ul>
+				</li>
+				<li id="user-link3" onclick="toggleSubList('user-shelter')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-home"></i> View Shelters</a>
+					<ul class="sub-list" id="user-shelter">
+						<li><a th:href="@{/shelters}"><i class="fas fa-home"></i> View Shelters</a></li>
+						<li><a th:href="@{/shelters/search}"><i class="fas fa-search"></i> Search Shelters</a></li>
+
+					</ul>
+				</li>
+				<li id="user-link4" onclick="toggleSubList('user-view-animal')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-paw"></i> View Animal</a>
+					<ul class="sub-list" id="user-view-animal">
+						<li><a th:href="@{/animals}"><i class="fas fa-paw"></i> View Animal List</a></li>
+						<li><a th:href="@{/animals/search}"><i class="fas fa-search"></i> Search Animals</a></li>
+
+					</ul>
+				</li>
+				<li id="user-link5" onclick="toggleSubList('user-report')">
+					<a href="javascript:void(0)">
+						<i class="fas fa-exclamation-triangle"></i> Report an Incident</a>
+					<ul class="sub-list" id="user-report">
+						<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
+								Incident</a>
+						</li>
+						<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
+						</li>
+
+
+
+					</ul>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+	<main>
+		<div class="main-content">
+			<h1>Welcome to the Animal Welfare Application</h1>
+			<!-- Dynamic content goes here based on the page being accessed -->
+		</div>
+
+
+
+		<div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+			<div
+				style="flex: 1; min-width: 200px; background-color: #f1f1f1; padding: 20px; border-radius: 8px; text-align: center;">
+				<h2>Total Animals</h2>
+				<p style="font-size: 24px; font-weight: bold;" th:text="${totalAnimals}"></p>
+			</div>
+			<div
+				style="flex: 1; min-width: 200px; background-color: #f1f1f1; padding: 20px; border-radius: 8px; text-align: center;">
+				<h2>Total Adoptions</h2>
+				<p style="font-size: 24px; font-weight: bold;" th:text="${totalAdoptions}"></p>
+			</div>
+			<div
+				style="flex: 1; min-width: 200px; background-color: #f1f1f1; padding: 20px; border-radius: 8px; text-align: center;">
+				<h2>Total Incidents</h2>
+				<p style="font-size: 24px; font-weight: bold;" th:text="${totalIncidents}"></p>
+			</div>
+		</div>
+
+		<div class="cards">
+			<h3 style="margin-top: 30px;">Recent Donors</h3>
+			<table
+				style="width: 100%; border-collapse: collapse; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); margin-top: 10px;">
+				<thead>
+					<tr style="background-color: #333; color: white;">
+						<th style="padding: 10px; text-align: left;">Name</th>
+						<th style="padding: 10px; text-align: left;">Email</th>
+						<th style="padding: 10px; text-align: left;">Donation Type</th>
+						<th style="padding: 10px; text-align: left;">Amount</th>
+						<th style="padding: 10px; text-align: left;">Quantity</th>
+						<th style="padding: 10px; text-align: left;">Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="donation : ${recentDonors}" style="background-color: #f9f9f9;">
+						<td style="padding: 10px; border-bottom: 1px solid #ddd;" th:text="${donation.donorName}">
+							Donor
+							Name
+						</td>
+						<td style="padding: 10px; border-bottom: 1px solid #ddd;" th:text="${donation.email}">Donor
+							Email
+						</td>
+						<td style="padding: 10px; border-bottom: 1px solid #ddd;" th:text="${donation.donationType}">
+							Donation Type</td>
+						<td style="padding: 10px; border-bottom: 1px solid #ddd;" th:text="${donation.amount}">
+							Donation
+							Amount</td>
+						<td style="padding: 10px; border-bottom: 1px solid #ddd;" th:text="${donation.quantity}">
+							Donation
+							Quantity</td>
+						<td style="padding: 10px; border-bottom: 1px solid #ddd;"
+							th:text="${#temporals.format(donation.date, 'yyyy-MM-dd')}">Donation Date</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</main>
+
+
+	<div th:attr="data-role=${role}" id="userRole"></div>
+	<script>
+		var userRole = document.getElementById("userRole").getAttribute("data-role");
+		console.log("User role is: ", userRole);
+
+		// Function to toggle visibility of the sublist
+		function toggleSubList(moduleId) {
+			const subList = document.getElementById(moduleId);
+			subList.classList.toggle('active');
+		}
+
+		// Role-based visibility of menu links (same logic as before)
+		if (userRole !== 'admin') {
+			document.getElementById('admin-link1').style.display = 'none';
+			document.getElementById('admin-link2').style.display = 'none';
+			document.getElementById('admin-link3').style.display = 'none';
+			document.getElementById('admin-link4').style.display = 'none';
+			document.getElementById('admin-link5').style.display = 'none';
+			document.getElementById('admin-link6').style.display = 'none';
+			document.getElementById('admin-link7').style.display = 'none';
+		}
+
+		if (userRole !== 'staff') {
+			document.getElementById('staff-link1').style.display = 'none';
+			document.getElementById('staff-link2').style.display = 'none';
+			document.getElementById('staff-link3').style.display = 'none';
+			document.getElementById('staff-link4').style.display = 'none';
+			document.getElementById('staff-link5').style.display = 'none';
+			document.getElementById('staff-link6').style.display = 'none';
+		}
+
+		if (userRole !== 'user') {
+			document.getElementById('user-link1').style.display = 'none';
+			document.getElementById('user-link2').style.display = 'none';
+			document.getElementById('user-link3').style.display = 'none';
+			document.getElementById('user-link4').style.display = 'none';
+			document.getElementById('user-link5').style.display = 'none';
+		}
+	</script>
+
+</body>
+
+</html>

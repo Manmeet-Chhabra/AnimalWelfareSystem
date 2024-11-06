@@ -39,4 +39,6 @@ public interface ReportService {
 
 	List<Report> searchReports(String description, String type, String status);
 
+	long getTotalIncidents();
+
 }

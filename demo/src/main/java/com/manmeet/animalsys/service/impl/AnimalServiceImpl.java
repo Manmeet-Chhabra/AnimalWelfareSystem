@@ -81,16 +81,20 @@ public class AnimalServiceImpl implements AnimalService {
 		// Fetch and return animals with status AVAILABLE
 		return animalRepository.findByAdoptionStatus(AdoptionStatus.AVAILABLE);
 	}
-	
+
 	@Override
 	public Animal findByName(String name) {
-	    return animalRepository.findByName(name);
+		return animalRepository.findByName(name);
 	}
-	
-	@Override
-    public Animal save(Animal animal) {
-        return animalRepository.save(animal); // Implement the save logic here
-    }
 
+	@Override
+	public Animal save(Animal animal) {
+		return animalRepository.save(animal); // Implement the save logic here
+	}
+
+	@Override
+	public long getTotalAnimals() {
+		return animalRepository.count();
+	}
 
 }

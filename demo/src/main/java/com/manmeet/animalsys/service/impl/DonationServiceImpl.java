@@ -20,21 +20,19 @@ public class DonationServiceImpl implements DonationService {
 	private DonationRepository donationRepository;
 
 	@Override
-    public void saveDonation(Donation donation) {
-        // Check for duplicates based on donor name, donation type, and date
-        Optional<Donation> existingDonation = donationRepository.findByDonorNameAndDonationTypeAndDate(
-            donation.getDonorName(),
-            donation.getDonationType(),
-            donation.getDate()
-        );
+	public void saveDonation(Donation donation) {
+		// Check for duplicates based on donor name, donation type, and date
+		Optional<Donation> existingDonation = donationRepository.findByDonorNameAndDonationTypeAndDate(
+				donation.getDonorName(), donation.getDonationType(), donation.getDate());
 
-        if (existingDonation.isPresent()) {
-            // Handle the case where a duplicate donation exists
-            throw new IllegalArgumentException("Duplicate donation detected for this donor on the same date.");
-        }
+		if (existingDonation.isPresent()) {
+			// Handle the case where a duplicate donation exists
+			throw new IllegalArgumentException("Duplicate donation detected for this donor on the same date.");
+		}
 
-        donationRepository.save(donation);
-    }
+		donationRepository.save(donation);
+	}
+
 	@Override
 	public List<Donation> getAllDonations() {
 		return donationRepository.findAll();
@@ -62,35 +60,40 @@ public class DonationServiceImpl implements DonationService {
 	}
 
 	@Override
-	//public List<Donation> getRecentDonations() {
-	//	return donationRepository.findTop10ByOrderByDateDesc();
-	//}
-	
+	// public List<Donation> getRecentDonations() {
+	// return donationRepository.findTop10ByOrderByDateDesc();
+	// }
+
 	public List<Donation> getRecentDonations() {
-	    List<Donation> donations = donationRepository.findTop10ByOrderByDateDesc();
-	    donations.forEach(donation -> {
-	        System.out.println("Donation Type: " + donation.getDonationType());
-	        System.out.println("Amount: " + donation.getAmount());
-	    });
-	    return donations;
+		List<Donation> donations = donationRepository.findTop10ByOrderByDateDesc();
+		donations.forEach(donation -> {
+			System.out.println("Donation Type: " + donation.getDonationType());
+			System.out.println("Amount: " + donation.getAmount());
+		});
+		return donations;
 	}
 
 	@Override
 	public List<Donation> findDonationsByUser(User user) {
-	    return donationRepository.findByUser(user); // Pass the user object
+		return donationRepository.findByUser(user); // Pass the user object
 	}
-
-
 
 	@Override
 	public void scheduleMonthlyDonation(Donation donation) {
 		donation.setRecurring(true); // Mark this donation as recurring
 		donationRepository.save(donation);
 	}
+
 	@Override
 	public Donation findById(Long id) {
-	    return donationRepository.findById(id)
-	            .orElseThrow(() -> new EntityNotFoundException("Donation not found with ID " + id));
+		return donationRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Donation not found with ID " + id));
+	}
+
+	// Extract the donor names from the recent donations
+	@Override
+	public List<Donation> getRecentDonors() {
+		// Get the top 10 most recent donations by date, including all details
+		return donationRepository.findTop10ByOrderByDateDesc();
 	}
 }
-

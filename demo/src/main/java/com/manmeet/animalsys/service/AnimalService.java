@@ -29,5 +29,7 @@ public interface AnimalService {
 	Animal findByName(String name);
 
 	Animal save(Animal animal);
+
+	long getTotalAnimals();
 }
 
