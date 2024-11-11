@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Pet Care Tips</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+			color: #333;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.header {
+			background-color: #2c3e50;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			position: fixed;
+			top: 0;
+			z-index: 100;
+			box-sizing: border-box;
+		}
+
+		.header .left-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .center-section {
+			text-align: center;
+			flex-grow: 1;
+		}
+
+		.header .right-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .logo {
+			margin-right: 10px;
+			height: 40px;
+		}
+
+		.header .app-name {
+			font-size: 18px;
+			color: white;
+			font-weight: bold;
+		}
+
+		.donate-btn {
+			color: white;
+			background-color: #4CAF50;
+			margin-right: 10px;
+			padding: 8px 12px;
+			text-decoration: none;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.donate-btn:hover {
+			background-color: #45a049;
+		}
+
+		.logout-btn {
+			color: white;
+			background-color: #e74c3c;
+			padding: 8px 12px;
+			text-decoration: none;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.logout-btn:hover {
+			background-color: #c0392b;
+		}
+
+		.container {
+			width: 80%;
+			margin: 100px auto 20px;
+			flex: 1;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			border-radius: 8px;
+		}
+
+		h1,
+		h2 {
+			text-align: center;
+			color: #4CAF50;
+			margin-bottom: 20px;
+		}
+
+		p,
+		ul {
+			font-size: 16px;
+			line-height: 1.6;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 20px;
+			padding: 20px 0;
+			background-color: #2c3e50;
+			color: white;
+		}
+
+		.footer .footer-links {
+			margin-bottom: 10px;
+		}
+
+		.footer .footer-links a {
+			color: white;
+			margin: 0 10px;
+			text-decoration: none;
+			transition: color 0.3s;
+		}
+
+		.footer .footer-links a:hover {
+			color: #4CAF50;
+		}
+
+		.footer .social-icons {
+			margin-top: 10px;
+		}
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+	<div class="header">
+		<div class="left-section">
+			<img src="/images/logo.jpg" alt="PETURA Logo" class="logo">
+		</div>
+		<div class="center-section">
+			<span class="app-name">PETURA: Love Knows No Species</span>
+		</div>
+		<div class="right-section">
+			<a href="/donations" class="donate-btn">
+				<i class="fas fa-donate"></i> Donate Now
+			</a>
+			<a href="/logout" class="logout-btn">
+				<i class="fas fa-sign-out-alt"></i> Logout
+			</a>
+		</div>
+	</div>
+
+	<div class="container">
+		<h1>Pet Care Tips</h1>
+
+		<div class="mt-4">
+			<h2>Nutrition</h2>
+			<p>Ensure your pet gets a balanced diet with appropriate nutrients for their age, size, and breed. Consult
+				with your veterinarian to choose the best food and feeding schedule.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Exercise</h2>
+			<p>Regular exercise is important for your pet's physical and mental health. Daily walks, playtime, and
+				interactive toys can help keep your pet active and engaged.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Grooming</h2>
+			<p>Regular grooming helps keep your pet clean and healthy. Brush their coat, trim their nails, and maintain
+				proper hygiene to prevent health issues.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Health Care</h2>
+			<p>Schedule regular vet check-ups to monitor your pet's health. Keep up with vaccinations, flea and tick
+				prevention, and dental care to ensure your pet stays healthy.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Training</h2>
+			<p>Use positive reinforcement techniques for training your pet. Reward good behavior with treats and praise
+				to encourage your pet to follow commands and behave well.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Socialization</h2>
+			<p>Socializing your pet with other animals and people helps them become well-adjusted and confident. Arrange
+				playdates, attend training classes, and visit pet-friendly parks.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Mental Stimulation</h2>
+			<p>Engage your pet's mind with puzzle toys, training exercises, and new experiences. Mental stimulation
+				prevents boredom and promotes a happy, healthy pet.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Safety</h2>
+			<p>Create a safe environment for your pet by removing hazards, securing your home, and using pet-friendly
+				products. Ensure your pet has a comfortable space to rest and play.</p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Dog Care Tips</h2>
+			<ul>
+				<li><strong>Nutrition:</strong> Dogs need a balanced diet with proteins, fats, and carbohydrates. Avoid
+					toxic foods like chocolate, grapes, and onions.</li>
+				<li><strong>Exercise:</strong> Regular exercise is crucial for physical and mental health. Breed and age
+					determine exercise needs.</li>
+				<li><strong>Grooming:</strong> Regular brushing, nail trimming, and bathing help maintain coat and skin
+					health.</li>
+				<li><strong>Training:</strong> Basic commands and socialization can improve behavior and safety.</li>
+				<li><strong>Health:</strong> Regular vet check-ups, vaccinations, and dental care are essential.</li>
+			</ul>
+			<p>Sources: <a href="https://www.akc.org/dog-training/" target="_blank">AKC</a> | <a
+					href="https://www.aspca.org/pet-care/dog-care" target="_blank">ASPCA</a></p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Cat Care Tips</h2>
+			<ul>
+				<li><strong>Feeding:</strong> Cats are obligate carnivores, so they need protein-rich food. Keep them
+					hydrated with fresh water, and avoid raw or potentially harmful foods.</li>
+				<li><strong>Litter Box:</strong> Clean the litter box daily and place it in a quiet, accessible area.
+				</li>
+				<li><strong>Grooming:</strong> Brush regularly to reduce shedding and hairballs.</li>
+				<li><strong>Mental Stimulation:</strong> Cats enjoy toys, scratching posts, and perches to keep them
+					engaged and prevent boredom.</li>
+				<li><strong>Health:</strong> Routine vet visits and vaccinations are key for health, as well as regular
+					deworming.</li>
+			</ul>
+			<p>Sources: <a href="https://www.aspca.org/pet-care/cat-care" target="_blank">ASPCA</a> | <a
+					href="https://www.petfinder.com/cats/cat-care/" target="_blank">Cat Care Tips</a></p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Rabbit Care Tips</h2>
+			<ul>
+				<li><strong>Diet:</strong> Rabbits need fresh hay daily, along with leafy greens and a limited amount of
+					pellets.</li>
+				<li><strong>Housing:</strong> Provide a spacious, well-ventilated cage with a soft area for resting.
+				</li>
+				<li><strong>Socialization:</strong> Rabbits are social animals that enjoy companionship, so interacting
+					with them is important.</li>
+				<li><strong>Chewing Needs:</strong> Give safe chew toys or wood to help wear down their teeth.</li>
+				<li><strong>Grooming:</strong> Brush rabbits regularly, especially long-haired breeds, to prevent
+					matting.</li>
+			</ul>
+			<p>Sources: <a href="https://www.humanesociety.org/resources/rabbit-care" target="_blank">Humane Society</a>
+				| <a href="https://rabbit.org/" target="_blank">House Rabbit Society</a></p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Cow Care Tips</h2>
+			<ul>
+				<li><strong>Nutrition:</strong> Cows require high-fiber diets with access to hay, silage, and grains.
+					Ensure they have fresh, clean water.</li>
+				<li><strong>Shelter:</strong> Cows need shelter from extreme weather and enough space to roam if
+					possible.</li>
+				<li><strong>Health:</strong> Vaccinations and regular deworming are essential for herd health.</li>
+				<li><strong>Hoof Care:</strong> Regular hoof trimming can prevent infections and other issues.</li>
+				<li><strong>Social Needs:</strong> Cows are herd animals, so social interaction is beneficial to their
+					well-being.</li>
+			</ul>
+			<p>Sources: <a href="https://www.worldanimalprotection.us/cows" target="_blank">World Animal Protection</a>
+				| <a href="https://dairy-cow.org/" target="_blank">Dairy Cow Health</a></p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Sheep Care Tips</h2>
+			<ul>
+				<li><strong>Diet:</strong> Primarily forage on grasses; provide mineral supplements and fresh water.
+				</li>
+				<li><strong>Shearing:</strong> Sheep need shearing at least once a year to prevent wool from
+					overgrowing, which can cause overheating and skin issues.</li>
+				<li><strong>Shelter:</strong> Protection from wind, rain, and heat is important, especially during
+					lambing season.</li>
+				<li><strong>Health:</strong> Vaccinations and parasite control are key to preventing diseases common in
+					sheep.</li>
+				<li><strong>Foot Care:</strong> Regular hoof trimming is essential to prevent infections.</li>
+			</ul>
+			<p>Sources: <a href="https://www.sheepusa.org" target="_blank">American Sheep Industry Association</a> | <a
+					href="https://www.fawc.org.uk" target="_blank">Farm Animal Welfare Council</a></p>
+		</div>
+		<div class="mt-4">
+			<h2>Bird Care Tips</h2>
+			<ul>
+				<li><strong>Cage Size:</strong> Ensure a spacious cage with room for flight and multiple perches at
+					different heights.</li>
+				<li><strong>Diet:</strong> Provide a balanced diet with seeds, pellets, and fresh fruits and vegetables.
+				</li>
+				<li><strong>Mental Stimulation:</strong> Birds require toys and regular social interaction to prevent
+					boredom and stress.</li>
+				<li><strong>Exercise:</strong> Allow birds out-of-cage time in a safe area to promote healthy activity.
+				</li>
+				<li><strong>Health:</strong> Keep an eye on feather condition, appetite, and activity level; regular vet
+					visits are important.</li>
+			</ul>
+			<p>Sources: <a href="https://abcbirds.org" target="_blank">American Bird Conservancy</a> | <a
+					href="https://www.petmd.com/bird" target="_blank">PetMD - Bird Care</a></p>
+		</div>
+	</div>
+
+	<footer class="footer">
+		<div class="footer-links">
+			<a href="/about">About Us</a>
+			<a href="/education">Education</a>
+			<a href="/pet-care-tips">Pet Care Tips</a>
+			<a href="/forum">Community Forum</a>
+			<a href="/feedback">Feedback</a>
+		</div>
+		<div class="social-icons">
+			<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+			<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+			<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+			<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+		<p>&copy; 2024 PETURA: Love Knows No Species</p>
+		<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+	</footer>
+</body>
+
+</html>

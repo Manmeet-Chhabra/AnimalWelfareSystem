@@ -3,11 +3,11 @@ package com.manmeet.animalsys.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.manmeet.animalsys.entity.AdoptionStatus;
 import com.manmeet.animalsys.entity.Animal;
 
 public interface AnimalService {
-	
-	
+
 	List<Animal> getAvailableAnimals();
 
 	Animal addAnimal(Long shelterId, Animal animal);
@@ -24,12 +24,17 @@ public interface AnimalService {
 
 	List<Animal> getAllAnimals();
 
-	List<Animal> searchAnimals(String type, String healthStatus); // Add search criteria as needed
+	
+
 
 	Animal findByName(String name);
 
 	Animal save(Animal animal);
 
 	long getTotalAnimals();
-}
 
+	List<Animal> getAnimalsByType(String type);
+
+	List<Animal> searchAnimals(String type, String healthStatus, AdoptionStatus adoptionStatus, Long shelterId,
+			String doctorAppointment);
+}

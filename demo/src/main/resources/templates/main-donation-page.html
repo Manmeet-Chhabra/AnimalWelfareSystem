@@ -4,133 +4,350 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Animal Welfare Donations</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<style>
 		body {
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 20px;
-			background-image: url('/images/background.jpg');
-			/* Replace with your image path */
-			background-size: cover;
-			/* Cover the entire background */
-			background-position: center;
-			/* Center the background image */
-			color: #ffffff;
-			/* Change text color to make it readable on the background */
+			background-color: #f8f9fa;
+			color: #333;
 			text-align: center;
 		}
 
-		h1 {
-			animation: slideIn 1s;
+		/* Header Styling */
+		.header {
+			background-color: #2c3e50;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			position: fixed;
+			top: 0;
+			z-index: 100;
+			box-sizing: border-box;
 		}
 
-		@keyframes slideIn {
-			from {
-				transform: translateY(-50px);
-				opacity: 0;
-			}
-
-			to {
-				transform: translateY(0);
-				opacity: 1;
-			}
+		.header .left-section {
+			display: flex;
+			align-items: center;
 		}
 
-		.btn {
-			padding: 10px 15px;
+		.header .center-section {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.header .right-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .logo {
+			margin-right: 10px;
+			height: 40px;
+		}
+
+		.header .app-name {
+			font-size: 18px;
 			color: white;
-			background-color: #007bff;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.donate-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #4CAF50;
+			border-radius: 5px;
+			margin-right: 10px;
+			transition: background-color 0.3s;
+		}
+
+		.donate-btn:hover {
+			background-color: #45a049;
+		}
+
+		.logout-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #e74c3c;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.logout-btn:hover {
+			background-color: #c0392b;
+		}
+
+		/* Centered Image and Text Section */
+		.centered-section {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 20px;
+			margin-top: 80px;
+			/* Space for fixed header */
+		}
+
+		.centered-section img {
+			width: 100%;
+			max-width: 400px;
+			height: auto;
+			border-radius: 8px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+			transition: transform 0.3s ease-in-out;
+		}
+
+		.centered-section img:hover {
+			transform: scale(1.1);
+		}
+
+		.centered-section h1 {
+			font-size: 2em;
+			font-weight: bold;
+			margin-bottom: 25px;
+			/* Space after sub-heading */
+		}
+
+		.centered-section p {
+			font-size: 1em;
+			margin-bottom: 15px;
+		}
+
+		.select-style {
+			padding: 10px;
+			margin: 20px 0;
+			font-size: 16px;
 			border: none;
 			border-radius: 5px;
-			cursor: pointer;
-			transition: background-color 0.3s, transform 0.3s;
-			margin: 5px;
+			background-color: #fff;
+			color: #333;
+			width: 100%;
+			max-width: 300px;
 		}
 
-		.btn:hover {
-			background-color: #0056b3;
-			transform: scale(1.05);
+		/* Story Section Styling */
+		.stories-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 50px;
+			/* Space before story section */
 		}
 
 		.story {
-			background: rgba(255, 255, 255, 0.8);
-			/* Semi-transparent white background for readability */
+			width: 80%;
+			max-width: 800px;
 			border-radius: 8px;
-			padding: 15px;
-			margin: 10px 0;
+			padding: 20px;
+			margin: 15px 0;
 			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			text-align: left;
 			color: #333;
-			/* Dark text for stories */
+		}
+
+		/* Individual story styles */
+		.story-1 {
+			background: linear-gradient(135deg, #f8b500 0%, #ecf05e 100%);
+		}
+
+		.story-2 {
+			background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+			color: #fff;
+		}
+
+		.story-3 {
+			background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+			color: #fff;
+		}
+
+		.story-4 {
+			background: linear-gradient(135deg, #ff9a8b 0%, #ff6a88 100%);
+			color: #fff;
+		}
+
+		.story-5 {
+			background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+		}
+
+		.story-6 {
+			background: linear-gradient(135deg, #8fd3f4 0%, #84fab0 100%);
+		}
+
+		.story-7 {
+			background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+			color: #fff;
+		}
+
+
+		/* Footer */
+		.footer {
+			margin-top: 50px;
+			text-align: center;
+			padding: 10px;
+			background-color: #f8f9fa;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 20px;
+			padding: 20px 0;
+			background-color: #2c3e50;
+			color: white;
+		}
+
+		.footer .footer-links {
+			margin-bottom: 10px;
+		}
+
+		.footer .footer-links a {
+			color: white;
+			margin: 0 10px;
+			text-decoration: none;
+			transition: color 0.3s;
+		}
+
+		.footer .footer-links a:hover {
+			color: #4CAF50;
+		}
+
+		.footer .social-icons {
+			margin-top: 10px;
+		}
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
 		}
 	</style>
 </head>
 
+
+
 <body>
-	<div th:if="${error}" style="color: red;">
-	        <p th:text="${error}"></p>
-	    </div>
-
-	    <div th:if="${message}" style="color: green;">
-	        <p th:text="${message}"></p>
-	    </div>
-	<h1>Make a Difference with Your Donation</h1>
-	<p>Each donation helps improve the lives of animals in our care.</p>
-	<p>“The greatness of a nation and its moral progress can be judged by the way its animals are treated.” – Mahatma
-		Gandhi</p>
-
-	<select id="donationType" onchange="redirectToDonationPage()">
-		<option value="">Select a type of donation</option>
-		<option value="food">Food Donation</option>
-		<option value="supplies">Supplies Donation</option>
-		<option value="health_hygiene">Health & Hygiene Donation</option>
-		<option value="toys">Toys Donation</option>
-		<option value="equipment">Equipment Donation</option>
-		<option value="money">Money Donation</option>
-		<option value="volunteer">Volunteer Time Donation</option>
-		<option value="educational">Educational Materials Donation</option>
-	</select>
-
-	<div class="story">
-		<h2>Anna's Story: The Food Donation</h2>
-		<p>“I remember the day I adopted my dog from the shelter, and I want to give back. By donating food, I feel like
-			I’m helping those still waiting for a loving home.”</p>
+	<div class="header">
+		<div class="left-section"> <img src="/images/logo.jpg" alt="PETURA Logo" class="logo"> </div>
+		<div class="center-section"> <span class="app-name">PETURA: Love Knows No Species</span> </div>
+		<div class="right-section"> <a href="/donations" class="donate-btn"> <i class="fas fa-donate"></i> Donate Now
+			</a>
+			<a href="/logout" class="logout-btn"> <i class="fas fa-sign-out-alt"></i> Logout </a>
+		</div>
 	</div>
 
-	<div class="story">
-		<h2>Tom's Story: The Supplies Donation</h2>
-		<p>“I often have excess supplies at my store. It warms my heart to know that my donations can help bring joy to
-			animals who might not have a cozy space.”</p>
+	<div class="initial-section" style="padding-top: 80px;">
+		<!-- Added padding to create space between header and body -->
+		<div class="text-section" style="text-align: center;">
+			<h1>Make a Difference with Your Donation</h1>
+		</div>
+		<div class="image-text-container" style="text-align: center;">
+			<div class="image-section" style="display: inline-block;">
+				<img src="/images/background.jpg" alt="Donation Image" class="hero-image">
+			</div>
+		</div>
+		<div class="text-section" style="text-align: center;">
+			<p>Each donation helps improve the lives of animals in our care.</p>
+			<p>“The greatness of a nation and its moral progress can be judged by the way its animals are treated.” –
+				Mahatma Gandhi</p>
+
+			<select id="donationType" class="select-style" onchange="redirectToDonationPage()">
+				<option value="">Select a type of donation</option>
+				<option value="food">Food Donation</option>
+				<option value="supplies">Supplies Donation</option>
+				<option value="health_hygiene">Health & Hygiene Donation</option>
+				<option value="toys">Toys Donation</option>
+				<option value="equipment">Equipment Donation</option>
+				<option value="money">Money Donation</option>
+				<option value="volunteer">Volunteer Time Donation</option>
+				<option value="educational">Educational Materials Donation</option>
+			</select>
+		</div>
 	</div>
 
-	<div class="story">
-		<h2>Lisa's Story: The Health & Hygiene Donation</h2>
-		<p>“Every time I visit the shelter, I see how important hygiene is for these animals. Donating health products
-			makes me feel like I’m directly contributing to their well-being.”</p>
+
+
+	<div class="stories-container">
+		<div class="story story-1">
+			<h2>Anna's Story</h2>
+			<p>“I remember the day I adopted my dog from the shelter, and I want to give back. By donating food,
+				I feel
+				like I’m helping those still waiting for a loving home.”</p>
+		</div>
+
+		<div class="story story-2">
+			<h2>Tom's Story</h2>
+			<p>“I often have excess supplies at my store. It warms my heart to know that my donations can help
+				bring joy
+				to animals who might not have a cozy space.”</p>
+		</div>
+
+		<div class="story story-3">
+			<h2>Lisa's Story</h2>
+			<p>“Every time I visit the shelter, I see how important hygiene is for these animals. Donating
+				health
+				products makes me feel like I’m directly contributing to their well-being.”</p>
+		</div>
+
+		<div class="story story-4">
+			<h2>Mark's Story</h2>
+			<p>“Money donations can be daunting, but knowing that my contribution helps keep the shelter running
+				and
+				provides medical care for sick animals makes it worthwhile.”</p>
+		</div>
+
+		<div class="story story-5">
+			<h2>Sara's Story</h2>
+			<p>“My students love animals, and we’ve collected so many toys! It’s fulfilling to know that we are
+				helping
+				shelter animals have fun and stay happy.”</p>
+		</div>
+
+		<div class="story story-6">
+			<h2>Jake's Story</h2>
+			<p>“Volunteering has been a rewarding experience. I not only get to spend time with animals but also
+				meet
+				other compassionate people who care just as much.”</p>
+		</div>
+
+		<div class="story story-7">
+			<h2>Emily's Story</h2>
+			<p>“Education is key to preventing animal abandonment. By donating resources, I hope to spread
+				awareness and
+				inspire others to be responsible pet owners.”</p>
+		</div>
 	</div>
 
-	<div class="story">
-		<h2>Mark's Story: The Money Donation</h2>
-		<p>“Money donations can be daunting, but knowing that my contribution helps keep the shelter running and
-			provides medical care for sick animals makes it worthwhile.”</p>
-	</div>
-
-	<div class="story">
-		<h2>Sara's Story: The Toy Donation</h2>
-		<p>“My students love animals, and we’ve collected so many toys! It’s fulfilling to know that we are helping
-			shelter animals have fun and stay happy.”</p>
-	</div>
-
-	<div class="story">
-		<h2>Jake's Story: The Volunteer Time Donation</h2>
-		<p>“Volunteering has been a rewarding experience. I not only get to spend time with animals but also meet other
-			compassionate people who care just as much.”</p>
-	</div>
-
-	<div class="story">
-		<h2>Emily's Story: The Educational Materials Donation</h2>
-		<p>“Education is key to preventing animal abandonment. By donating resources, I hope to spread awareness and
-			inspire others to be responsible pet owners.”</p>
-	</div>
+	<footer class="footer">
+		<div class="footer-links">
+			<a href="/about">About Us</a>
+			<a href="/education">Education</a>
+			<a href="/pet-care-tips">Pet Care Tips</a>
+			<a href="/forum">Community Forum</a>
+			<a href="/feedback">Feedback</a>
+		</div>
+		<div class="social-icons">
+			<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+			<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+			<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+			<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+		<p>&copy; 2024 PETURA: Love Knows No Species</p>
+		<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+	</footer>
 
 	<script>
 		function redirectToDonationPage() {
@@ -140,12 +357,6 @@
 			}
 		}
 	</script>
-	h3>Recent Donors</h3>
-	<div>
-		<ul th:each="donor : ${recentDonors}">
-			<li th:text="${donor.donorName} + ' donated ' + ${donor.amount} + ' on ' + ${donor.date}"></li>
-		</ul>
-	</div>
 </body>
 
 </html>

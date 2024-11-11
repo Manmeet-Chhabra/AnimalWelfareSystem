@@ -16,8 +16,10 @@
 			padding: 0;
 			display: flex;
 			flex-direction: column;
+			min-height: 100vh;
 			/* Ensure body content aligns vertically */
 		}
+
 
 		.header {
 			background-color: #2c3e50;
@@ -51,7 +53,6 @@
 		.header .logo {
 			margin-right: 10px;
 			height: 40px;
-			/* Ensure the logo fits within the header */
 		}
 
 		.header .app-name {
@@ -59,6 +60,22 @@
 			color: white;
 			font-weight: bold;
 			text-align: center;
+		}
+
+		.donate-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #4CAF50;
+			/* Green color for Donate Now button */
+			border-radius: 5px;
+			margin-right: 10px;
+			transition: background-color 0.3s;
+		}
+
+		.donate-btn:hover {
+			background-color: #45a049;
 		}
 
 		.logout-btn {
@@ -74,7 +91,6 @@
 		.logout-btn:hover {
 			background-color: #c0392b;
 		}
-
 
 		/* Sidebar Styles */
 		.sidebar {
@@ -177,12 +193,7 @@
 			box-sizing: border-box;
 		}
 
-		footer {
-			text-align: center;
-			padding: 10px;
-			background-color: #f1f1f1;
-			margin-top: 20px;
-		}
+
 
 		@media (max-width: 768px) {
 			.sidebar {
@@ -211,29 +222,69 @@
 				padding: 10px 15px;
 			}
 		}
+
+		.footer {
+			margin-top: 50px;
+			text-align: center;
+			padding: 10px;
+			background-color: #f8f9fa;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 20px;
+			padding: 20px 0;
+			background-color: #2c3e50;
+			color: white;
+		}
+
+		.footer .footer-links {
+			margin-bottom: 10px;
+		}
+
+		.footer .footer-links a {
+			color: white;
+			margin: 0 10px;
+			text-decoration: none;
+			transition: color 0.3s;
+		}
+
+		.footer .footer-links a:hover {
+			color: #4CAF50;
+		}
+
+		.footer .social-icons {
+			margin-top: 10px;
+		}
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
+		}
 	</style>
 </head>
 
 <body>
-	
 
 	<div class="header">
-		<div class="left-section">
-			<img src="/images/logo.jpg" alt="PETURA Logo" class="logo">
-		</div>
-		<div class="center-section">
-			<span class="app-name">PETURA: Love Knows No Species</span>
-		</div>
-		<div class="right-section">
-			<a href="/logout" class="logout-btn">
-				<i class="fas fa-sign-out-alt"></i> Logout
+		<div class="left-section"> <img src="/images/logo.jpg" alt="PETURA Logo" class="logo"> </div>
+		<div class="center-section"> <span class="app-name">PETURA: Love Knows No Species</span> </div>
+		<div class="right-section"> <a href="/donations" class="donate-btn"> <i class="fas fa-donate"></i> Donate Now
 			</a>
+			<a href="/logout" class="logout-btn"> <i class="fas fa-sign-out-alt"></i> Logout </a>
 		</div>
 	</div>
 
 
 	<div class="sidebar">
-		
+
 		<div class="sidebar-menu">
 			<ul>
 				<!-- Admin Sidebar Links -->
@@ -254,7 +305,6 @@
 					<ul class="sub-list" id="admin-shelter">
 						<li><a th:href="@{/shelters}"><i class="fas fa-home"></i> View Shelters</a></li>
 						<li><a th:href="@{/shelters/create}"><i class="fas fa-plus-circle"></i> Add Shelter</a></li>
-						<li><a th:href="@{/shelters/update}"><i class="fas fa-sync-alt"></i> Update Shelter</a></li>
 						<li><a th:href="@{/shelters/search}"><i class="fas fa-search"></i> Search Shelter</a></li>
 
 					</ul>
@@ -263,9 +313,11 @@
 					<a href="javascript:void(0)">
 						<i class="fas fa-users"></i> Adoption Management</a>
 					<ul class="sub-list" id="admin-adoption">
-						<li><a th:href="@{/adoptions/available}"><i class="fas fa-paw"></i> View Adoptions</a></li>
+						<li><a th:href="@{/adoptions/available}"><i class="fas fa-paw"></i> Browse Animals</a></li>
 						<li><a th:href="@{/adoptions/requests}"><i class="fas fa-handshake"></i> Review Adoption
 								Request</a></li>
+						<li><a th:href="@{/adoptions/adoption-status}"><i class="fas fa-check-circle"></i> Check
+								Adoption Status</a></li>
 
 					</ul>
 				</li>
@@ -273,17 +325,13 @@
 					<a href="javascript:void(0)">
 						<i class="fas fa-donate"></i> Donation Management</a>
 					<ul class="sub-list" id="admin-donation">
-						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> View Donations</a></li>
-						<li><a th:href="@{/donations/new}"><i class="fas fa-hand-holding-usd"></i> Make a New
-								Donation</a></li>
-						<li><a th:href="@{/donations/add}"><i class="fas fa-plus-circle"></i> Add Donation</a></li>
+						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> Make a New Donations</a></li>
 						<li><a th:href="@{/donations/admin}"><i class="fas fa-list"></i> Review Lists of
 								Donations</a>
 						</li>
 						<li><a th:href="@{/donations/recent-donors}"><i class="fas fa-users"></i> Recent Donors</a>
 						</li>
-						<li><a th:href="@{/donations/history}"><i class="fas fa-history"></i> Donation History</a>
-						</li>
+						
 
 					</ul>
 				</li>
@@ -363,140 +411,136 @@
 				</li>
 				<li id="staff-link3" onclick="toggleSubList('staff-adoption')">
 					<a href="javascript:void(0)">
-						<i class="fas fa-users"></i> Adoption Management</a>
+						<i class="fas fa-users"></i> Adopt A Pet</a>
 					<ul class="sub-list" id="staff-adoption">
-						<li><a th:href="@{/adoptions}"><i class="fas fa-paw"></i> View Adoptions</a></li>
-						<li><a th:href="@{/adoptions/manage}"><i class="fas fa-cogs"></i> Manage Adoption</a></li>
-
-					</ul>
-				</li>
-
-				<li id="staff-link4" onclick="toggleSubList('staff-donation')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-donate"></i> Make a Donation</a>
-					<ul class="sub-list" id="staff-donation">
-						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> View Donations</a></li>
-						<li><a th:href="@{/donations/new}"><i class="fas fa-plus-circle"></i> Make a New
-								Donation</a>
-						</li>
-						<li><a th:href="@{/donations/add}"><i class="fas fa-hand-holding-usd"></i> Add Donation</a>
-						</li>
-						<li><a th:href="@{/donations/recent-donor}"><i class="fas fa-users"></i> Recent Donors</a>
-						</li>
-						<li><a th:href="@{/donations/history}"><i class="fas fa-history"></i> Donation History</a>
-						</li>
-
-					</ul>
-				</li>
-				<li id="staff-link5" onclick="toggleSubList('staff-report-generation')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-chart-line"></i> Report Generation Management</a>
-					<ul class="sub-list" id="staff-report-generation">
-						<li><a th:href="@{/reports/animal-distribution}"><i class="fas fa-paw"></i> Animal
-								Distribution</a></li>
-						<li><a th:href="@{/reports/adoption-trends}"><i class="fas fa-users"></i> Adoption
-								Trends</a>
-						</li>
-						<li><a th:href="@{/reports/donation-summary}"><i class="fas fa-donate"></i> Donation
-								Summary</a>
-						</li>
-						<li><a th:href="@{/reports/incident-reports}"><i class="fas fa-exclamation-triangle"></i>
-								Incident Reports</a></li>
-						<li><a th:href="@{/reports/shelter-capacity}"><i class="fas fa-home"></i> Shelter
-								Capacity</a>
-						</li>
-						<li><a th:href="@{/reports/total-adoptions}"><i class="fas fa-check-circle"></i> Total
-								Adoptions</a></li>
-						<li><a th:href="@{/reports/total-donations}"><i class="fas fa-money-check-alt"></i> Total
-								Donations</a></li>
-						<li><a th:href="@{/reports/animal-health-status}"><i class="fas fa-stethoscope"></i> Animal
-								Health Status Report</a></li>
-						<li><a th:href="@{/reports/animal-reports}"><i class="fas fa-file-alt"></i> Animal
-								Reports</a>
-						</li>
-					</ul>
-				</li>
-				<li id="staff-link6" onclick="toggleSubList('staff-report')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-exclamation-triangle"></i> Incident Management</a>
-					<ul class="sub-list" id="staff-report">
-						<li><a th:href="@{/reports}"><i class="fas fa-clipboard-list"></i> View Incidents</a></li>
-						<li><a th:href="@{/reports/pending}"><i class="fas fa-hourglass-half"></i> Pending
-								Incidents</a>
-						</li>
-						<li><a th:href="@{/reports/search}"><i class="fas fa-search"></i> Search Incidents</a></li>
-						<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
-								Incident</a>
-						</li>
-						<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
-						</li>
-
-					</ul>
-				</li>
-
-
-
-				<!-- User Sidebar Links -->
-				<li id="user-link1" onclick="toggleSubList('user-adopt')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-users"></i> Adopt Animals</a>
-					<ul class="sub-list" id="user-adopt">
 						<li><a th:href="@{/adoptions/available}"><i class="fas fa-paw"></i> Browse Animals</a></li>
-						<li><a th:href="@{/adoptions/request}"><i class="fas fa-handshake"></i> Request Adoption</a>
-						</li>
 						<li><a th:href="@{/adoptions/adoption-status}"><i class="fas fa-check-circle"></i> Check
-								Adoption Status</a></li>
-
-					</ul>
+								Adoption Status</a></li> fa-cogs"></i> Manage Adoption</a>
 				</li>
-				<li id="user-link2" onclick="toggleSubList('user-donation')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-donate"></i> Make a Donation</a>
-					<ul class="sub-list" id="user-donation">
-						<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> View Donations</a></li>
-						<li><a th:href="@{/donations/new}"><i class="fas fa-plus-circle"></i> Make a New
-								Donation</a>
-						</li>
-						<li><a th:href="@{/donations/add}"><i class="fas fa-plus"></i> Add Donation</a></li>
-						<li><a th:href="@{/donations/recent-donor}"><i class="fas fa-users"></i> Recent Donors</a>
-						</li>
-						<li><a th:href="@{/donations/history}"><i class="fas fa-history"></i> Donation History</a>
-						</li>
 
-					</ul>
-				</li>
-				<li id="user-link3" onclick="toggleSubList('user-shelter')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-home"></i> View Shelters</a>
-					<ul class="sub-list" id="user-shelter">
-						<li><a th:href="@{/shelters}"><i class="fas fa-home"></i> View Shelters</a></li>
-						<li><a th:href="@{/shelters/search}"><i class="fas fa-search"></i> Search Shelters</a></li>
+			</ul>
+			</li>
 
-					</ul>
-				</li>
-				<li id="user-link4" onclick="toggleSubList('user-view-animal')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-paw"></i> View Animal</a>
-					<ul class="sub-list" id="user-view-animal">
-						<li><a th:href="@{/animals}"><i class="fas fa-paw"></i> View Animal List</a></li>
-						<li><a th:href="@{/animals/search}"><i class="fas fa-search"></i> Search Animals</a></li>
+			<li id="staff-link4" onclick="toggleSubList('staff-donation')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-donate"></i> Make a Donation</a>
+				<ul class="sub-list" id="staff-donation">
+					<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> Make a New Donations</a></li>
+					
+					
+					<li><a th:href="@{/donations/recent-donor}"><i class="fas fa-users"></i> Recent Donors</a>
+					</li>
+					
 
-					</ul>
-				</li>
-				<li id="user-link5" onclick="toggleSubList('user-report')">
-					<a href="javascript:void(0)">
-						<i class="fas fa-exclamation-triangle"></i> Report an Incident</a>
-					<ul class="sub-list" id="user-report">
-						<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
-								Incident</a>
-						</li>
-						<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
-						</li>
+				</ul>
+			</li>
+			<li id="staff-link5" onclick="toggleSubList('staff-report-generation')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-chart-line"></i> Report Generation Management</a>
+				<ul class="sub-list" id="staff-report-generation">
+					<li><a th:href="@{/reports/animal-distribution}"><i class="fas fa-paw"></i> Animal
+							Distribution</a></li>
+					<li><a th:href="@{/reports/adoption-trends}"><i class="fas fa-users"></i> Adoption
+							Trends</a>
+					</li>
+					<li><a th:href="@{/reports/donation-summary}"><i class="fas fa-donate"></i> Donation
+							Summary</a>
+					</li>
+					<li><a th:href="@{/reports/incident-reports}"><i class="fas fa-exclamation-triangle"></i>
+							Incident Reports</a></li>
+					<li><a th:href="@{/reports/shelter-capacity}"><i class="fas fa-home"></i> Shelter
+							Capacity</a>
+					</li>
+					<li><a th:href="@{/reports/total-adoptions}"><i class="fas fa-check-circle"></i> Total
+							Adoptions</a></li>
+					<li><a th:href="@{/reports/total-donations}"><i class="fas fa-money-check-alt"></i> Total
+							Donations</a></li>
+					<li><a th:href="@{/reports/animal-health-status}"><i class="fas fa-stethoscope"></i> Animal
+							Health Status Report</a></li>
+					<li><a th:href="@{/reports/animal-reports}"><i class="fas fa-file-alt"></i> Animal
+							Reports</a>
+					</li>
+				</ul>
+			</li>
+			<li id="staff-link6" onclick="toggleSubList('staff-report')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-exclamation-triangle"></i> Incident Management</a>
+				<ul class="sub-list" id="staff-report">
+					<li><a th:href="@{/reports}"><i class="fas fa-clipboard-list"></i> View Incidents</a></li>
+					<li><a th:href="@{/reports/pending}"><i class="fas fa-hourglass-half"></i> Pending
+							Incidents</a>
+					</li>
+					<li><a th:href="@{/reports/search}"><i class="fas fa-search"></i> Search Incidents</a></li>
+					<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
+							Incident</a>
+					</li>
+					<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
+					</li>
+
+				</ul>
+			</li>
 
 
 
-					</ul>
-				</li>
+			<!-- User Sidebar Links -->
+			<li id="user-link1" onclick="toggleSubList('user-report')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-exclamation-triangle"></i> Report an Incident</a>
+				<ul class="sub-list" id="user-report">
+					<li><a th:href="@{/reports/new}"><i class="fas fa-exclamation-triangle"></i> Report
+							Incident</a>
+					</li>
+					<li><a th:href="@{/reports/history}"><i class="fas fa-history"></i> Incident History</a>
+					</li>
+
+
+
+				</ul>
+			</li>
+
+			<li id="user-link2" onclick="toggleSubList('user-view-animal')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-paw"></i> View Animal</a>
+				<ul class="sub-list" id="user-view-animal">
+					<li><a th:href="@{/animals}"><i class="fas fa-paw"></i> View Animal List</a></li>
+					<li><a th:href="@{/animals/search}"><i class="fas fa-search"></i> Search Animals</a></li>
+
+				</ul>
+			</li>
+			<li id="user-link3" onclick="toggleSubList('user-adopt')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-users"></i> Adopt A Pet</a>
+				<ul class="sub-list" id="user-adopt">
+					<li><a th:href="@{/adoptions/available}"><i class="fas fa-paw"></i> Browse Animals</a></li>
+					<li><a th:href="@{/adoptions/adoption-status}"><i class="fas fa-check-circle"></i> Check
+							Adoption Status</a></li>
+
+				</ul>
+			</li>
+			<li id="user-link4" onclick="toggleSubList('user-shelter')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-home"></i> View Shelters</a>
+				<ul class="sub-list" id="user-shelter">
+					<li><a th:href="@{/shelters}"><i class="fas fa-home"></i> View Shelters</a></li>
+					<li><a th:href="@{/shelters/search}"><i class="fas fa-search"></i> Search Shelters</a></li>
+
+				</ul>
+			</li>
+			<li id="user-link5" onclick="toggleSubList('user-donation')">
+				<a href="javascript:void(0)">
+					<i class="fas fa-donate"></i> Make a Donation</a>
+				<ul class="sub-list" id="user-donation">
+					<li><a th:href="@{/donations}"><i class="fas fa-donate"></i> Make a New Donations</a></li>
+					
+					<li><a th:href="@{/donations/recent-donors}"><i class="fas fa-users"></i> Recent Donors</a>
+					</li>
+					
+
+				</ul>
+			</li>
+
+
+
 
 			</ul>
 		</div>
@@ -608,6 +652,23 @@
 		}
 	</script>
 
+	<footer class="footer">
+		<div class="footer-links">
+			<a href="/about">About Us</a>
+			<a href="/education">Education</a>
+			<a href="/pet-care-tips">Pet Care Tips</a>
+			<a href="/forum">Community Forum</a>
+			<a href="/feedback">Feedback</a>
+		</div>
+		<div class="social-icons">
+			<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+			<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+			<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+			<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+		<p>&copy; 2024 PETURA: Love Knows No Species</p>
+		<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+	</footer>
 </body>
 
 </html>

@@ -18,7 +18,6 @@ public interface ShelterService {
 
     Shelter updateShelter(Shelter shelter);
 
-    List<Shelter> searchShelters(String location, Integer capacity);
 
     Shelter increaseCapacity(Long shelterId, int increment);
 
@@ -30,4 +29,6 @@ public interface ShelterService {
     void removeStaffFromShelter(Long shelterId, Long staffId);
 
     List<User> getStaffByShelter(Long shelterId);
+
+	List<Shelter> searchShelters(String name, String location, Integer capacity);
 }

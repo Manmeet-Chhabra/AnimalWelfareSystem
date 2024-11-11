@@ -3,6 +3,7 @@ package com.manmeet.animalsys.controller;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -45,26 +46,31 @@ public class AdoptionController {
 	@Autowired
 	private NotificationService notificationService;
 
-	// Display list of animals available for adoption
 	@GetMapping("/available")
 	public String listAvailableAnimals(Model model) {
 		List<Animal> availableAnimals = animalService.getAvailableAnimals();
 
-		model.addAttribute("animals", availableAnimals);
+		availableAnimals.forEach(animal -> {
+			if (animal.getPictureData() != null) {
+				String base64EncodedImage = Base64.getEncoder().encodeToString(animal.getPictureData());
+				animal.setBase64Image(base64EncodedImage); // Assuming Animal has a transient base64Image field
+			}
+		});
 
+		model.addAttribute("animals", availableAnimals);
 		return "adopt-animal-list";
 	}
 
 	// Show adoption eligibility questionnaire form
 	@GetMapping("/{animalId}/questionnaire")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('STAFF')")
 	public String showQuestionnaire(@PathVariable Long animalId, Model model) {
 		model.addAttribute("animalId", animalId);
 		return "adoption-questionnaire";
 	}
 
 	@PostMapping("/{animalId}/questionnaire")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('STAFF')")
 	public String submitQuestionnaire(@PathVariable Long animalId, @RequestParam Map<String, String> allParams,
 			Model model, Principal principal) {
 
@@ -114,7 +120,7 @@ public class AdoptionController {
 	}
 
 	@GetMapping("/adoption-status")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public String checkAdoptionStatus(Principal principal, Model model) {
 		// Fetch the current user by email
 		User currentUser = userService.findByEmail(principal.getName());
@@ -129,7 +135,7 @@ public class AdoptionController {
 	}
 
 	@GetMapping("/{animalId}/request")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')  or hasRole('STAFF')")
 	public String showAdoptionRequestForm(@PathVariable Long animalId, Model model, Principal principal) {
 		// Fetch current user from Principal
 		User currentUser = userService.findByEmail(principal.getName()); // Assuming email is unique
@@ -142,7 +148,7 @@ public class AdoptionController {
 	}
 
 	@PostMapping("/{animalId}/submit")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')  or hasRole('STAFF')")
 	public String submitAdoptionRequest(@PathVariable Long animalId, RedirectAttributes redirectAttributes,
 			Principal principal) {
 		// Fetch the current user
@@ -170,7 +176,7 @@ public class AdoptionController {
 		updatedAnimal.setType(animal.getType());
 		updatedAnimal.setHealthStatus(animal.getHealthStatus());
 		updatedAnimal.setDoctorAppointment(animal.getDoctorAppointment());
-		updatedAnimal.setPictureUrl(animal.getPictureUrl());
+		updatedAnimal.setPictureData(animal.getPictureData());
 		updatedAnimal.setShelter(animal.getShelter());
 		updatedAnimal.setAdoptionStatus(AdoptionStatus.ADOPTED); // Set the adoption status to ADOPTED
 
@@ -235,8 +241,8 @@ public class AdoptionController {
 	@GetMapping("/requests")
 	@PreAuthorize("hasRole('ADMIN')")
 	public String listAdoptionRequests(Model model) {
-		List<Adoption> pendingRequests = adoptionService.getAllAdoptionRequests(); // Ensure this method is
-																					// defined correctly
+		List<Adoption> pendingRequests = adoptionService.getAllAdoptionRequests(); // Ensure this method is defined
+																					// correctly
 		model.addAttribute("pendingRequests", pendingRequests);
 		System.out.println("Fetched pending requests: " + pendingRequests);
 		model.addAttribute("pendingRequests", pendingRequests);
@@ -287,9 +293,9 @@ public class AdoptionController {
 		String subject = "Update on Your Adoption Request";
 		String body = String.format(
 				"Dear %s,\n\nWe would like to inform you that the status of your adoption request for the animal '%s' has been updated to '%s'."
-				+ "\n\nIf you have any questions or need further assistance, please feel free to reach out to us."
-				+ "\n\nThank you for your interest in adopting and for your commitment to animal welfare."
-				+ "\n\nBest regards,\nAnimal Welfare Team",
+						+ "\n\nIf you have any questions or need further assistance, please feel free to reach out to us."
+						+ "\n\nThank you for your interest in adopting and for your commitment to animal welfare."
+						+ "\n\nBest regards,\nAnimal Welfare Team",
 				adoptionRequest.getUser().getName(), adoptionRequest.getAnimal().getName(), decision);
 		notificationService.sendEmail(userEmail, subject, body);
 
@@ -325,12 +331,15 @@ public class AdoptionController {
 
 		// Optional: Predefined questions, if you want to map answers to questions in
 		// the view
-		List<String> questions = List.of("What is your experience with animals?", "What is your living situation?",
-				"How much time can you dedicate to a pet?", "Are you financially prepared for a pet?",
-				"What is your lifestyle like?", "What knowledge or training do you have?",
-				"Do you own or rent your home?",
-				"Do you have plans for who will care for the animal if you are unable?",
-				"Are you willing to undergo a home visit?", "Do you have any allergies to animals?");
+		List<String> questions = List.of("Do you have previous experience with caring for animals?",
+				"Is your home suitable for housing a pet?", "Can you commit time daily to care for a pet?",
+				"Are you financially capable of covering the costs associated with pet care?",
+				"Do you have a stable living situation where pets are allowed?",
+				"Do you have knowledge or experience with training animals?",
+				"Do you have a plan for who will take care of the pet if you are away or unable to?",
+				"Are you open to a home visit as part of the adoption process?",
+				"Are you prepared to handle emergency situations related to the pet's health?",
+				"Do you have a basic understanding of pet health and nutrition?");
 
 		model.addAttribute("questions", questions); // Include predefined questions if needed
 

@@ -72,56 +72,56 @@ public class DonationController {
 
 	// Display the donation form - allowed for all users
 	@GetMapping("/new")
-	@PreAuthorize("isAuthenticated()") // Ensure user is authenticated
+	//@PreAuthorize("isAuthenticated()") // Ensure user is authenticated
 	public String showDonationForm(Model model) {
 		model.addAttribute("donation", new Donation());
 		return "donation-form"; // Thymeleaf template name
 	}
 
 	@PostMapping("/save")
-	@PreAuthorize("isAuthenticated()") // Ensure user is authenticated
 	public String saveDonation(@ModelAttribute Donation donation, RedirectAttributes redirectAttributes) {
-		donation.setDate(LocalDate.now()); // Set current date
+	    donation.setDate(LocalDate.now()); // Set current date
 
-		try {
-			donationService.saveDonation(donation);
+	    try {
+	        // Save the donation
+	        donationService.saveDonation(donation);
 
-			// Send confirmation email to the user
-			String userEmail = donation.getUser().getEmail();
-			String userSubject = "Thank You for Your Donation!";
-			String userBody = String.format("Dear %s,\n\n"
-					+ "Thank you for your generous donation of %s towards our cause. Your support makes a significant difference in the lives of animals in need.\n\n"
-					+ "If you have any questions or would like to learn more about how your donation is being used, please do not hesitate to reach out.\n\n"
-					+ "Best regards,\n" + "Animal Welfare Team", donation.getUser().getName(), donation.getAmount());
-			notificationService.sendEmail(userEmail, userSubject, userBody);
+	        // Send confirmation email to the user-provided email
+	        String userEmail = donation.getEmail();
+	        String userSubject = "Thank You for Your Donation!";
+	        String userBody = String.format("Dear %s,\n\n"
+	                + "Thank you for your generous donation of %s towards our cause. Your support makes a significant difference in the lives of animals in need.\n\n"
+	                + "If you have any questions or would like to learn more about how your donation is being used, please do not hesitate to reach out.\n\n"
+	                + "Best regards,\nAnimal Welfare Team", donation.getDonorName(), donation.getQuantity());
+	        notificationService.sendEmail(userEmail, userSubject, userBody);
 
-			// Fetch admin email using findByRole method
-			List<User> admins = userService.findByRole("ROLE_ADMIN");
-			String adminEmail;
+	        // Fetch admin email using findByRole method
+	        List<User> admins = userService.findByRole("ROLE_ADMIN");
+	        String adminEmail;
 
-			// Check if any admins were found
-			if (!admins.isEmpty()) {
-				adminEmail = admins.get(0).getEmail(); // Get the first admin's email
-			} else {
-				adminEmail = "sbp.manmeet@gmail.com"; // Fallback to hardcoded admin email
-			}
+	        // Check if any admins were found
+	        if (!admins.isEmpty()) {
+	            adminEmail = admins.get(0).getEmail(); // Get the first admin's email
+	        } else {
+	            adminEmail = "sbp.manmeet@gmail.com"; // Fallback to hardcoded admin email
+	        }
 
-			// Notify admin of the new donation
-			String adminSubject = "New Donation Received";
-			String adminBody = String.format("Dear Admin,\n\n" + "A new donation has been successfully recorded:\n\n"
-					+ "Donor: %s\n" + "Amount: %s\n" + "Donation Date: %s\n" + "Type: %s\n\n"
-					+ "Thank you for your attention to this matter.\n\n" + "Best regards,\n" + "Animal Welfare Team",
-					donation.getUser().getName(), donation.getAmount(), donation.getDate(), donation.getDonationType());
-			notificationService.sendEmail(adminEmail, adminSubject, adminBody);
+	        // Notify admin of the new donation
+	        String adminSubject = "New Donation Received";
+	        String adminBody = String.format("Dear Admin,\n\nA new donation has been successfully recorded:\n\n"
+	                + "Donor: %s\n" + "Quantity: %s\n" + "Donation Date: %s\n" + "Type: %s\n\n"
+	                + "Thank you for your attention to this matter.\n\nBest regards,\nAnimal Welfare Team",
+	                donation.getDonorName(), donation.getQuantity(), donation.getDate(), donation.getDonationType());
+	        notificationService.sendEmail(adminEmail, adminSubject, adminBody);
 
-			redirectAttributes.addFlashAttribute("message",
-					"Donation saved successfully! Thank you for your contribution.");
-			return "redirect:/donations/thank-you"; // Redirect to thank you page
-		} catch (IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("error", e.getMessage());
-			return "redirect:/donations"; // Redirect back to the donations page
-		}
+	        redirectAttributes.addFlashAttribute("message", "Donation saved successfully! Thank you for your contribution.");
+	        return "redirect:/donations/thank-you"; // Redirect to thank you page
+	    } catch (IllegalArgumentException e) {
+	        redirectAttributes.addFlashAttribute("error", e.getMessage());
+	        return "redirect:/donations"; // Redirect back to the donations page
+	    }
 	}
+
 
 	@GetMapping("/thank-you")
 	public String showThankYouPage() {
@@ -201,16 +201,23 @@ public class DonationController {
 		return "recent-donors"; // This should be the name of the Thymeleaf template
 	}
 
-	// 2. Donor History (Personal Dashboard)
 	@GetMapping("/history")
 	@PreAuthorize("isAuthenticated()")
 	public String getDonationHistory(Model model) {
-		User currentUser = userService.getCurrentUser(); // Get the current user
-		List<Donation> userDonations = donationService.findDonationsByUser(currentUser); // Pass user object
-		model.addAttribute("donations", userDonations);
+	    User currentUser = userService.getCurrentUser1(); // Get the current user
+	    if (currentUser == null) {
+	        // Handle case where user is not found
+	        System.out.println("Error: No user is currently logged in.");
+	        return "error"; // Redirect to an error page
+	    }
+	    
+	    List<Donation> userDonations = donationService.findDonationsByUser(currentUser); // Pass user object
+	    System.out.println("User: " + currentUser.getName() + " has " + userDonations.size() + " donations.");
+	    model.addAttribute("donations", userDonations);
 
-		return "donor-history"; // Thymeleaf template for user donation history
+	    return "donor-history"; // Thymeleaf template for user donation history
 	}
+
 
 	// 3. One-Time or Monthly Donations
 	@PostMapping("/recurring/save")

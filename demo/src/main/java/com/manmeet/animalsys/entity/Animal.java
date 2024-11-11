@@ -24,8 +24,20 @@ public class Animal {
 	@Column(name = "doctor_appointment")
 	private String doctorAppointment; // or any other relevant fields
 
-	@Column(name = "picture_url")
-	private String pictureUrl; // Field to store the animal picture URL
+	@Lob
+	@Column(name = "picture_data", columnDefinition = "LONGBLOB")
+	private byte[] pictureData;
+
+	@Transient
+	private String base64Image; // Transient field for Base64 image data
+
+	public String getBase64Image() {
+		return base64Image;
+	}
+
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "shelter_id") // This will create a shelter_id column in the animals table
@@ -56,8 +68,6 @@ public class Animal {
 	public Animal() {
 	}
 
-	
-
 	public Animal(Long id, String name, String type, String healthStatus, String doctorAppointment, String pictureUrl,
 			Shelter shelter, AdoptionStatus adoptionStatus, List<Adoption> adoptionRequests) {
 		super();
@@ -66,7 +76,7 @@ public class Animal {
 		this.type = type;
 		this.healthStatus = healthStatus;
 		this.doctorAppointment = doctorAppointment;
-		this.pictureUrl = pictureUrl;
+		this.pictureData = pictureData;
 		this.shelter = shelter;
 		this.adoptionStatus = adoptionStatus;
 		this.adoptionRequests = adoptionRequests;
@@ -112,12 +122,12 @@ public class Animal {
 		this.doctorAppointment = doctorAppointment;
 	}
 
-	public String getPictureUrl() {
-		return pictureUrl;
+	public byte[] getPictureData() {
+		return pictureData;
 	}
 
-	public void setPictureUrl(String pictureUrl) {
-		this.pictureUrl = pictureUrl;
+	public void setPictureData(byte[] pictureData) {
+		this.pictureData = pictureData;
 	}
 
 	public Shelter getShelter() {
@@ -127,27 +137,23 @@ public class Animal {
 	public void setShelter(Shelter shelter) {
 		this.shelter = shelter;
 	}
-	
+
 	// Method to adopt the animal
-    public void adopt() {
-        this.adoptionStatus = AdoptionStatus.ADOPTED;
-        this.adoptionRequests.clear(); // Clear the adoption requests when adopted
-    }
+	public void adopt() {
+		this.adoptionStatus = AdoptionStatus.ADOPTED;
+		this.adoptionRequests.clear(); // Clear the adoption requests when adopted
+	}
 
-    // Check if the animal is available for adoption
-    public boolean isAvailable() {
-        return this.adoptionStatus == AdoptionStatus.AVAILABLE;
-    }
+	// Check if the animal is available for adoption
+	public boolean isAvailable() {
+		return this.adoptionStatus == AdoptionStatus.AVAILABLE;
+	}
 
-    // Override toString() for better logging
-    @Override
-    public String toString() {
-        return "Animal{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", adoptionStatus=" + adoptionStatus +
-                '}';
-    }
+	// Override toString() for better logging
+	@Override
+	public String toString() {
+		return "Animal{" + "id=" + id + ", name='" + name + '\'' + ", type='" + type + '\'' + ", adoptionStatus="
+				+ adoptionStatus + '}';
+	}
 
 }

@@ -1,50 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Animals</title>
-    <link rel="stylesheet" href="/css/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<title>Search Animals</title>
+	<link rel="stylesheet" href="/css/styles.css">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+			color: #333;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+
+		.header {
+			background-color: #2c3e50;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			position: fixed;
+			top: 0;
+			z-index: 100;
+			box-sizing: border-box;
+		}
+
+		.header .left-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .center-section {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.header .right-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .logo {
+			margin-right: 10px;
+			height: 40px;
+		}
+
+		.header .app-name {
+			font-size: 18px;
+			color: white;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.donate-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #4CAF50;
+			/* Green color for Donate Now button */
+			border-radius: 5px;
+			margin-right: 10px;
+			transition: background-color 0.3s;
+		}
+
+		.donate-btn:hover {
+			background-color: #45a049;
+		}
+
+		.logout-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #e74c3c;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.logout-btn:hover {
+			background-color: #c0392b;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			flex: 1;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			text-align: center;
+			color: #4CAF50;
+		}
+
+		form {
+			margin-bottom: 20px;
+		}
+
+		.form-group {
+			margin-bottom: 15px;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.form-group input,
+		.form-group select {
+			width: 100%;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+
+		button {
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background-color: #45a049;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 20px;
+			background-color: #fff;
+		}
+
+		th,
+		td {
+			padding: 12px;
+			border: 1px solid #ddd;
+			text-align: center;
+		}
+
+		th {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		.actions a {
+			color: #4CAF50;
+			text-decoration: none;
+			margin: 0 5px;
+		}
+
+		.actions a:hover {
+			text-decoration: underline;
+		}
+
+		.footer {
+			margin-top: 50px;
+			text-align: center;
+			padding: 10px;
+			background-color: #f8f9fa;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 20px;
+			padding: 20px 0;
+			background-color: #2c3e50;
+			color: white;
+			position: relative;
+									/* Ensure the footer moves with the page content */
+									bottom: 0;
+									/* Keep the footer at the bottom of the page */
+									margin-top: auto;
+		}
+
+		.footer .footer-links {
+			margin-bottom: 10px;
+		}
+
+		.footer .footer-links a {
+			color: white;
+			margin: 0 10px;
+			text-decoration: none;
+			transition: color 0.3s;
+		}
+
+		.footer .footer-links a:hover {
+			color: #4CAF50;
+		}
+
+		.footer .social-icons {
+			margin-top: 10px;
+		}
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
+		}
+	</style>
 </head>
+
 <body>
-    <h1>Search Animals</h1>
-    <form action="/animals/search" method="get" th:action="@{/animals/search}">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
+	<div class="header">
+		<div class="left-section"> <img src="/images/logo.jpg" alt="PETURA Logo" class="logo"> </div>
+		<div class="center-section"> <span class="app-name">PETURA: Love Knows No Species</span> </div>
+		<div class="right-section"> <a href="/donations" class="donate-btn"> <i class="fas fa-donate"></i> Donate Now </a>
+			<a href="/logout" class="logout-btn"> <i class="fas fa-sign-out-alt"></i> Logout </a>
+		</div>
+	</div>
 
-        <label for="type">Type:</label>
-        <input type="text" id="type" name="type">
+	<div class="container">
+		<h1>Search Animals</h1>
+		<form action="/animals/search" method="get" th:action="@{/animals/search}">
+			<div class="form-group">
+				<label for="type">Type:</label>
+				<select id="type" name="type">
+					<option value="">Select Type</option>
+					<option value="Dog">Dog</option>
+					<option value="Cat">Cat</option>
+					<option value="Bird">Bird</option>
+					<option value="Cow">Cow</option>
+					<option value="Rabbit">Rabbit</option>
+					<option value="Sheep">Sheep</option>
+					<option value="Other">Other</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="healthStatus">Health Status:</label>
+				<select id="healthStatus" name="healthStatus">
+					<option value="">Select Health Status</option>
+					<option value="HEALTHY">Healthy</option>
+					<option value="SICK">Sick</option>
+					<option value="IN_TREATMENT">In Treatment</option>
+					<option value="UNKNOWN">Unknown</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="adoptionStatus">Adoption Status:</label>
+				<select id="adoptionStatus" name="adoptionStatus">
+					<option value="">Select Adoption Status</option>
+					<option value="AVAILABLE">Available</option>
+					<option value="ADOPTED">Adopted</option>
+					<option value="NOT_AVAILABLE">Not Available</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="shelter">Shelter:</label>
+				<select id="shelter" name="shelterId">
+					<option value="">Select Shelter</option>
+					<option th:each="shelter : ${shelters}" th:value="${shelter.id}" th:text="${shelter.name}"></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="doctorAppointment">Doctor Appointment:</label>
+				<select id="doctorAppointment" name="doctorAppointment">
+					<option value="">Select Appointment Status</option>
+					<option value="Yes">Yes</option>
+					<option value="No">No</option>
+				</select>
+			</div>
+			<button type="submit">Search</button>
+			<button type="reset">Clear</button> <!-- Added Reset Button -->
+		</form>
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Health Status</th>
+					<th>Adoption Status</th>
+					<th>Shelter</th>
+					<th>Doctor Appointment</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="animal : ${animals}">
+					<td th:text="${animal.id}"></td>
+					<td th:text="${animal.name}"></td>
+					<td th:text="${animal.type}"></td>
+					<td th:text="${animal.healthStatus}"></td>
+					<td th:text="${animal.adoptionStatus}"></td>
+					<td th:text="${animal.shelter != null ? animal.shelter.name : 'No Shelter'}"></td>
+					<td th:text="${animal.doctorAppointment}"></td>
+					<td class="actions">
+						<a th:href="@{/animals/{id}(id=${animal.id})}">Details</a> |
+						<a th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
-        <label for="healthStatus">Health Status:</label>
-        <input type="text" id="healthStatus" name="healthStatus">
+	<footer class="footer">
+		<div class="footer-links">
+			<a href="/about">About Us</a>
+			<a href="/education">Education</a>
+			<a href="/pet-care-tips">Pet Care Tips</a>
+			<a href="/forum">Community Forum</a>
+			<a href="/feedback">Feedback</a>
+		</div>
+		<div class="social-icons">
+			<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+			<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+			<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+			<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+		<p>&copy; 2024 PETURA: Love Knows No Species</p>
+		<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+	</footer>
 
-        <button type="submit">Search</button>
-    </form>
-
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Health Status</th>
-                <th>Picture URL</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="animal : ${animals}">
-                <td th:text="${animal.id}"></td>
-                <td th:text="${animal.name}"></td>
-                <td th:text="${animal.type}"></td>
-                <td th:text="${animal.healthStatus}"></td>
-                <td th:text="${animal.pictureUrl}"></td>
-                <td>
-                    <a th:href="@{/animals/{id}(id=${animal.id})}">Details</a> |
-                    <a th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 </body>
+
 </html>

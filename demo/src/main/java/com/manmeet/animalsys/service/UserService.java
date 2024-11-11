@@ -25,4 +25,8 @@ public interface UserService {
 	User findByName(String name);
 	
 	User getCurrentUser();
+
+	Optional<User> findById1(Long id);
+
+	User getCurrentUser1();
 }

@@ -1,19 +1,25 @@
 package com.manmeet.animalsys.repos;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.manmeet.animalsys.entity.Shelter;
 import com.manmeet.animalsys.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+	User findByEmail(String email);
 
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
-    List<User> findByRolesName(@Param("roleName") String roleName);
+	@Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
+	List<User> findByRolesName(@Param("roleName") String roleName);
 
-    User findByName(String name);
+	User findByName(String name);
 
+
+	List<User> findByShelter(Shelter shelter);
+
+	Optional<User> findById(Long id);
 }

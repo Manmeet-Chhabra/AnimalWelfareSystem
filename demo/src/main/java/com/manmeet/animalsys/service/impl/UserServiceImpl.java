@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,79 +19,73 @@ import com.manmeet.animalsys.repos.RoleRepository;
 import com.manmeet.animalsys.repos.UserRepository;
 import com.manmeet.animalsys.service.UserService;
 
-
-
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+	@Autowired
+	private RoleRepository roleRepository;
 
-    @Override
-    public void saveUser(UserDto userDto) {
-        User user = new User();
-        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
-        user.setEmail(userDto.getEmail());
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-        // Encrypt the password using the PasswordEncoder
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+	@Override
+	public void saveUser(UserDto userDto) {
+		User user = new User();
+		user.setName(userDto.getFirstName() + " " + userDto.getLastName());
+		user.setEmail(userDto.getEmail());
 
-        // Fetch role based on the userDto's role
-        Role role = roleRepository.findByName(userDto.getRole());
-        if (role == null) {
-            role = checkRoleExist(userDto.getRole());
-        }
+		// Encrypt the password using the PasswordEncoder
+		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        // Assign the role dynamically
-        user.setRoles(new HashSet<>(Collections.singletonList(role)));
+		// Fetch role based on the userDto's role
+		Role role = roleRepository.findByName(userDto.getRole());
+		if (role == null) {
+			role = checkRoleExist(userDto.getRole());
+		}
 
-        userRepository.save(user);
-    }
+		// Assign the role dynamically
+		user.setRoles(new HashSet<>(Collections.singletonList(role)));
 
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+		userRepository.save(user);
+	}
 
-    @Override
-    public List<UserDto> findAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(this::convertEntityToDto)
-                .collect(Collectors.toList());
-    }
+	@Override
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
 
-    private UserDto convertEntityToDto(User user) {
-        UserDto userDto = new UserDto();
-        String[] nameParts = user.getName().split(" ");
-        userDto.setFirstName(nameParts[0]);
-        userDto.setLastName(nameParts.length > 1 ? nameParts[nameParts.length - 1] : "");
-        userDto.setEmail(user.getEmail());
-        return userDto;
-    }
+	@Override
+	public List<UserDto> findAllUsers() {
+		List<User> users = userRepository.findAll();
+		return users.stream().map(this::convertEntityToDto).collect(Collectors.toList());
+	}
 
-    private Role checkRoleExist(String roleName) {
-        Role role = roleRepository.findByName(roleName);
-        if (role == null) {
-            role = new Role();
-            role.setName(roleName);
-            roleRepository.save(role);
-        }
-        return role;
-    }
+	private UserDto convertEntityToDto(User user) {
+		UserDto userDto = new UserDto();
+		String[] nameParts = user.getName().split(" ");
+		userDto.setFirstName(nameParts[0]);
+		userDto.setLastName(nameParts.length > 1 ? nameParts[nameParts.length - 1] : "");
+		userDto.setEmail(user.getEmail());
+		return userDto;
+	}
 
-    @Override
-    public Role findRoleByName(String role) {
-        return roleRepository.findByName(role);
-    }
+	private Role checkRoleExist(String roleName) {
+		Role role = roleRepository.findByName(roleName);
+		if (role == null) {
+			role = new Role();
+			role.setName(roleName);
+			roleRepository.save(role);
+		}
+		return role;
+	}
+
+	@Override
+	public Role findRoleByName(String role) {
+		return roleRepository.findByName(role);
+	}
 
 	@Override
 	public List<User> findByRole(String roleName) {
@@ -98,26 +94,36 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findById(Long id) {
-		 return userRepository.findById(id).orElse(null); // Return null if not found
+		return userRepository.findById(id).orElse(null); // Return null if not found
 	}
-	
+
 	@Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id); // Assumes your UserRepository has this method
-    }
-	
-	@Override
-    public User findByName(String name) {
-        // Assuming you have a method in your UserRepository to find by username
-        return userRepository.findByName(name);
+	public Optional<User> findById1(Long id) {
+		return userRepository.findById(id); // Return null if not found
 	}
-	
-	 @Override
-	    public User getCurrentUser() {
-	        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-	        return userRepository.findByEmail(email);  // Assumes user emails are unique
-	    }
-	 
-	 
-	
+
+	@Override
+	public Optional<User> getUserById(Long id) {
+		return userRepository.findById(id); // Assumes your UserRepository has this method
+	}
+
+	@Override
+	public User findByName(String name) {
+		// Assuming you have a method in your UserRepository to find by username
+		return userRepository.findByName(name);
+	}
+
+	@Override
+	public User getCurrentUser() {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		return userRepository.findByEmail(email); // Assumes user emails are unique
+	}
+
+	@Override
+	public User getCurrentUser1() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String name = authentication.getName();
+		return userRepository.findByName(name);
+	}
+
 }

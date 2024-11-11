@@ -90,9 +90,10 @@ public class ShelterServiceImpl implements ShelterService {
 	}
 
 	@Override
-	public List<Shelter> searchShelters(String location, Integer capacity) {
-		return shelterRepository.findByLocationAndCapacity(location, capacity);
+	public List<Shelter> searchShelters(String name, String location, Integer capacity) {
+	    return shelterRepository.findSheltersByFilters(name, location, capacity);
 	}
+
 
 	@Override
 	@Transactional
@@ -156,39 +157,47 @@ public class ShelterServiceImpl implements ShelterService {
 	        User savedStaff = userRepository.save(staff);
 
 	        // Associate staff with the shelter
-	        shelter.getStaff().add(savedStaff);
-	        shelterRepository.save(shelter); // Save the updated shelter
+	        savedStaff.setShelter(shelter);  // Updated this line to set the shelter on the user
+	        userRepository.save(savedStaff); // Save the updated user
 
 	        return savedStaff; // Optionally return the saved staff member
 	    }
 	    throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
 	}
 
-	@Override
-	public void removeStaffFromShelter(Long shelterId, Long staffId) {
-		Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
-		if (shelterOptional.isPresent()) {
-			Shelter shelter = shelterOptional.get();
-			Optional<User> staffOptional = userRepository.findById(staffId);
-			if (staffOptional.isPresent()) {
-				User staff = staffOptional.get();
-				shelter.getStaff().remove(staff); // Assuming Shelter has a method to remove staff
-				userRepository.delete(staff);
-			} else {
-				throw new IllegalArgumentException("Staff with id " + staffId + " does not exist.");
-			}
-		} else {
-			throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
-		}
-	}
 
 	@Override
+	@Transactional
+	public void removeStaffFromShelter(Long shelterId, Long staffId) {
+	    Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
+	    if (shelterOptional.isPresent()) {
+	        Shelter shelter = shelterOptional.get();
+	        Optional<User> staffOptional = userRepository.findById(staffId);
+	        if (staffOptional.isPresent()) {
+	            User staff = staffOptional.get();
+	            if (staff.getShelter().equals(shelter)) {
+	                staff.setShelter(null); // Disassociate the staff from the shelter
+	                userRepository.save(staff);
+	            } else {
+	                throw new IllegalArgumentException("Staff member does not belong to this shelter.");
+	            }
+	        } else {
+	            throw new IllegalArgumentException("Staff with id " + staffId + " does not exist.");
+	        }
+	    } else {
+	        throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
+	    }
+	}
+
+
+	@Override
+	@Transactional
 	public List<User> getStaffByShelter(Long shelterId) {
 	    Optional<Shelter> shelterOptional = shelterRepository.findById(shelterId);
 	    if (shelterOptional.isPresent()) {
 	        Shelter shelter = shelterOptional.get();
 	        
-	        // Return staff members who have the ROLE_STAFF
+	        // Return staff members who have the ROLE_STAFF and are associated with the shelter
 	        return shelter.getStaff().stream()
 	                .filter(user -> user.getRoles().stream()
 	                        .anyMatch(role -> role.getName().equals("ROLE_STAFF"))) // Ensure using the correct role name
@@ -196,5 +205,6 @@ public class ShelterServiceImpl implements ShelterService {
 	    }
 	    throw new IllegalArgumentException("Shelter with id " + shelterId + " does not exist.");
 	}
+
 
 }

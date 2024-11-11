@@ -1,75 +1,277 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Adoption Questionnaire</title>
+	<title>Adoption Questionnaire</title>
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <title>Adoption Questionnaire</title>
+	    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	    <style>
+	        body {
+	            font-family: Arial, sans-serif;
+	            background-color: #f9f9f9;
+	            color: #333;
+	            margin: 0;
+	            padding: 20px;
+	            display: flex;
+	            flex-direction: column;
+	            min-height: 100vh;
+	        }
+
+	        .header {
+	            background-color: #2c3e50;
+	            padding: 15px 20px;
+	            display: flex;
+	            justify-content: space-between;
+	            align-items: center;
+	            width: 100%;
+	            position: fixed;
+	            top: 0;
+	            z-index: 100;
+	            box-sizing: border-box;
+	        }
+
+	        .header .left-section {
+	            display: flex;
+	            align-items: center;
+	        }
+
+	        .header .center-section {
+	            position: absolute;
+	            left: 50%;
+	            transform: translateX(-50%);
+	        }
+
+	        .header .right-section {
+	            display: flex;
+	            align-items: center;
+	        }
+
+	        .header .logo {
+	            margin-right: 10px;
+	            height: 40px;
+	        }
+
+	        .header .app-name {
+	            font-size: 18px;
+	            color: white;
+	            font-weight: bold;
+	            text-align: center;
+	        }
+
+	        .donate-btn {
+	            color: white;
+	            font-size: 16px;
+	            text-decoration: none;
+	            padding: 8px 12px;
+	            background-color: #4CAF50;
+	            /* Green color for Donate Now button */
+	            border-radius: 5px;
+	            margin-right: 10px;
+	            transition: background-color 0.3s;
+	        }
+
+	        .donate-btn:hover {
+	            background-color: #45a049;
+	        }
+
+	        .logout-btn {
+	            color: white;
+	            font-size: 16px;
+	            text-decoration: none;
+	            padding: 8px 12px;
+	            background-color: #e74c3c;
+	            border-radius: 5px;
+	            transition: background-color 0.3s;
+	        }
+
+	        .logout-btn:hover {
+	            background-color: #c0392b;
+	        }
+
+	        .container {
+	            margin-top: 50px;
+	            padding: 20px;
+	            flex: 1;
+	            background-color: #fff;
+	            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	            border-radius: 8px;
+	        }
+
+	        h1 {
+	            text-align: center;
+	            color: #4CAF50;
+	            margin-bottom: 30px;
+	        }
+
+	        .form-group {
+	            margin-bottom: 15px;
+	        }
+
+	        .form-group label {
+	            font-weight: bold;
+	        }
+
+	        .btn-primary {
+	            background-color: #4CAF50;
+	            border: none;
+	        }
+
+	        .btn-primary:hover {
+	            background-color: #45a049;
+	        }
+
+	        .footer {
+	            margin-top: 50px;
+	            text-align: center;
+	            padding: 10px;
+	            background-color: #f8f9fa;
+	        }
+
+	        .footer {
+	            text-align: center;
+	            margin-top: 20px;
+	            padding: 20px 0;
+	            background-color: #2c3e50;
+	            color: white;
+	        }
+
+	        .footer .footer-links {
+	            margin-bottom: 10px;
+	        }
+
+	        .footer .footer-links a {
+	            color: white;
+	            margin: 0 10px;
+	            text-decoration: none;
+	            transition: color 0.3s;
+	        }
+
+	        .footer .footer-links a:hover {
+	            color: #4CAF50;
+	        }
+
+	        .footer .social-icons {
+	            margin-top: 10px;
+	        }
+
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
+		}
+	</style>
 </head>
+
 <body>
-    <h1>Adoption Eligibility Questionnaire</h1>
-    <form th:action="@{/adoptions/{animalId}/questionnaire(animalId=${animalId})}" method="post">
-        <div>
-            <label for="answer0">1. Do you have prior experience with animals?</label><br>
-            <input type="radio" id="answer0" name="answer0" value="yes" required> Yes
-            <input type="radio" id="answer0_no" name="answer0" value="no"> No
-        </div>
 
-        <div>
-            <label for="answer1">2. Is your home pet-friendly?</label><br>
-            <input type="radio" id="answer1" name="answer1" value="yes" required> Yes
-            <input type="radio" id="answer1_no" name="answer1" value="no"> No
-        </div>
+	<div class="header">
+		<div class="left-section"> <img src="/images/logo.jpg" alt="PETURA Logo" class="logo"> </div>
+		<div class="center-section"> <span class="app-name">PETURA: Love Knows No Species</span> </div>
+		<div class="right-section"> <a href="/donations" class="donate-btn"> <i class="fas fa-donate"></i> Donate Now </a>
+			<a href="/logout" class="logout-btn"> <i class="fas fa-sign-out-alt"></i> Logout </a>
+		</div>
+	</div>
 
-        <div>
-            <label for="answer2">3. Can you commit time daily for pet care?</label><br>
-            <input type="radio" id="answer2" name="answer2" value="yes" required> Yes
-            <input type="radio" id="answer2_no" name="answer2" value="no"> No
-        </div>
 
-        <div>
-            <label for="answer3">4. Are you financially prepared for pet care?</label><br>
-            <input type="radio" id="answer3" name="answer3" value="yes" required> Yes
-            <input type="radio" id="answer3_no" name="answer3" value="no"> No
-        </div>
+	<div class="container">
+		<h1>Adoption Eligibility Questionnaire</h1>
+		<form th:action="@{/adoptions/{animalId}/questionnaire(animalId=${animalId})}" method="post">
+			<div class="form-group">
+				<label for="answer0">1. Do you have previous experience with caring for animals?</label><br>
+				<input type="radio" id="answer0" name="answer0" value="yes" required> Yes
+				<input type="radio" id="answer0_no" name="answer0" value="no"> No
+			</div>
 
-        <div>
-            <label for="answer4">5. Do you have a stable living situation?</label><br>
-            <input type="radio" id="answer4" name="answer4" value="yes" required> Yes
-            <input type="radio" id="answer4_no" name="answer4" value="no"> No
-        </div>
+			<div class="form-group">
+				<label for="answer1">2. Is your home suitable for housing a pet?</label><br>
+				<input type="radio" id="answer1" name="answer1" value="yes" required> Yes
+				<input type="radio" id="answer1_no" name="answer1" value="no"> No
+			</div>
 
-        <div>
-            <label for="answer5">6. Do you have knowledge or experience in training animals?</label><br>
-            <input type="radio" id="answer5" name="answer5" value="yes" required> Yes
-            <input type="radio" id="answer5_no" name="answer5" value="no"> No
-        </div>
+			<div class="form-group">
+				<label for="answer2">3. Can you commit time daily to care for a pet?</label><br>
+				<input type="radio" id="answer2" name="answer2" value="yes" required> Yes
+				<input type="radio" id="answer2_no" name="answer2" value="no"> No
+			</div>
 
-        <div>
-            <label for="answer6">7. Do you have plans for who will care for the animal if you are unable?</label><br>
-            <input type="radio" id="answer6" name="answer6" value="yes" required> Yes
-            <input type="radio" id="answer6_no" name="answer6" value="no"> No
-        </div>
+			<div class="form-group">
+				<label for="answer3">4. Are you financially capable of covering the costs associated with pet
+					care?</label><br>
+				<input type="radio" id="answer3" name="answer3" value="yes" required> Yes
+				<input type="radio" id="answer3_no" name="answer3" value="no"> No
+			</div>
 
-        <div>
-            <label for="answer7">8. Are you willing to undergo a home visit?</label><br>
-            <input type="radio" id="answer7" name="answer7" value="yes" required> Yes
-            <input type="radio" id="answer7_no" name="answer7" value="no"> No
-        </div>
+			<div class="form-group">
+				<label for="answer4">5. Do you have a stable living situation where pets are allowed?</label><br>
+				<input type="radio" id="answer4" name="answer4" value="yes" required> Yes
+				<input type="radio" id="answer4_no" name="answer4" value="no"> No
+			</div>
 
-        <div>
-            <label for="answer8">9. Do you have any allergies to animals?</label><br>
-            <input type="radio" id="answer8" name="answer8" value="yes" required> Yes
-            <input type="radio" id="answer8_no" name="answer8" value="no"> No
-        </div>
+			<div class="form-group">
+				<label for="answer5">6. Do you have knowledge or experience with training animals?</label><br>
+				<input type="radio" id="answer5" name="answer5" value="yes" required> Yes
+				<input type="radio" id="answer5_no" name="answer5" value="no"> No
+			</div>
 
-        <div>
-            <label for="answer9">10. How would you describe your lifestyle?</label><br>
-            <input type="radio" id="answer9" name="answer9" value="active" required> Active
-            <input type="radio" id="answer9" name="answer9" value="moderate"> Moderate
-            <input type="radio" id="answer9" name="answer9" value="sedentary"> Sedentary
-        </div>
+			<div class="form-group">
+				<label for="answer6">7. Do you have a plan for who will take care of the pet if you are away or unable
+					to?</label><br>
+				<input type="radio" id="answer6" name="answer6" value="yes" required> Yes
+				<input type="radio" id="answer6_no" name="answer6" value="no"> No
+			</div>
 
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-    </form>
+			<div class="form-group">
+				<label for="answer7">8. Are you open to a home visit as part of the adoption process?</label><br>
+				<input type="radio" id="answer7" name="answer7" value="yes" required> Yes
+				<input type="radio" id="answer7_no" name="answer7" value="no"> No
+			</div>
+
+			<div class="form-group">
+				<label for="answer8">9. Are you prepared to handle emergency situations related to the pet's health?</label><br>
+				<input type="radio" id="answer8" name="answer8" value="yes" required> Yes
+				<input type="radio" id="answer8_no" name="answer8" value="no"> No
+			</div>
+
+			<div class="form-group">
+				<label for="answer9">10. Do you have a basic understanding of pet health and nutrition?</label><br>
+				<input type="radio" id="answer9" name="answer9" value="yes" required> Yes
+				<input type="radio" id="answer9_no" name="answer9" value="no"> No
+			</div>
+
+	</div>
+	<button type="submit">Submit</button> </div>
+	</form>
+
+	<footer class="footer">
+		<div class="footer-links">
+			<a href="/about">About Us</a>
+			<a href="/education">Education</a>
+			<a href="/pet-care-tips">Pet Care Tips</a>
+			<a href="/forum">Community Forum</a>
+			<a href="/feedback">Feedback</a>
+		</div>
+		<div class="social-icons">
+			<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+			<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+			<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+			<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+		<p>&copy; 2024 PETURA: Love Knows No Species</p>
+		<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+	</footer>
+
 </body>
+
 </html>

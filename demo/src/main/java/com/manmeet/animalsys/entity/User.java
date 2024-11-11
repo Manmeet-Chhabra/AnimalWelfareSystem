@@ -17,47 +17,38 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name="users")
-public class User
-{
-    private static final long serialVersionUID = 1L;
+@Table(name = "users")
+public class User {
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable=false)
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    @Column(nullable=false, unique=true)
-    private String email;
+	@Column(nullable = false, unique = true)
+	private String email;
 
-    @Column(nullable=false)
-    private String password;
+	@Column(nullable = false)
+	private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(
-            name="users_roles",
-            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
-            inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
-    private Set<Role> roles = new HashSet<>();
-    
-    @ManyToOne
-    @JoinColumn(name = "shelter_id")
-    private Shelter shelter;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "users_roles", joinColumns = {
+			@JoinColumn(name = "USER_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
+					@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID") })
+	private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user") // This tells JPA that the 'user' field in Donation is the owner of the relationship
-    private List<Donation> donations;
+	@ManyToOne
+	@JoinColumn(name = "shelter_id")
+	private Shelter shelter;
+
+	@OneToMany(mappedBy = "user") // This tells JPA that the 'user' field in Donation is the owner of the
+									// relationship
+	private List<Donation> donations;
 
 	public Set<Role> getRoles() {
 		return roles;
@@ -99,13 +90,38 @@ public class User
 		this.password = password;
 	}
 
+	public Shelter getShelter() {
+		return shelter;
+	}
 
+	public void setShelter(Shelter shelter) {
+		this.shelter = shelter;
+	}
+
+	public List<Donation> getDonations() {
+		return donations;
+	}
+
+	public void setDonations(List<Donation> donations) {
+		this.donations = donations;
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	
-	
+	public User(Long id, String name, String email, String password, Set<Role> roles, Shelter shelter,
+			List<Donation> donations) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+		this.shelter = shelter;
+		this.donations = donations;
+	}
+
+	public User() {
+	}
 
 }

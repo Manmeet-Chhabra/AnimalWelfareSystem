@@ -12,6 +12,7 @@ import com.manmeet.animalsys.entity.Shelter;
 import com.manmeet.animalsys.repos.AnimalRepository;
 import com.manmeet.animalsys.repos.ShelterRepository;
 import com.manmeet.animalsys.service.AnimalService;
+import com.manmeet.animalsys.utility.AnimalSpecification;
 
 @Service
 public class AnimalServiceImpl implements AnimalService {
@@ -58,9 +59,8 @@ public class AnimalServiceImpl implements AnimalService {
 	}
 
 	@Override
-	public List<Animal> searchAnimals(String type, String healthStatus) {
-		// Implement search logic here based on type and health status
-		return animalRepository.findByTypeAndHealthStatus(type, healthStatus);
+	public List<Animal> searchAnimals(String type, String healthStatus, AdoptionStatus adoptionStatus, Long shelterId, String doctorAppointment) { 
+		return animalRepository.findAll(AnimalSpecification.filterByCriteria(type, healthStatus, adoptionStatus, shelterId, doctorAppointment));
 	}
 
 	@Override
@@ -95,6 +95,11 @@ public class AnimalServiceImpl implements AnimalService {
 	@Override
 	public long getTotalAnimals() {
 		return animalRepository.count();
+	}
+
+	@Override
+	public List<Animal> getAnimalsByType(String type) {
+		return animalRepository.findByType(type);
 	}
 
 }

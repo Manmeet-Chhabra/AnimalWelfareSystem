@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Education and Resources</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+			color: #333;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.header {
+			background-color: #2c3e50;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			position: fixed;
+			top: 0;
+			z-index: 100;
+			box-sizing: border-box;
+		}
+
+		.header .left-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .center-section {
+			text-align: center;
+			flex-grow: 1;
+		}
+
+		.header .right-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .logo {
+			margin-right: 10px;
+			height: 40px;
+		}
+
+		.header .app-name {
+			font-size: 18px;
+			color: white;
+			font-weight: bold;
+		}
+
+		.donate-btn {
+			color: white;
+			background-color: #4CAF50;
+			/* Green color for Donate Now button */
+			margin-right: 10px;
+			padding: 8px 12px;
+			text-decoration: none;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.donate-btn:hover {
+			background-color: #45a049;
+		}
+
+		.logout-btn {
+			color: white;
+			background-color: #e74c3c;
+			padding: 8px 12px;
+			text-decoration: none;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.logout-btn:hover {
+			background-color: #c0392b;
+		}
+
+		.container {
+			width: 80%;
+			margin: 100px auto 20px;
+			flex: 1;
+			/* Adjusted margin for fixed header */
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			border-radius: 8px;
+		}
+
+		h1 {
+			text-align: center;
+			color: #4CAF50;
+			margin-bottom: 20px;
+		}
+
+		h2 {
+			color: #4CAF50;
+			margin-top: 20px;
+		}
+
+		p,
+		ul {
+			font-size: 16px;
+			line-height: 1.6;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 20px;
+			padding: 20px 0;
+			background-color: #2c3e50;
+			color: white;
+		}
+
+		.footer .footer-links {
+			margin-bottom: 10px;
+		}
+
+		.footer .footer-links a {
+			color: white;
+			margin: 0 10px;
+			text-decoration: none;
+			transition: color 0.3s;
+		}
+
+		.footer .footer-links a:hover {
+			color: #4CAF50;
+		}
+
+		.footer .social-icons {
+			margin-top: 10px;
+		}
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+	<div class="header">
+		<div class="left-section">
+			<img src="/images/logo.jpg" alt="PETURA Logo" class="logo">
+		</div>
+		<div class="center-section">
+			<span class="app-name">PETURA: Love Knows No Species</span>
+		</div>
+		<div class="right-section">
+			<a href="/donations" class="donate-btn">
+				<i class="fas fa-donate"></i> Donate Now
+			</a>
+			<a href="/logout" class="logout-btn">
+				<i class="fas fa-sign-out-alt"></i> Logout
+			</a>
+		</div>
+	</div>
+
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Education and Resources</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	</head>
+
+	<body>
+		<div class="container mt-5">
+			<h1 class="text-center">Education and Resources</h1>
+
+			<div class="mt-4">
+				<h2>Articles</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a href="https://thehumaneleague.org/article/animal-welfare"
+							target="_blank">What Is Animal Welfare and Why Is It Important?</a></li>
+					<li class="list-group-item"><a href="https://ourworldindata.org/animal-welfare"
+							target="_blank">Animal Welfare - Our World in Data</a></li>
+					<li class="list-group-item"><a
+							href="https://www.frontiersin.org/research-topics/62081/enhancing-companion-animal-welfare-through-advanced-behavioral-management-strategies"
+							target="_blank">Enhancing Companion Animal Welfare through Advanced Behavioral Management
+							Strategies</a></li>
+				</ul>
+			</div>
+
+			<div class="mt-4">
+				<h2>Videos</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a href="https://www.youtube.com/watch?v=Y5W3JAID52g"
+							target="_blank">What Is Animal Welfare</a></li>
+					<li class="list-group-item"><a href="https://www.youtube.com/watch?v=VO7E1XIMTxM"
+							target="_blank">The Five Needs of Animal Welfare</a></li>
+				</ul>
+			</div>
+
+			<div class="mt-4">
+				<h2>Animal Care Basics</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a href="https://www.humanesociety.org/resources" target="_blank">The
+							Humane Society of the United States: Animal Care Basics</a></li>
+					<li class="list-group-item"><a href="https://www.animalwelfareinstitute.org/content/animal-care"
+							target="_blank">Animal Welfare Institute: Animal Care</a></li>
+				</ul>
+			</div>
+
+			<div class="mt-4">
+				<h2>Training Techniques</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a href="https://www.akc.org/dog-training/" target="_blank">American
+							Kennel Club: Dog Training Guides</a></li>
+					<li class="list-group-item"><a href="https://www.petfinder.com/dogs/dog-training/"
+							target="_blank">Petfinder: Dog Training</a></li>
+				</ul>
+			</div>
+
+			<div class="mt-4">
+				<h2>Pet Grooming Essentials</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a href="https://www.animalbehaviorcollege.com/grooming/"
+							target="_blank">Animal Behavior College: Pet Grooming Courses</a></li>
+					<li class="list-group-item"><a href="https://www.ndgaa.com/" target="_blank">National Dog Groomers
+							Association of America</a></li>
+					<li class="list-group-item"><a href="https://topdogtips.com/" target="_blank">Top Dog Tips: Pet
+							Grooming</a></li>
+				</ul>
+			</div>
+
+			<div class="mt-4">
+				<h2>First Aid and Safety</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a
+							href="https://www.redcross.org/take-a-class/first-aid/cat-dog-first-aid" target="_blank">Red
+							Cross: Pet First Aid</a></li>
+					<li class="list-group-item"><a href="https://www.petmd.com/dog/emergency" target="_blank">PetMD: Pet
+							First Aid and Emergencies</a></li>
+				</ul>
+			</div>
+
+			<div class="mt-4">
+				<h2>Pet Nutrition</h2>
+				<ul class="list-group">
+					<li class="list-group-item"><a href="https://www.petmd.com/dog/nutrition" target="_blank">PetMD: Pet
+							Nutrition</a></li>
+					<li class="list-group-item"><a href="https://www.purina.com/articles/dog/nutrition"
+							target="_blank">Purina: Dog Nutrition</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<footer class="footer">
+			<div class="footer-links">
+				<a href="/about">About Us</a>
+				<a href="/education">Education</a>
+				<a href="/pet-care-tips">Pet Care Tips</a>
+				<a href="/forum">Community Forum</a>
+				<a href="/feedback">Feedback</a>
+			</div>
+			<div class="social-icons">
+				<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+				<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+				<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+				<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<p>&copy; 2024 PETURA: Love Knows No Species</p>
+			<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+		</footer>
+	</body>
+
+</html>

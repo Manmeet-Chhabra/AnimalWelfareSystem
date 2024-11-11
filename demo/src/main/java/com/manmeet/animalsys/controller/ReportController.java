@@ -132,10 +132,10 @@ public class ReportController {
 	    notificationService.sendEmail(adminEmail, subject, body);
 
 	    // Send the same email to all staff members
-	    List<User> staffMembers = userService.findByRole("ROLE_STAFF");
+	  /*  List<User> staffMembers = userService.findByRole("ROLE_STAFF");
 	    for (User staff : staffMembers) {
 	        notificationService.sendEmail(staff.getEmail(), subject, body);
-	    }
+	    }*/
 
 	    return "redirect:/reports/history"; // Redirect to user's report history
 	}

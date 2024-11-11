@@ -1,40 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Animal</title>
-    <link rel="stylesheet" href="/css/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<title>Edit Animal</title>
+	<link rel="stylesheet" href="/css/styles.css">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+			color: #333;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.header {
+			background-color: #2c3e50;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			position: fixed;
+			top: 0;
+			z-index: 100;
+			box-sizing: border-box;
+		}
+
+		.header .left-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .center-section {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.header .right-section {
+			display: flex;
+			align-items: center;
+		}
+
+		.header .logo {
+			margin-right: 10px;
+			height: 40px;
+		}
+
+		.header .app-name {
+			font-size: 18px;
+			color: white;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.donate-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #4CAF50;
+			/* Green color for Donate Now button */
+			border-radius: 5px;
+			margin-right: 10px;
+			transition: background-color 0.3s;
+		}
+
+		.donate-btn:hover {
+			background-color: #45a049;
+		}
+
+		.logout-btn {
+			color: white;
+			font-size: 16px;
+			text-decoration: none;
+			padding: 8px 12px;
+			background-color: #e74c3c;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.logout-btn:hover {
+			background-color: #c0392b;
+		}
+
+
+		.container {
+			max-width: 600px;
+			padding: 20px;
+			flex: 1;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			text-align: center;
+			color: #4CAF50;
+		}
+
+		.form-group {
+			margin-bottom: 15px;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.form-group input,
+		.form-group select {
+			width: 100%;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+
+		.form-group button {
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			cursor: pointer;
+		}
+
+		.form-group button:hover {
+			background-color: #45a049;
+		}
+
+		.back-link {
+			display: block;
+			text-align: center;
+			margin-top: 20px;
+			color: #4CAF50;
+			text-decoration: none;
+		}
+
+		.back-link:hover {
+			text-decoration: underline;
+		}
+
+		.footer {
+			margin-top: 50px;
+			text-align: center;
+			padding: 10px;
+			background-color: #f8f9fa;
+		}
+
+		.footer {
+			text-align: center;
+			margin-top: 20px;
+			padding: 20px 0;
+			background-color: #2c3e50;
+			color: white;
+			position: relative;
+									/* Ensure the footer moves with the page content */
+									bottom: 0;
+									/* Keep the footer at the bottom of the page */
+									margin-top: auto;
+		}
+
+		.footer .footer-links {
+			margin-bottom: 10px;
+		}
+
+		.footer .footer-links a {
+			color: white;
+			margin: 0 10px;
+			text-decoration: none;
+			transition: color 0.3s;
+		}
+
+		.footer .footer-links a:hover {
+			color: #4CAF50;
+		}
+
+		.footer .social-icons {
+			margin-top: 10px;
+		}
+
+		.footer .social-icons a {
+			color: white;
+			margin: 0 5px;
+			text-decoration: none;
+			font-size: 20px;
+			transition: color 0.3s;
+		}
+
+		.footer .social-icons a:hover {
+			color: #4CAF50;
+		}
+	</style>
 </head>
+
 <body>
-    <h1>Edit Animal</h1>
-    <form action="/animals/{id}/edit" method="post" th:action="@{/animals/{id}/edit(id=${animal.id})}" th:object="${animal}">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" th:field="*{name}" required>
+	<div class="header">
+		<div class="left-section"> <img src="/images/logo.jpg" alt="PETURA Logo" class="logo"> </div>
+		<div class="center-section"> <span class="app-name">PETURA: Love Knows No Species</span> </div>
+		<div class="right-section"> <a href="/donations" class="donate-btn"> <i class="fas fa-donate"></i> Donate Now </a>
+			<a href="/logout" class="logout-btn"> <i class="fas fa-sign-out-alt"></i> Logout </a>
+		</div>
+	</div>
 
-        <label for="type">Type:</label>
-        <input type="text" id="type" name="type" th:field="*{type}" required>
+	<div class="container">
+		<h1>Edit Animal</h1>
+		<form action="/animals/{id}/edit" method="post" th:action="@{/animals/{id}/edit(id=${animal.id})}"
+			th:object="${animal}" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="name">Name:</label>
+				<input type="text" id="name" name="name" th:field="*{name}" required>
+			</div>
 
-        <label for="healthStatus">Health Status:</label>
-        <input type="text" id="healthStatus" name="healthStatus" th:field="*{healthStatus}" required>
+			<div class="form-group">
+				<label for="type">Type:</label>
+				<select id="type" name="type" th:field="*{type}">
+					<option value="">Select Type</option>
+					<option value="Dog" th:selected="${animal.type == 'Dog'}">Dog</option>
+					<option value="Cat" th:selected="${animal.type == 'Cat'}">Cat</option>
+					<option value="Bird" th:selected="${animal.type == 'Bird'}">Bird</option>
+					<option value="Cow" th:selected="${animal.type == 'Cow'}">Cow</option>
+					<option value="Rabbit" th:selected="${animal.type == 'Rabbit'}">Rabbit</option>
+					<option value="Sheep" th:selected="${animal.type == 'Sheep'}">Sheep</option>
+					<option value="Other" th:selected="${animal.type == 'Other'}">Other</option>
+				</select>
+			</div>
 
-        <label for="doctorAppointment">Doctor Appointment:</label>
-        <input type="text" id="doctorAppointment" name="doctorAppointment" th:field="*{doctorAppointment}">
+			<div class="form-group">
+				<label for="healthStatus">Health Status:</label>
+				<select id="healthStatus" name="healthStatus" th:field="*{healthStatus}">
+					<option value="HEALTHY" th:selected="${animal.healthStatus == 'HEALTHY'}">Healthy</option>
+					<option value="SICK" th:selected="${animal.healthStatus == 'SICK'}">Sick</option>
+					<option value="IN_TREATMENT" th:selected="${animal.healthStatus == 'IN_TREATMENT'}">In Treatment
+					</option>
+					<option value="UNKNOWN" th:selected="${animal.healthStatus == 'UNKNOWN'}">Unknown</option>
+				</select>
+			</div>
 
-        <label for="pictureUrl">Picture URL:</label>
-        <input type="text" id="pictureUrl" name="pictureUrl" th:field="*{pictureUrl}">
+			<div class="form-group">
+				<label for="doctorAppointment">Doctor Appointment:</label>
+				<select id="doctorAppointment" name="doctorAppointment" th:field="*{doctorAppointment}">
+					<option value="" th:selected="${animal.doctorAppointment == ''}">Select</option>
+					<option value="Yes" th:selected="${animal.doctorAppointment == 'Yes'}">Yes</option>
+					<option value="No" th:selected="${animal.doctorAppointment == 'No'}">No</option>
+				</select>
+			</div>
 
-        <label for="shelter">Shelter:</label>
-        <select id="shelter" name="shelterId" th:field="*{shelter.id}">
-            <option value="" disabled selected>Select Shelter</option> <!-- Optional placeholder -->
-            <option th:each="shelter : ${shelters}" 
-                    th:value="${shelter.id}" 
-                    th:text="${shelter.name}" 
-                    th:selected="${animal.shelter.id == shelter.id}"></option>
-        </select>
+			<div class="form-group">
+				<label for="pictureData">Picture Data:</label>
+				<input type="file" id="pictureData" name="fileUpload">
+			</div>
 
-        <button type="submit">Update Animal</button>
-    </form>
-    <a href="/animals">Back to Animal List</a>
+			<div class="form-group">
+				<label for="shelter">Shelter:</label>
+				<select id="shelter" name="shelterId" th:field="*{shelter.id}">
+					<option value="" disabled>Select Shelter</option>
+					<option th:each="shelter : ${shelters}" th:value="${shelter.id}" th:text="${shelter.name}"
+						th:selected="${animal.shelter != null && animal.shelter.id == shelter.id}"></option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<button type="submit">Update Animal</button>
+			</div>
+		</form>
+		<a href="/animals" class="back-link">Back to Animal List</a>
+	</div>
+
+	<footer class="footer">
+		<div class="footer-links">
+			<a href="/about">About Us</a>
+			<a href="/education">Education</a>
+			<a href="/pet-care-tips">Pet Care Tips</a>
+			<a href="/forum">Community Forum</a>
+			<a href="/feedback">Feedback</a>
+		</div>
+		<div class="social-icons">
+			<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+			<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+			<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+			<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+		<p>&copy; 2024 PETURA: Love Knows No Species</p>
+		<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+	</footer>
+
 </body>
+
 </html>

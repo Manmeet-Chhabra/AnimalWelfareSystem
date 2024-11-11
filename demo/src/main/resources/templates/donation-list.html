@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Donation List</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -10,48 +12,214 @@
             padding: 20px;
             background-color: #f8f9fa;
             background-image: url('/images/donation-list-bg.jpg'); /* Update this path to your chosen background image */
-            background-size: cover; /* Make sure the image covers the entire background */
+            background-size: cover; /* Ensure the image covers the entire background */
             background-position: center; /* Center the image */
-        }
+            background-attachment: fixed; /* Prevent background scroll */
+			display: flex;
+						flex-direction: column;
+						min-height: 100vh;
+					}
+
+					.header {
+						background-color: #2c3e50;
+						padding: 15px 20px;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						width: 100%;
+						position: fixed;
+						top: 0;
+						z-index: 100;
+						box-sizing: border-box;
+					}
+
+					.header .left-section {
+						display: flex;
+						align-items: center;
+					}
+
+					.header .center-section {
+						position: absolute;
+						left: 50%;
+						transform: translateX(-50%);
+					}
+
+					.header .right-section {
+						display: flex;
+						align-items: center;
+					}
+
+					.header .logo {
+						margin-right: 10px;
+						height: 40px;
+					}
+
+					.header .app-name {
+						font-size: 18px;
+						color: white;
+						font-weight: bold;
+						text-align: center;
+					}
+
+					.donate-btn {
+						color: white;
+						font-size: 16px;
+						text-decoration: none;
+						padding: 8px 12px;
+						background-color: #4CAF50;
+						/* Green color for Donate Now button */
+						border-radius: 5px;
+						margin-right: 10px;
+						transition: background-color 0.3s;
+					}
+
+					.donate-btn:hover {
+						background-color: #45a049;
+					}
+
+					.logout-btn {
+						color: white;
+						font-size: 16px;
+						text-decoration: none;
+						padding: 8px 12px;
+						background-color: #e74c3c;
+						border-radius: 5px;
+						transition: background-color 0.3s;
+					}
+
+					.logout-btn:hover {
+						background-color: #c0392b;
+					}
+
         .container {
             max-width: 800px;
             margin: auto;
             background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for readability */
             padding: 20px;
+			flex: 1;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
         }
+
         h1 {
             color: #333;
+            text-align: center;
+            margin-bottom: 20px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
+
         table th, table td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: left;
         }
+
         table th {
             background-color: #007bff;
             color: white;
+            text-transform: uppercase;
         }
+
         .btn {
             display: inline-block;
-            padding: 10px 15px;
+            padding: 10px 20px;
             color: white;
             background-color: #007bff;
             text-decoration: none;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 5px 0;
         }
+
         .btn:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            table th, table td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            .btn {
+                padding: 8px 15px;
+            }
+        }
+		.footer {
+					margin-top: 50px;
+					text-align: center;
+					padding: 10px;
+					background-color: #f8f9fa;
+				}
+
+				.footer {
+					text-align: center;
+					margin-top: 20px;
+					padding: 20px 0;
+					background-color: #2c3e50;
+					color: white;
+				}
+
+				.footer .footer-links {
+					margin-bottom: 10px;
+				}
+
+				.footer .footer-links a {
+					color: white;
+					margin: 0 10px;
+					text-decoration: none;
+					transition: color 0.3s;
+				}
+
+				.footer .footer-links a:hover {
+					color: #4CAF50;
+				}
+
+				.footer .social-icons {
+					margin-top: 10px;
+				}
+
+				.footer .social-icons a {
+					color: white;
+					margin: 0 5px;
+					text-decoration: none;
+					font-size: 20px;
+					transition: color 0.3s;
+				}
+
+				.footer .social-icons a:hover {
+					color: #4CAF50;
+				}
     </style>
 </head>
+
 <body>
+	<div class="header">
+			<div class="left-section"> <img src="/images/logo.jpg" alt="PETURA Logo" class="logo"> </div>
+			<div class="center-section"> <span class="app-name">PETURA: Love Knows No Species</span> </div>
+			<div class="right-section"> <a href="/donations" class="donate-btn"> <i class="fas fa-donate"></i> Donate Now </a>
+				<a href="/logout" class="logout-btn"> <i class="fas fa-sign-out-alt"></i> Logout </a>
+			</div>
+		</div>
     <div class="container">
         <h1>Donation List</h1>
         <table>
@@ -63,7 +231,6 @@
                     <th>Quantity</th>
                     <th>Donor Name</th>
                     <th>Date</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,13 +241,30 @@
                     <td th:text="${donation.quantity}"></td>
                     <td th:text="${donation.donorName}"></td>
                     <td th:text="${donation.date}"></td>
-                    <td>
-                        <a th:href="@{/donations/delete/{id}(id=${donation.id})}" class="btn">Delete</a>
-                    </td>
+                    
                 </tr>
             </tbody>
         </table>
         <a href="/donations/new" class="btn">Make a Donation</a>
     </div>
+	
+	<footer class="footer">
+			<div class="footer-links">
+				<a href="/about">About Us</a>
+				<a href="/education">Education</a>
+				<a href="/pet-care-tips">Pet Care Tips</a>
+				<a href="/forum">Community Forum</a>
+				<a href="/feedback">Feedback</a>
+			</div>
+			<div class="social-icons">
+				<a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+				<a href="https://www.twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+				<a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+				<a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<p>&copy; 2024 PETURA: Love Knows No Species</p>
+			<p>Contact us at: <a href="mailto:manmeetchhabra@04@gmail.com">support@animalwelfare.org</a></p>
+		</footer>
 </body>
+
 </html>

@@ -4,22 +4,23 @@ import com.manmeet.animalsys.entity.AdoptionStatus;
 
 public class AnimalReportDto {
 	private String name;
-    private String type; // e.g., Dog, Cat
-    private String healthStatus;
-    private String pictureUrl; // Optional: for displaying the animal's picture
-    private String shelterName; // For associating with the shelter
-    private String shelterLocation; // Add this field
-    private String doctorAppointment; // Add this field
-    private AdoptionStatus adoptionStatus;
-	
-    public AnimalReportDto(String name, String type, String healthStatus, String shelterName, String doctorAppointment) {
-        this.name = name;
-        this.type = type;
-        this.healthStatus = healthStatus;
-        this.shelterName = shelterName;
-        this.doctorAppointment = doctorAppointment;
-    }
-    
+	private String type; // e.g., Dog, Cat
+	private String healthStatus;
+	private byte[] pictureData; // Optional: for displaying the animal's picture
+	private String shelterName; // For associating with the shelter
+	private String shelterLocation; // Add this field
+	private String doctorAppointment; // Add this field
+	private AdoptionStatus adoptionStatus;
+
+	public AnimalReportDto(String name, String type, String healthStatus, String shelterName,
+			String doctorAppointment) {
+		this.name = name;
+		this.type = type;
+		this.healthStatus = healthStatus;
+		this.shelterName = shelterName;
+		this.doctorAppointment = doctorAppointment;
+	}
+
 	public String getShelterLocation() {
 		return shelterLocation;
 	}
@@ -44,8 +45,6 @@ public class AnimalReportDto {
 		this.name = name;
 	}
 
-	
-
 	public String getType() {
 		return type;
 	}
@@ -62,12 +61,12 @@ public class AnimalReportDto {
 		this.healthStatus = healthStatus;
 	}
 
-	public String getPictureUrl() {
-		return pictureUrl;
+	public byte[] getPictureData() {
+		return pictureData;
 	}
 
-	public void setPictureUrl(String pictureUrl) {
-		this.pictureUrl = pictureUrl;
+	public void setPictureData(byte[] pictureData) {
+		this.pictureData = pictureData;
 	}
 
 	public String getShelterName() {
@@ -89,12 +88,12 @@ public class AnimalReportDto {
 	public AnimalReportDto() {
 	}
 
-	public AnimalReportDto(String name, String type, String healthStatus, String pictureUrl, String shelterName,
+	public AnimalReportDto(String name, String type, String healthStatus, byte[] pictureData, String shelterName,
 			AdoptionStatus adoptionStatus) {
 		this.name = name;
 		this.type = type;
 		this.healthStatus = healthStatus;
-		this.pictureUrl = pictureUrl;
+		this.pictureData = pictureData;
 		this.shelterName = shelterName;
 		this.adoptionStatus = adoptionStatus;
 	}
